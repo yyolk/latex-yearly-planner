@@ -64,12 +64,12 @@ function _restore() {
 
 _combinations=(
   ""                        "dotted.default"
-  "_mkLine"                 "lined.default"
   "_mkSun"                  "dotted.default.sun"
-  "_mkLine _mkSun"          "lined.default.sun"
   "_mkAMPM"                 "dotted.default.ampm"
-  "_mkAMPM _mkLine"         "lined.default.ampm"
   "_mkAMPM _mkSun"          "dotted.default.ampm.sun"
+  "_mkLine"                 "lined.default"
+  "_mkLine _mkSun"          "lined.default.sun"
+  "_mkLine _mkAMPM"         "lined.default.ampm"
   "_mkLine _mkAMPM _mkSun"  "lined.default.ampm.sun"
 )
 
