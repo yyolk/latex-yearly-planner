@@ -61,3 +61,13 @@ func (h Week) HeadMonth() time.Month {
 func (h Week) TailMonth() time.Month {
 	return h.Days[6].Month()
 }
+
+func (h Week) ZerofyMonth(mo time.Month) Week {
+	for i, day := range h.Days {
+		if day.Month() == mo {
+			h.Days[i] = Day{} //nolint:exhaustivestruct
+		}
+	}
+
+	return h
+}

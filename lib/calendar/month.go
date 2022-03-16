@@ -1,11 +1,11 @@
 package calendar
 
+import "time"
+
 type Month struct{ Weeks Weeks }
 
-type MonthOption func() Week
-
-func NewMonth(mo MonthOption) Month {
-	week := mo()
+func NewMonth(year int, mo time.Month, wd time.Weekday) Month {
+	week := NewWeek(FromMonth(year, mo, wd))
 	currMo := week.TailMonth()
 	month := Month{Weeks: append(make(Weeks, 0, 5), week)}
 
@@ -13,11 +13,18 @@ func NewMonth(mo MonthOption) Month {
 		week = week.Next()
 
 		if week.HeadMonth() == currMo {
-			month.Weeks = append(month.Weeks, week)
-		}
+			stop := false
 
-		if week.TailMonth() != currMo {
-			break
+			if tailMo := week.TailMonth(); tailMo != currMo {
+				week = week.ZerofyMonth(tailMo)
+				stop = true
+			}
+
+			month.Weeks = append(month.Weeks, week)
+
+			if stop {
+				break
+			}
 		}
 	}
 
