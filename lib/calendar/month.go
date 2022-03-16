@@ -7,7 +7,7 @@ type Month struct{ Weeks Weeks }
 func NewMonth(year int, mo time.Month, wd time.Weekday) Month {
 	week := NewWeek(FromMonth(year, mo, wd))
 	currMo := week.TailMonth()
-	month := Month{Weeks: append(make(Weeks, 0, 5), week)}
+	month := Month{Weeks: append(make(Weeks, 0, usualWeeksInMonth), week)}
 
 	for {
 		week = week.Next()
