@@ -23,12 +23,25 @@ func FromTime(moment time.Time) WeekOption {
 }
 
 func NewWeek(wo WeekOption) Week {
-	week := Week{} //nolint:exhaustivestruct
-	week.Days[0] = wo()
+	return Week{Days: [7]Day{wo()}}.fillFromFirstDay()
+}
 
+func (h Week) Next() Week {
+	return Week{Days: [7]Day{h.Days[6].Add(1)}}.fillFromFirstDay()
+}
+
+func (h Week) fillFromFirstDay() Week {
 	for i := 1; i < 7; i++ {
-		week.Days[i] = week.Days[i-1].Add(1)
+		h.Days[i] = h.Days[i-1].Add(1)
 	}
 
-	return week
+	return h
+}
+
+func (h Week) TailMonth() time.Month {
+	return h.Days[6].Month()
+}
+
+func (h Week) HeadMonth() time.Month {
+	return h.Days[0].Month()
 }

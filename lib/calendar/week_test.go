@@ -34,3 +34,20 @@ func TestNewWeek(t *testing.T) {
 		})
 	})
 }
+
+func TestWeek_Next(t *testing.T) {
+	t.Parallel()
+
+	Convey("Next", t, func() {
+		moment, err := time.Parse(time.RFC3339, "2022-02-01T00:00:00Z")
+		So(err, ShouldBeNil)
+
+		momentInWeek, err := time.Parse(time.RFC3339, "2022-02-08T00:00:00Z")
+		So(err, ShouldBeNil)
+
+		week := calendar.NewWeek(calendar.FromTime(moment))
+		expected := calendar.NewWeek(calendar.FromTime(momentInWeek))
+
+		So(week.Next(), ShouldResemble, expected)
+	})
+}
