@@ -20,3 +20,21 @@ func TestDay_Add(t *testing.T) {
 		So(today.Add(1), ShouldResemble, tomorrow)
 	})
 }
+
+func TestDay_IsZero(t *testing.T) {
+	t.Parallel()
+
+	Convey("IsZero", t, func() {
+		Convey("is zero", func() {
+			zero := calendar.Day{}
+
+			So(zero.IsZero(), ShouldBeTrue)
+		})
+
+		Convey("not zero", func() {
+			notZero := calendar.Day{Time: time.Now()}
+
+			So(notZero.IsZero(), ShouldBeFalse)
+		})
+	})
+}
