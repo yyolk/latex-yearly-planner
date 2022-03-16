@@ -26,7 +26,7 @@ func TestDay_IsZero(t *testing.T) {
 
 	Convey("IsZero", t, func() {
 		Convey("is zero", func() {
-			zero := calendar.Day{}
+			zero := calendar.Day{} //nolint:exhaustivestruct
 
 			So(zero.IsZero(), ShouldBeTrue)
 		})
