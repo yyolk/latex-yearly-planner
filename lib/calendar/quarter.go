@@ -8,16 +8,16 @@ type Quarter struct {
 
 func NewQuarter(year int, qrtr int, wd time.Weekday) Quarter {
 	if qrtr < FirstQuarter || qrtr > FourthQuarter {
-		return Quarter{}
+		return Quarter{} //nolint:exhaustivestruct
 	}
 
-	mo := time.Month(qrtr*3 - 2)
+	mo := time.Month(qrtr*3 - 2) //nolint:gomnd
 
 	return Quarter{
 		Months: [3]Month{
 			NewMonth(year, mo, wd),
 			NewMonth(year, mo+1, wd),
-			NewMonth(year, mo+2, wd),
+			NewMonth(year, mo+2, wd), //nolint:gomnd
 		},
 	}
 }
