@@ -124,3 +124,27 @@ func TestWeek_TailMonth(t *testing.T) {
 		So(week.TailMonth(), ShouldEqual, time.March)
 	})
 }
+
+func TestWeek_ZerofyMonth(t *testing.T) {
+	t.Parallel()
+
+	Convey("ZerofyMonth", t, func() {
+		moment, err := time.Parse(time.RFC3339, "2022-02-24T00:00:00Z")
+		So(err, ShouldBeNil)
+
+		week := calendar.NewWeek(calendar.FromTime(moment)).ZerofyMonth(time.March)
+		expected := calendar.Week{
+			Days: [7]calendar.Day{
+				{Time: time.Date(2022, time.February, 24, 0, 0, 0, 0, time.UTC)},
+				{Time: time.Date(2022, time.February, 25, 0, 0, 0, 0, time.UTC)},
+				{Time: time.Date(2022, time.February, 26, 0, 0, 0, 0, time.UTC)},
+				{Time: time.Date(2022, time.February, 27, 0, 0, 0, 0, time.UTC)},
+				{Time: time.Date(2022, time.February, 28, 0, 0, 0, 0, time.UTC)},
+				{},
+				{},
+			},
+		}
+
+		So(week, ShouldResemble, expected)
+	})
+}
