@@ -1,5 +1,23 @@
 package calendar
 
+import "time"
+
 type Quarter struct {
 	Months [3]Month
+}
+
+func NewQuarter(year int, qrtr int, wd time.Weekday) Quarter {
+	if qrtr < FirstQuarter || qrtr > FourthQuarter {
+		return Quarter{}
+	}
+
+	mo := time.Month(qrtr*3 - 2)
+
+	return Quarter{
+		Months: [3]Month{
+			NewMonth(year, mo, wd),
+			NewMonth(year, mo+1, wd),
+			NewMonth(year, mo+2, wd),
+		},
+	}
 }
