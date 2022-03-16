@@ -51,3 +51,29 @@ func TestWeek_Next(t *testing.T) {
 		So(week.Next(), ShouldResemble, expected)
 	})
 }
+
+func TestWeek_HeadMonth(t *testing.T) {
+	t.Parallel()
+
+	Convey("HeadMonth", t, func() {
+		moment, err := time.Parse(time.RFC3339, "2022-02-24T00:00:00Z")
+		So(err, ShouldBeNil)
+
+		week := calendar.NewWeek(calendar.FromTime(moment))
+
+		So(week.HeadMonth(), ShouldEqual, time.February)
+	})
+}
+
+func TestWeek_TailMonth(t *testing.T) {
+	t.Parallel()
+
+	Convey("TailMonth", t, func() {
+		moment, err := time.Parse(time.RFC3339, "2022-02-24T00:00:00Z")
+		So(err, ShouldBeNil)
+
+		week := calendar.NewWeek(calendar.FromTime(moment))
+
+		So(week.TailMonth(), ShouldEqual, time.March)
+	})
+}

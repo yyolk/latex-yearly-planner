@@ -38,10 +38,10 @@ func (h Week) fillFromFirstDay() Week {
 	return h
 }
 
-func (h Week) TailMonth() time.Month {
-	return h.Days[6].Month()
-}
-
 func (h Week) HeadMonth() time.Month {
 	return h.Days[0].Month()
+}
+
+func (h Week) TailMonth() time.Month {
+	return h.Days[6].Month()
 }
