@@ -8,22 +8,34 @@ type Week struct {
 	Days [7]Day
 }
 
-type WeekOption func() Day
+type WeekOption func() Week
 
 func FromDay(day Day) WeekOption {
-	return func() Day {
-		return day
+	return func() Week {
+		return Week{Days: [7]Day{day}}.fillFromFirstDay()
 	}
 }
 
 func FromTime(moment time.Time) WeekOption {
-	return func() Day {
-		return Day{Time: moment}
+	return func() Week {
+		return Week{Days: [7]Day{{Time: moment}}}.fillFromFirstDay()
+	}
+}
+
+func FromMonth(year int, mo time.Month, wd time.Weekday) WeekOption {
+	return func() Week {
+		day := Day{Time: time.Date(year, mo, 1, 0, 0, 0, 0, time.Local)}
+		week := Week{} //nolint:exhaustivestruct
+
+		pos := (day.Weekday() - wd + 7) % 7
+		week.Days[pos] = day
+
+		return week.fillFromDay(int(pos))
 	}
 }
 
 func NewWeek(wo WeekOption) Week {
-	return Week{Days: [7]Day{wo()}}.fillFromFirstDay()
+	return wo()
 }
 
 func (h Week) Next() Week {
@@ -31,7 +43,11 @@ func (h Week) Next() Week {
 }
 
 func (h Week) fillFromFirstDay() Week {
-	for i := 1; i < 7; i++ {
+	return h.fillFromDay(0)
+}
+
+func (h Week) fillFromDay(n int) Week {
+	for i := n + 1; i < 7; i++ {
 		h.Days[i] = h.Days[i-1].Add(1)
 	}
 

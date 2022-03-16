@@ -32,6 +32,53 @@ func TestNewWeek(t *testing.T) {
 				So(week.Days[i].Day(), ShouldEqual, i+1)
 			}
 		})
+
+		Convey("new from month", func() {
+			Convey("start from sunday", func() {
+				week := calendar.NewWeek(calendar.FromMonth(2022, time.February, time.Sunday))
+				expected := calendar.Week{Days: [7]calendar.Day{
+					{Time: time.Time{}},
+					{Time: time.Time{}},
+					{Time: time.Date(2022, time.February, 1, 0, 0, 0, 0, time.Local)},
+					{Time: time.Date(2022, time.February, 2, 0, 0, 0, 0, time.Local)},
+					{Time: time.Date(2022, time.February, 3, 0, 0, 0, 0, time.Local)},
+					{Time: time.Date(2022, time.February, 4, 0, 0, 0, 0, time.Local)},
+					{Time: time.Date(2022, time.February, 5, 0, 0, 0, 0, time.Local)},
+				}}
+
+				So(week, ShouldResemble, expected)
+			})
+
+			Convey("start from monday", func() {
+				week := calendar.NewWeek(calendar.FromMonth(2022, time.February, time.Monday))
+				expected := calendar.Week{Days: [7]calendar.Day{
+					{Time: time.Time{}},
+					{Time: time.Date(2022, time.February, 1, 0, 0, 0, 0, time.Local)},
+					{Time: time.Date(2022, time.February, 2, 0, 0, 0, 0, time.Local)},
+					{Time: time.Date(2022, time.February, 3, 0, 0, 0, 0, time.Local)},
+					{Time: time.Date(2022, time.February, 4, 0, 0, 0, 0, time.Local)},
+					{Time: time.Date(2022, time.February, 5, 0, 0, 0, 0, time.Local)},
+					{Time: time.Date(2022, time.February, 6, 0, 0, 0, 0, time.Local)},
+				}}
+
+				So(week, ShouldResemble, expected)
+			})
+
+			Convey("start from friday", func() {
+				week := calendar.NewWeek(calendar.FromMonth(2022, time.February, time.Friday))
+				expected := calendar.Week{Days: [7]calendar.Day{
+					{Time: time.Time{}},
+					{Time: time.Time{}},
+					{Time: time.Time{}},
+					{Time: time.Time{}},
+					{Time: time.Date(2022, time.February, 1, 0, 0, 0, 0, time.Local)},
+					{Time: time.Date(2022, time.February, 2, 0, 0, 0, 0, time.Local)},
+					{Time: time.Date(2022, time.February, 3, 0, 0, 0, 0, time.Local)},
+				}}
+
+				So(week, ShouldResemble, expected)
+			})
+		})
 	})
 }
 
