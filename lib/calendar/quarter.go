@@ -11,7 +11,7 @@ func NewQuarter(year int, qrtr int, wd time.Weekday) Quarter {
 		return Quarter{} //nolint:exhaustivestruct
 	}
 
-	mo := time.Month(qrtr*3 - 2) //nolint:gomnd
+	mo := time.Month((qrtr+1)*3 - 2) //nolint:gomnd
 
 	return Quarter{
 		Months: [3]Month{

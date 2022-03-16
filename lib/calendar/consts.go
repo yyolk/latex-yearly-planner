@@ -1,7 +1,7 @@
 package calendar
 
 const (
-	FirstQuarter = 1 + iota
+	FirstQuarter = iota
 	SecondQuarter
 	ThirdQuarter
 	FourthQuarter
