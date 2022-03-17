@@ -3,6 +3,7 @@ package planners
 import (
 	"errors"
 	"fmt"
+	"os"
 )
 
 type planner interface {
@@ -34,9 +35,25 @@ func New(params Params) (Planner, error) {
 }
 
 func (p Planner) GenerateFiles(dir string) error {
+	if err := p.mkdir(dir); err != nil {
+		return err
+	}
+
 	return p.planner.GenerateFiles(dir) //nolint:wrapcheck
 }
 
 func (p Planner) Compile(dir string) error {
+	if err := p.mkdir(dir); err != nil {
+		return err
+	}
+
 	return p.planner.Compile(dir) //nolint:wrapcheck
+}
+
+func (p Planner) mkdir(dir string) error {
+	if err := os.MkdirAll(dir, os.ModeDir); err != nil {
+		return fmt.Errorf("mkdir all: %w", err)
+	}
+
+	return nil
 }
