@@ -11,7 +11,9 @@ type Planner interface {
 }
 
 type Params struct {
-	Name string
+	Name             string
+	BreadcrumbParams BreadcrumbParams
+	MOSParams        MOSParams
 }
 
 var ErrUnknownPlanner = errors.New("unknown planner")
@@ -19,13 +21,9 @@ var ErrUnknownPlanner = errors.New("unknown planner")
 func New(params Params) (Planner, error) { //nolint:ireturn
 	switch params.Name {
 	case "breadcrumb":
-		return breadcrumb{
-			params: BreadcrumbParams{},
-		}, nil
+		return breadcrumb{params: params.BreadcrumbParams}, nil
 	case "mos":
-		return mos{
-			params: MOSParameters{},
-		}, nil
+		return mos{params: params.MOSParams}, nil
 	}
 
 	return nil, fmt.Errorf("%s: %w", params.Name, ErrUnknownPlanner)

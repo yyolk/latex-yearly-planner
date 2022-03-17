@@ -1,9 +1,9 @@
 package planners
 
-type MOSParameters struct{}
+type MOSParams struct{}
 
 type mos struct {
-	params MOSParameters
+	params MOSParams
 }
 
 func (m mos) GenerateFiles(dir string) error {
