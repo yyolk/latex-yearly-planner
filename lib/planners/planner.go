@@ -34,9 +34,9 @@ func New(params Params) (Planner, error) {
 }
 
 func (p Planner) GenerateFiles(dir string) error {
-	return p.planner.GenerateFiles(dir)
+	return p.planner.GenerateFiles(dir) //nolint:wrapcheck
 }
 
 func (p Planner) Compile(dir string) error {
-	return p.planner.Compile(dir)
+	return p.planner.Compile(dir) //nolint:wrapcheck
 }
