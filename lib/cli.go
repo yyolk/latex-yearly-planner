@@ -8,7 +8,11 @@ import (
 )
 
 func main() {
-	planner := planners.New(planners.Params{})
+	planner, err := planners.New(planners.Params{})
+	if err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, "new planner: %w", err)
+	}
+
 	if err := planner.GenerateFiles("out"); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, "generate files: %w", err)
 		os.Exit(1)

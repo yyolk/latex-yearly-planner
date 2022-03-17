@@ -1,17 +1,26 @@
 package planners
 
-type Planner struct{}
+import (
+	"errors"
+	"fmt"
+)
 
-type Params struct{}
-
-func New(_ Params) Planner {
-	return Planner{}
+type Planner interface {
+	GenerateFiles(dir string) error
+	Compile(dir string) error
 }
 
-func (p Planner) GenerateFiles(_ string) error {
-	panic("not implemented")
+type Params struct {
+	Name string
 }
 
-func (p Planner) Compile(_ string) error {
-	panic("not implemented")
+var ErrUnknownPlanner = errors.New("unknown planner")
+
+func New(params Params) (Planner, error) { //nolint:ireturn
+	switch params.Name { // nolint:gocritic
+	case "breadcrumb":
+		return Breadcrumb{}, nil
+	}
+
+	return nil, fmt.Errorf("%s: %w", params.Name, ErrUnknownPlanner)
 }
