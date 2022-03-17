@@ -8,7 +8,10 @@ import (
 )
 
 func main() {
-	planner, err := planners.New(planners.Params{})
+	planner, err := planners.New(planners.Params{
+		Name: "breadcrumb",
+	})
+
 	if err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, "new planner: %w", err)
 	}
