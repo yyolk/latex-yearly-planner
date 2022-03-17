@@ -2,14 +2,14 @@ package planners
 
 type BreadcrumbParams struct{}
 
-type Breadcrumb struct {
+type breadcrumb struct {
 	Params BreadcrumbParams
 }
 
-func (r Breadcrumb) GenerateFiles(_ string) error {
+func (r breadcrumb) GenerateFiles(_ string) error {
 	panic("not implemented")
 }
 
-func (r Breadcrumb) Compile(_ string) error {
+func (r breadcrumb) Compile(_ string) error {
 	panic("not implemented")
 }

@@ -19,7 +19,7 @@ var ErrUnknownPlanner = errors.New("unknown planner")
 func New(params Params) (Planner, error) { //nolint:ireturn
 	switch params.Name { // nolint:gocritic
 	case "breadcrumb":
-		return Breadcrumb{
+		return breadcrumb{
 			Params: BreadcrumbParams{},
 		}, nil
 	}
