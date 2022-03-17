@@ -5,26 +5,38 @@ import (
 	"fmt"
 )
 
-type Planner interface {
+type planner interface {
 	GenerateFiles(dir string) error
 	Compile(dir string) error
 }
 
+type Planner struct {
+	planner planner
+}
+
 type Params struct {
-	Name             string
 	BreadcrumbParams BreadcrumbParams
 	MOSParams        MOSParams
+	Name             string
 }
 
 var ErrUnknownPlanner = errors.New("unknown planner")
 
-func New(params Params) (Planner, error) { //nolint:ireturn
+func New(params Params) (Planner, error) {
 	switch params.Name {
 	case "breadcrumb":
-		return breadcrumb{params: params.BreadcrumbParams}, nil
+		return Planner{planner: breadcrumb{params: params.BreadcrumbParams}}, nil
 	case "mos":
-		return mos{params: params.MOSParams}, nil
+		return Planner{planner: mos{params: params.MOSParams}}, nil
 	}
 
-	return nil, fmt.Errorf("%s: %w", params.Name, ErrUnknownPlanner)
+	return Planner{}, fmt.Errorf("%s: %w", params.Name, ErrUnknownPlanner)
+}
+
+func (p Planner) GenerateFiles(dir string) error {
+	return p.planner.GenerateFiles(dir)
+}
+
+func (p Planner) Compile(dir string) error {
+	return p.planner.Compile(dir)
 }
