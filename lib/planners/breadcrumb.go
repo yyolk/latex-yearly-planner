@@ -3,7 +3,7 @@ package planners
 type BreadcrumbParams struct{}
 
 type breadcrumb struct {
-	Params BreadcrumbParams
+	params BreadcrumbParams
 }
 
 func (r breadcrumb) GenerateFiles(_ string) error {

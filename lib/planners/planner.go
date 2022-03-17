@@ -17,10 +17,14 @@ type Params struct {
 var ErrUnknownPlanner = errors.New("unknown planner")
 
 func New(params Params) (Planner, error) { //nolint:ireturn
-	switch params.Name { // nolint:gocritic
+	switch params.Name {
 	case "breadcrumb":
 		return breadcrumb{
-			Params: BreadcrumbParams{},
+			params: BreadcrumbParams{},
+		}, nil
+	case "mos":
+		return mos{
+			params: MOSParameters{},
 		}, nil
 	}
 
