@@ -46,12 +46,10 @@ type Margin struct {
 
 type ApplyToTemplateData func(*TemplateData)
 
-func (r *TemplateData) Apply(options ...ApplyToTemplateData) *TemplateData {
+func (r *TemplateData) Apply(options ...ApplyToTemplateData) {
 	for _, option := range options {
 		option(r)
 	}
-
-	return r
 }
 
 func WithFiles(files ...string) ApplyToTemplateData {
@@ -63,6 +61,12 @@ func WithFiles(files ...string) ApplyToTemplateData {
 func WithLayout(layout Layout) ApplyToTemplateData {
 	return func(data *TemplateData) {
 		data.layout = layout
+	}
+}
+
+func WithYear(year int) ApplyToTemplateData {
+	return func(data *TemplateData) {
+		data.year = year
 	}
 }
 

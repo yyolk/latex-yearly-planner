@@ -3,6 +3,7 @@ package app2
 import (
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners"
@@ -14,6 +15,7 @@ type App struct {
 }
 
 const (
+	year       = "year"
 	deviceName = "device-name"
 )
 
@@ -37,6 +39,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 					&cli.Command{
 						Name: "mos",
 						Flags: []cli.Flag{
+							&cli.IntFlag{Name: year, Value: time.Now().Year()},
 							&cli.StringFlag{Name: deviceName, Required: true},
 						},
 						Action: func(appContext *cli.Context) error {
@@ -45,7 +48,10 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								return fmt.Errorf("new device: %w", err)
 							}
 
-							planner, err := planners.New(planners.NewParams(planners.MonthsOnSidesTemplate))
+							params := planners.NewParams(planners.MonthsOnSidesTemplate)
+							params.TemplateData.Apply(planners.WithYear(appContext.Int(year)))
+
+							planner, err := planners.New(params)
 							if err != nil {
 								return fmt.Errorf("new planner: %w", err)
 							}
