@@ -1,7 +1,7 @@
 package app2
 
 import (
-	"os"
+	"io"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/flags"
 	"github.com/urfave/cli/v2"
@@ -12,10 +12,10 @@ type App struct {
 	deviceFlag *flags.DeviceFlag
 }
 
-func New() *App {
+func New(reader io.Reader, writer, errWriter io.Writer) *App {
 	return (&App{}).
 		prepareFlags().
-		setupCli()
+		setupCli(reader, writer, errWriter)
 }
 
 func (r *App) prepareFlags() *App {
@@ -24,13 +24,13 @@ func (r *App) prepareFlags() *App {
 	return r
 }
 
-func (r *App) setupCli() *App {
+func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 	r.app = &cli.App{
 		Name: "plannergen",
 
-		Reader:    os.Stdin,
-		Writer:    os.Stdout,
-		ErrWriter: os.Stderr,
+		Reader:    reader,
+		Writer:    writer,
+		ErrWriter: errWriter,
 		Flags:     r.flags(),
 
 		Action: r.mainAction,
