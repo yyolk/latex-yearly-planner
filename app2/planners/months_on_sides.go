@@ -58,7 +58,7 @@ func WithDevice(device devices.Device) ApplyToTemplateData {
 	}
 }
 
-func (r *MonthsOnSides) WriteTo(dir string) error {
+func (r *MonthsOnSides) WriteTeXTo(dir string) error {
 	for _, future := range r.futureFiles {
 		if err := os.WriteFile(path.Join(dir, future.name), []byte(future.buffer.String()), 0600); err != nil {
 			return fmt.Errorf("write file %s: %w", future.name, err)

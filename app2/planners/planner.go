@@ -14,7 +14,7 @@ const (
 
 type Planner interface {
 	GenerateFor(devices.Device) error
-	WriteTo(dir string) error
+	WriteTeXTo(dir string) error
 	Compile(context.Context) error
 }
 

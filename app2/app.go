@@ -54,7 +54,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								return fmt.Errorf("generate: %w", err)
 							}
 
-							if err = planner.WriteTo("./out"); err != nil {
+							if err = planner.WriteTeXTo("./out"); err != nil {
 								return fmt.Errorf("write to ./out: %w", err)
 							}
 
