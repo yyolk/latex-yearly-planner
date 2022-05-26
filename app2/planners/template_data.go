@@ -1,10 +1,15 @@
 package planners
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/kudrykv/latex-yearly-planner/app2/devices"
+)
 
 type TemplateData struct {
-	Year  int
-	files []string
+	Year   int
+	files  []string
+	device devices.Device
 }
 
 type ApplyToTemplateData func(*TemplateData)
@@ -21,6 +26,10 @@ func WithFiles(files ...string) ApplyToTemplateData {
 	return func(data *TemplateData) {
 		data.files = files
 	}
+}
+
+func (r TemplateData) Device() devices.Device {
+	return r.device
 }
 
 func (r TemplateData) PaperWidth() string {

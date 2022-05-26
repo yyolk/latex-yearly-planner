@@ -32,6 +32,8 @@ func newMonthsOnSides(params Params) (*MonthsOnSides, error) {
 }
 
 func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
+	r.params.TemplateData.Apply(WithDevice(device))
+
 	if err := r.createTitle(); err != nil {
 		return fmt.Errorf("create title: %w", err)
 	}
@@ -41,6 +43,12 @@ func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
 	}
 
 	return nil
+}
+
+func WithDevice(device devices.Device) ApplyToTemplateData {
+	return func(data *TemplateData) {
+		data.device = device
+	}
 }
 
 func (r *MonthsOnSides) WriteTo(dir string) error {
@@ -139,7 +147,7 @@ const rootDocumentTex = `\documentclass[9pt]{extarticle}
 \usepackage{multido}
 
 
-\geometry{paperwidth={{.PaperWidth}}, paperheight={{.PaperHeight}}}
+\geometry{paperwidth={{.Device.Paper.Width}}, paperheight={{.Device.Paper.Height}}}
 \geometry{
              top={{ .TopMargin }},
           bottom={{ .BottomMargin }},
