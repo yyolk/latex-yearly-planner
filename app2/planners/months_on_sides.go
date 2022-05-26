@@ -167,10 +167,10 @@ const rootDocumentTex = `\documentclass[9pt]{extarticle}
 
 \geometry{paperwidth={{.Device.Paper.Width}}, paperheight={{.Device.Paper.Height}}}
 \geometry{
-             top={{ .TopMargin }},
-          bottom={{ .BottomMargin }},
-            left={{ .LeftMargin }},
-           right={{ .RightMargin }},
+             top={{ .Layout.Margin.Top }},
+          bottom={{ .Layout.Margin.Bottom }},
+            left={{ .Layout.Margin.Left }},
+           right={{ .Layout.Margin.Right }},
   marginparwidth={{ .MarginNotesWidth }},
     marginparsep={{ .MarginNotesMargin }}
 }

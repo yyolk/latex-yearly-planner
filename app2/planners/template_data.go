@@ -21,7 +21,7 @@ func newLayout(device devices.Device) (Layout, error) {
 	switch device.(type) {
 	case *devices.SupernoteA5X:
 		return Layout{
-			Margins: Margins{
+			Margin: Margin{
 				Top:    "1cm",
 				Right:  "5mm",
 				Bottom: "5mm",
@@ -34,10 +34,10 @@ func newLayout(device devices.Device) (Layout, error) {
 }
 
 type Layout struct {
-	Margins Margins
+	Margin Margin
 }
 
-type Margins struct {
+type Margin struct {
 	Top    string
 	Right  string
 	Bottom string
@@ -74,20 +74,8 @@ func (r TemplateData) Device() devices.Device {
 	return r.device
 }
 
-func (r TemplateData) TopMargin() string {
-	return "1.4cm"
-}
-
-func (r TemplateData) BottomMargin() string {
-	return "5mm"
-}
-
-func (r TemplateData) LeftMargin() string {
-	return "5mm"
-}
-
-func (r TemplateData) RightMargin() string {
-	return "5mm"
+func (r TemplateData) Layout() Layout {
+	return r.layout
 }
 
 func (r TemplateData) MarginNotesWidth() string {
