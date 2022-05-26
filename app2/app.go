@@ -14,8 +14,7 @@ type App struct {
 }
 
 const (
-	deviceName  = "device-name"
-	plannerName = "planner-name"
+	deviceName = "device-name"
 )
 
 func New(reader io.Reader, writer, errWriter io.Writer) *App {
@@ -30,37 +29,40 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 		Reader:    reader,
 		Writer:    writer,
 		ErrWriter: errWriter,
-		Flags:     r.flags(),
 
-		Action: r.mainAction,
+		Commands: cli.Commands{
+			&cli.Command{
+				Name: "template",
+				Subcommands: cli.Commands{
+					&cli.Command{
+						Name: "mos",
+						Flags: []cli.Flag{
+							&cli.StringFlag{Name: deviceName, Required: true},
+						},
+						Action: func(appContext *cli.Context) error {
+							device, err := devices.New(appContext.String(deviceName))
+							if err != nil {
+								return fmt.Errorf("new device: %w", err)
+							}
+
+							template, err := planners.New(planners.MonthsOnSidesTemplate)
+							if err != nil {
+								return fmt.Errorf("new template: %w", err)
+							}
+
+							if err = template.GenerateFor(device); err != nil {
+								return fmt.Errorf("generate: %w", err)
+							}
+
+							return nil
+						},
+					},
+				},
+			},
+		},
 	}
 
 	return r
-}
-
-func (r *App) flags() []cli.Flag {
-	return []cli.Flag{
-		&cli.StringFlag{Name: deviceName, Required: true},
-		&cli.StringFlag{Name: plannerName, Required: true},
-	}
-}
-
-func (r *App) mainAction(appContext *cli.Context) error {
-	device, err := devices.New(appContext.String(deviceName))
-	if err != nil {
-		return fmt.Errorf("new device: %w", err)
-	}
-
-	template, err := planners.New(appContext.String(plannerName))
-	if err != nil {
-		return fmt.Errorf("new template: %w", err)
-	}
-
-	if err = template.GenerateFor(device); err != nil {
-		return fmt.Errorf("generate: %w", err)
-	}
-
-	return nil
 }
 
 func (r *App) Run(args []string) error {
