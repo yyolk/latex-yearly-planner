@@ -5,7 +5,7 @@ import (
 	"io"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
-	"github.com/kudrykv/latex-yearly-planner/app2/templates"
+	"github.com/kudrykv/latex-yearly-planner/app2/planners"
 	"github.com/urfave/cli/v2"
 )
 
@@ -57,7 +57,7 @@ func (r *App) mainAction(appContext *cli.Context) error {
 		return fmt.Errorf("new device: %w", err)
 	}
 
-	template, err := templates.New(appContext.String(templateName))
+	template, err := planners.New(appContext.String(templateName))
 	if err != nil {
 		return fmt.Errorf("new template: %w", err)
 	}
