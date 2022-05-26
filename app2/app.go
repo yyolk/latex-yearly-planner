@@ -46,12 +46,6 @@ func (r *App) flags() []cli.Flag {
 }
 
 func (r *App) mainAction(appContext *cli.Context) error {
-	// dimensions:
-	// - device (supernote, remarkable (vanilla, ddvk), ?boox)
-	//     this defines dimensions and internal layout boundaries: leave empty space for control elements
-	// - template - which template to use
-	//     sub-dependent are enabled template sections
-	//     based on what is selected, some links should or should not be displayed, etc
 	device, err := devices.New(appContext.String(deviceName))
 	if err != nil {
 		return fmt.Errorf("new device: %w", err)
