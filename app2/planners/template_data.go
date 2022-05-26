@@ -9,6 +9,30 @@ import (
 )
 
 type Section string
+type Sections []Section
+
+func (r Sections) Exists(section string) bool {
+	for _, existing := range r {
+		if string(existing) == section {
+			return true
+		}
+	}
+
+	return false
+}
+
+const (
+	title        Section = "title"
+	annual       Section = "annual"
+	quarterly    Section = "quarterly"
+	monthly      Section = "monthly"
+	weekly       Section = "weekly"
+	daily        Section = "daily"
+	dailyNotes   Section = "daily_notes"
+	dailyReflect Section = "daily_reflect"
+	notes        Section = "notes"
+	copyright    Section = "copyright"
+)
 
 type TemplateData struct {
 	year     int

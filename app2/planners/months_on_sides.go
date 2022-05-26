@@ -13,10 +13,11 @@ import (
 )
 
 type MonthsOnSides struct {
-	params      Params
-	futureFiles []futureFile
-	templates   *template.Template
-	dir         string
+	params            Params
+	futureFiles       []futureFile
+	templates         *template.Template
+	dir               string
+	availableSections Sections
 }
 
 type futureFile struct {
@@ -25,7 +26,21 @@ type futureFile struct {
 }
 
 func newMonthsOnSides(params Params) (*MonthsOnSides, error) {
-	mos := &MonthsOnSides{params: params}
+	mos := &MonthsOnSides{
+		params: params,
+		availableSections: Sections{
+			title,
+			annual,
+			quarterly,
+			monthly,
+			weekly,
+			daily,
+			dailyNotes,
+			dailyReflect,
+			notes,
+			copyright,
+		},
+	}
 
 	if err := mos.init(); err != nil {
 		return nil, fmt.Errorf("init: %w", err)
