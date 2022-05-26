@@ -1,6 +1,7 @@
 package app2
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/flags"
@@ -52,6 +53,12 @@ func (r *App) mainAction(appContext *cli.Context) error {
 	// - template - which template to use
 	//     sub-dependent are enabled template sections
 	//     based on what is selected, some links should or should not be displayed, etc
+	device, err := r.deviceFlag.Device()
+	if err != nil {
+		return fmt.Errorf("get device: %w", err)
+	}
+
+	_ = device
 
 	// get / parse configs
 	// create tex files
