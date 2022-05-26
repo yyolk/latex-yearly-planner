@@ -95,7 +95,7 @@ func (r *MonthsOnSides) init() error {
 func (r *MonthsOnSides) createTitle() error {
 	buffer := &bytes.Buffer{}
 
-	if err := r.templates.ExecuteTemplate(buffer, "title", r.params.TemplateData); err != nil {
+	if err := r.templates.ExecuteTemplate(buffer, titleTpl, r.params.TemplateData); err != nil {
 		return fmt.Errorf("execute template title: %w", err)
 	}
 
@@ -114,7 +114,7 @@ func (r *MonthsOnSides) createRootDocument() error {
 	r.params.TemplateData.Apply(WithFiles(files...))
 
 	buffer := &bytes.Buffer{}
-	if err := r.templates.ExecuteTemplate(buffer, "root-document", r.params.TemplateData); err != nil {
+	if err := r.templates.ExecuteTemplate(buffer, rootDocumentTpl, r.params.TemplateData); err != nil {
 		return fmt.Errorf("execute template root-document: %w", err)
 	}
 
