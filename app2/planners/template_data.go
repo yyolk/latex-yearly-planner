@@ -86,7 +86,7 @@ func (r TemplateData) MarginNotesMargin() string {
 	return "3mm"
 }
 
-func (r TemplateData) Pages() string {
+func (r TemplateData) Files() string {
 	include := func(str string) string { return `\include{` + str + `}` }
 
 	var wrappedPages []string

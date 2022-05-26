@@ -182,6 +182,6 @@ const rootDocumentTex = `\documentclass[9pt]{extarticle}
 
 \begin{document}
 
-{{ .Pages }}
+{{ .Files }}
 
 \end{document}`
