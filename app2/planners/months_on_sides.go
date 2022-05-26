@@ -3,6 +3,7 @@ package planners
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"os/exec"
@@ -13,12 +14,13 @@ import (
 )
 
 type MonthsOnSides struct {
-	params            Params
-	futureFiles       []futureFile
-	templates         *template.Template
-	dir               string
-	availableSections Sections
+	params      Params
+	futureFiles []futureFile
+	templates   *template.Template
+	dir         string
 }
+
+var UnknownSectionErr = errors.New("unknown section")
 
 type futureFile struct {
 	name   string
@@ -28,18 +30,6 @@ type futureFile struct {
 func newMonthsOnSides(params Params) (*MonthsOnSides, error) {
 	mos := &MonthsOnSides{
 		params: params,
-		availableSections: Sections{
-			title,
-			annual,
-			quarterly,
-			monthly,
-			weekly,
-			daily,
-			dailyNotes,
-			dailyReflect,
-			notes,
-			copyright,
-		},
 	}
 
 	if err := mos.init(); err != nil {
@@ -57,8 +47,17 @@ func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
 
 	r.params.TemplateData.Apply(WithLayout(layout), WithDevice(device))
 
-	if err := r.createTitle(); err != nil {
-		return fmt.Errorf("create title: %w", err)
+	funcs := r.sections()
+
+	for _, section := range r.params.TemplateData.sections {
+		f, ok := funcs[section]
+		if !ok {
+			return fmt.Errorf("%v: %w", section, UnknownSectionErr)
+		}
+
+		if err = f(); err != nil {
+			return fmt.Errorf("%v: %w", section, err)
+		}
 	}
 
 	if err := r.createRootDocument(); err != nil {
@@ -66,6 +65,12 @@ func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
 	}
 
 	return nil
+}
+
+func (r *MonthsOnSides) sections() map[string]func() error {
+	return map[string]func() error{
+		TitleSection: r.createTitle,
+	}
 }
 
 func WithDevice(device devices.Device) ApplyToTemplateData {

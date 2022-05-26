@@ -8,30 +8,8 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 )
 
-type Section string
-type Sections []Section
-
-func (r Sections) Exists(section string) bool {
-	for _, existing := range r {
-		if string(existing) == section {
-			return true
-		}
-	}
-
-	return false
-}
-
 const (
-	title        Section = "title"
-	annual       Section = "annual"
-	quarterly    Section = "quarterly"
-	monthly      Section = "monthly"
-	weekly       Section = "weekly"
-	daily        Section = "daily"
-	dailyNotes   Section = "daily_notes"
-	dailyReflect Section = "daily_reflect"
-	notes        Section = "notes"
-	copyright    Section = "copyright"
+	TitleSection = "title"
 )
 
 type TemplateData struct {
@@ -39,7 +17,7 @@ type TemplateData struct {
 	files    []string
 	device   devices.Device
 	layout   Layout
-	sections []Section
+	sections []string
 }
 
 var UnknownDeviceTypeErr = errors.New("unknown device type")
@@ -99,13 +77,7 @@ func WithYear(year int) ApplyToTemplateData {
 
 func WithSections(sections []string) ApplyToTemplateData {
 	return func(data *TemplateData) {
-		if len(sections) == 0 {
-			return
-		}
-
-		for _, section := range sections {
-			data.sections = append(data.sections, Section(section))
-		}
+		data.sections = sections
 	}
 }
 
