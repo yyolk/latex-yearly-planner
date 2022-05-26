@@ -45,12 +45,12 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								return fmt.Errorf("new device: %w", err)
 							}
 
-							template, err := planners.New(planners.MonthsOnSidesTemplate)
+							planner, err := planners.New(planners.MonthsOnSidesTemplate)
 							if err != nil {
-								return fmt.Errorf("new template: %w", err)
+								return fmt.Errorf("new planner: %w", err)
 							}
 
-							if err = template.GenerateFor(device); err != nil {
+							if err = planner.GenerateFor(device); err != nil {
 								return fmt.Errorf("generate: %w", err)
 							}
 
