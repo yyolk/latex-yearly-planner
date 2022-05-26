@@ -1,10 +1,10 @@
 package planners
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"path"
-	"strings"
 	"text/template"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
@@ -17,8 +17,8 @@ type MonthsOnSides struct {
 }
 
 type futureFile struct {
-	name    string
-	builder *strings.Builder
+	name   string
+	buffer *bytes.Buffer
 }
 
 func newMonthsOnSides(params Params) (*MonthsOnSides, error) {
@@ -36,12 +36,16 @@ func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
 		return fmt.Errorf("create title: %w", err)
 	}
 
+	if err := r.createRootDocument(); err != nil {
+		return fmt.Errorf("create root document: %w", err)
+	}
+
 	return nil
 }
 
 func (r *MonthsOnSides) WriteTo(dir string) error {
 	for _, future := range r.futureFiles {
-		if err := os.WriteFile(path.Join(dir, future.name), []byte(future.builder.String()), 0600); err != nil {
+		if err := os.WriteFile(path.Join(dir, future.name), []byte(future.buffer.String()), 0600); err != nil {
 			return fmt.Errorf("write file %s: %w", future.name, err)
 		}
 	}
@@ -60,19 +64,33 @@ func (r *MonthsOnSides) init() error {
 }
 
 func (r *MonthsOnSides) createTitle() error {
-	builder := &strings.Builder{}
+	buffer := &bytes.Buffer{}
 
-	if err := r.templates.ExecuteTemplate(builder, "title", r.params.TemplateData); err != nil {
+	if err := r.templates.ExecuteTemplate(buffer, "title", r.params.TemplateData); err != nil {
 		return fmt.Errorf("execute template title: %w", err)
 	}
 
-	r.futureFiles = append(r.futureFiles, futureFile{name: "title.tex", builder: builder})
+	r.futureFiles = append(r.futureFiles, futureFile{name: "title.tex", buffer: buffer})
 
 	return nil
 }
 
-func (r *MonthsOnSides) writeTo(dir string) {
+func (r *MonthsOnSides) createRootDocument() error {
+	files := make([]string, 0, len(r.futureFiles))
 
+	for _, file := range r.futureFiles {
+		files = append(files, file.name)
+	}
+
+	buffer := &bytes.Buffer{}
+
+	if err := r.templates.ExecuteTemplate(buffer, "root-document", r.params.TemplateData.Apply(WithFiles(files...))); err != nil {
+		return fmt.Errorf("execute template root-document: %w", err)
+	}
+
+	r.futureFiles = append(r.futureFiles, futureFile{name: "document.tex", buffer: buffer})
+
+	return nil
 }
 
 func bigTemplateStuff() (*template.Template, error) {
@@ -80,7 +98,7 @@ func bigTemplateStuff() (*template.Template, error) {
 
 	var err error
 
-	for _, row := range [][]string{{"title", titleTex}} {
+	for _, row := range [][]string{{"title", titleTex}, {"root-document", rootDocumentTex}} {
 		tpls = tpls.New(row[0])
 
 		if tpls, err = tpls.Parse(row[1]); err != nil {
@@ -94,3 +112,50 @@ func bigTemplateStuff() (*template.Template, error) {
 const titleTex = `\hspace{0pt}\vfil
 \hfill\resizebox{.7\linewidth}{!}{ {{- .Year -}} }%
 \pagebreak`
+
+const rootDocumentTex = `\documentclass[9pt]{extarticle}
+
+\usepackage{geometry}
+\usepackage[table]{xcolor}
+\usepackage{calc}
+\usepackage{dashrule}
+\usepackage{setspace}
+\usepackage{array}
+\usepackage{tikz}
+\usepackage{varwidth}
+\usepackage{blindtext}
+\usepackage{tabularx}
+\usepackage{wrapfig}
+\usepackage{makecell}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{amssymb}
+\usepackage{expl3}
+\usepackage{leading}
+\usepackage{pgffor}
+\usepackage{hyperref}
+\usepackage{marginnote}
+\usepackage{adjustbox}
+\usepackage{multido}
+
+
+\geometry{paperwidth={{.PaperWidth}}, paperheight={{.PaperHeight}}}
+\geometry{
+             top={{ .TopMargin }},
+          bottom={{ .BottomMargin }},
+            left={{ .LeftMargin }},
+           right={{ .RightMargin }},
+  marginparwidth={{ .MarginNotesWidth }},
+    marginparsep={{ .MarginNotesMargin }}
+}
+
+\pagestyle{empty}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\parindent=0pt
+\fboxsep0pt
+
+\begin{document}
+
+{{ .Pages }}
+
+\end{document}`

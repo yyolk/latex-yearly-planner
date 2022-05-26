@@ -5,10 +5,6 @@ type Params struct {
 	TemplateData TemplateData
 }
 
-type TemplateData struct {
-	Year int
-}
-
 func NewParams(name string) Params {
 	return Params{
 		Name:         name,
