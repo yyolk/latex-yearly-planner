@@ -25,11 +25,3 @@ func New(params Params) (Planner, error) {
 		return nil, fmt.Errorf("%s: %w", params.Name, UnknownTemplateName)
 	}
 }
-
-type MonthsOnSides struct {
-	params Params
-}
-
-func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
-	return nil
-}
