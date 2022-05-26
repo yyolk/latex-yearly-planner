@@ -32,14 +32,6 @@ func (r TemplateData) Device() devices.Device {
 	return r.device
 }
 
-func (r TemplateData) PaperWidth() string {
-	return "15.9cm"
-}
-
-func (r TemplateData) PaperHeight() string {
-	return "20.3cm"
-}
-
 func (r TemplateData) TopMargin() string {
 	return "1.4cm"
 }
