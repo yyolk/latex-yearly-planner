@@ -14,12 +14,12 @@ type DeviceFlag struct {
 
 var UnknownDeviceNameErr = errors.New("unknown device")
 
-func (f DeviceFlag) Device() (devices.Device, error) {
-	switch f.Name {
+func (r DeviceFlag) Device() (devices.Device, error) {
+	switch r.GetValue() {
 	case "supernote_a5x":
 		return &devices.SupernoteA5X{}, nil
 	default:
-		return nil, fmt.Errorf("%s: %w", f.Name, UnknownDeviceNameErr)
+		return nil, fmt.Errorf("%s: %w", r.GetValue(), UnknownDeviceNameErr)
 	}
 }
 

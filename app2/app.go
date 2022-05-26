@@ -9,8 +9,9 @@ import (
 )
 
 type App struct {
-	app        *cli.App
-	deviceFlag *flags.DeviceFlag
+	app          *cli.App
+	deviceFlag   *flags.DeviceFlag
+	templateFlag *flags.TemplateFlag
 }
 
 func New(reader io.Reader, writer, errWriter io.Writer) *App {
@@ -21,6 +22,7 @@ func New(reader io.Reader, writer, errWriter io.Writer) *App {
 
 func (r *App) prepareFlags() *App {
 	r.deviceFlag = flags.NewDeviceFlag()
+	r.templateFlag = flags.NewTemplateFlag()
 
 	return r
 }
@@ -43,6 +45,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 func (r *App) flags() []cli.Flag {
 	return []cli.Flag{
 		r.deviceFlag,
+		r.templateFlag,
 	}
 }
 
