@@ -58,6 +58,10 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								return fmt.Errorf("write to ./out: %w", err)
 							}
 
+							if err = planner.Compile(appContext.Context); err != nil {
+								return fmt.Errorf("compile: %w", err)
+							}
+
 							return nil
 						},
 					},

@@ -1,6 +1,7 @@
 package planners
 
 import (
+	"context"
 	"errors"
 	"fmt"
 
@@ -14,6 +15,7 @@ const (
 type Planner interface {
 	GenerateFor(devices.Device) error
 	WriteTo(dir string) error
+	Compile(context.Context) error
 }
 
 var UnknownTemplateName = errors.New("unknown planner name")

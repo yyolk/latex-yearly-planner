@@ -2,8 +2,10 @@ package planners
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"os"
+	"os/exec"
 	"path"
 	"text/template"
 
@@ -56,6 +58,17 @@ func (r *MonthsOnSides) WriteTo(dir string) error {
 		if err := os.WriteFile(path.Join(dir, future.name), []byte(future.buffer.String()), 0600); err != nil {
 			return fmt.Errorf("write file %s: %w", future.name, err)
 		}
+	}
+
+	return nil
+}
+
+func (r *MonthsOnSides) Compile(ctx context.Context) error {
+	cmd := exec.CommandContext(ctx, "pdflatex", "./document.tex")
+	cmd.Dir = "./out"
+
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("run pdflatex: %w", err)
 	}
 
 	return nil
