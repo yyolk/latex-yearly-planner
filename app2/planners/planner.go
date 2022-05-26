@@ -20,7 +20,7 @@ var UnknownTemplateName = errors.New("unknown planner name")
 func New(params Params) (Planner, error) {
 	switch params.Name {
 	case MonthsOnSidesTemplate:
-		return &MonthsOnSides{params: params}, nil
+		return newMonthsOnSides(params)
 	default:
 		return nil, fmt.Errorf("%s: %w", params.Name, UnknownTemplateName)
 	}
