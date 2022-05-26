@@ -16,6 +16,7 @@ type MonthsOnSides struct {
 	params      Params
 	futureFiles []futureFile
 	templates   *template.Template
+	dir         string
 }
 
 type futureFile struct {
@@ -65,12 +66,14 @@ func (r *MonthsOnSides) WriteTeXTo(dir string) error {
 		}
 	}
 
+	r.dir = dir
+
 	return nil
 }
 
 func (r *MonthsOnSides) Compile(ctx context.Context) error {
 	cmd := exec.CommandContext(ctx, "pdflatex", "./document.tex")
-	cmd.Dir = "./out"
+	cmd.Dir = r.dir
 
 	if err := cmd.Run(); err != nil {
 		return fmt.Errorf("run pdflatex: %w", err)
@@ -108,9 +111,10 @@ func (r *MonthsOnSides) createRootDocument() error {
 		files = append(files, file.name)
 	}
 
-	buffer := &bytes.Buffer{}
+	r.params.TemplateData.Apply(WithFiles(files...))
 
-	if err := r.templates.ExecuteTemplate(buffer, "root-document", r.params.TemplateData.Apply(WithFiles(files...))); err != nil {
+	buffer := &bytes.Buffer{}
+	if err := r.templates.ExecuteTemplate(buffer, "root-document", r.params.TemplateData); err != nil {
 		return fmt.Errorf("execute template root-document: %w", err)
 	}
 
