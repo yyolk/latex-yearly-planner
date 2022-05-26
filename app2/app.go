@@ -45,7 +45,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								return fmt.Errorf("new device: %w", err)
 							}
 
-							planner, err := planners.New(planners.MonthsOnSidesTemplate)
+							planner, err := planners.New(planners.NewParams(planners.MonthsOnSidesTemplate))
 							if err != nil {
 								return fmt.Errorf("new planner: %w", err)
 							}
