@@ -15,7 +15,9 @@ type App struct {
 }
 
 const (
-	year       = "year"
+	year     = "year"
+	sections = "sections"
+
 	deviceName = "device-name"
 )
 
@@ -41,6 +43,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 						Flags: []cli.Flag{
 							&cli.IntFlag{Name: year, Value: time.Now().Year()},
 							&cli.StringFlag{Name: deviceName, Required: true},
+							&cli.StringSliceFlag{Name: sections, Value: cli.NewStringSlice()},
 						},
 						Action: func(appContext *cli.Context) error {
 							device, err := devices.New(appContext.String(deviceName))
@@ -49,7 +52,10 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 							}
 
 							params := planners.NewParams(planners.MonthsOnSidesTemplate)
-							params.TemplateData.Apply(planners.WithYear(appContext.Int(year)))
+							params.TemplateData.Apply(
+								planners.WithYear(appContext.Int(year)),
+								planners.WithSections(appContext.StringSlice(sections)),
+							)
 
 							planner, err := planners.New(params)
 							if err != nil {

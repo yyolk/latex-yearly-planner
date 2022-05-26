@@ -8,11 +8,14 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 )
 
+type Section string
+
 type TemplateData struct {
-	year   int
-	files  []string
-	device devices.Device
-	layout Layout
+	year     int
+	files    []string
+	device   devices.Device
+	layout   Layout
+	sections []Section
 }
 
 var UnknownDeviceTypeErr = errors.New("unknown device type")
@@ -52,7 +55,7 @@ func (r *TemplateData) Apply(options ...ApplyToTemplateData) {
 	}
 }
 
-func WithFiles(files ...string) ApplyToTemplateData {
+func WithFiles(files []string) ApplyToTemplateData {
 	return func(data *TemplateData) {
 		data.files = files
 	}
@@ -67,6 +70,18 @@ func WithLayout(layout Layout) ApplyToTemplateData {
 func WithYear(year int) ApplyToTemplateData {
 	return func(data *TemplateData) {
 		data.year = year
+	}
+}
+
+func WithSections(sections []string) ApplyToTemplateData {
+	return func(data *TemplateData) {
+		if len(sections) == 0 {
+			return
+		}
+
+		for _, section := range sections {
+			data.sections = append(data.sections, Section(section))
+		}
 	}
 }
 

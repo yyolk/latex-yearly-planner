@@ -111,7 +111,7 @@ func (r *MonthsOnSides) createRootDocument() error {
 		files = append(files, file.name)
 	}
 
-	r.params.TemplateData.Apply(WithFiles(files...))
+	r.params.TemplateData.Apply(WithFiles(files))
 
 	buffer := &bytes.Buffer{}
 	if err := r.templates.ExecuteTemplate(buffer, rootDocumentTpl, r.params.TemplateData); err != nil {
