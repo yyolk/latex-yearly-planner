@@ -14,8 +14,8 @@ type App struct {
 }
 
 const (
-	deviceName   = "device-name"
-	templateName = "template-name"
+	deviceName  = "device-name"
+	plannerName = "planner-name"
 )
 
 func New(reader io.Reader, writer, errWriter io.Writer) *App {
@@ -41,7 +41,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 func (r *App) flags() []cli.Flag {
 	return []cli.Flag{
 		&cli.StringFlag{Name: deviceName, Required: true},
-		&cli.StringFlag{Name: templateName, Required: true},
+		&cli.StringFlag{Name: plannerName, Required: true},
 	}
 }
 
@@ -57,7 +57,7 @@ func (r *App) mainAction(appContext *cli.Context) error {
 		return fmt.Errorf("new device: %w", err)
 	}
 
-	template, err := planners.New(appContext.String(templateName))
+	template, err := planners.New(appContext.String(plannerName))
 	if err != nil {
 		return fmt.Errorf("new template: %w", err)
 	}
