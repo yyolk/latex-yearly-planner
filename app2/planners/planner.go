@@ -17,16 +17,18 @@ type Planner interface {
 
 var UnknownTemplateName = errors.New("unknown planner name")
 
-func New(name string) (Planner, error) {
-	switch name {
+func New(params Params) (Planner, error) {
+	switch params.Name {
 	case MonthsOnSidesTemplate:
-		return &MonthsOnSides{}, nil
+		return &MonthsOnSides{params: params}, nil
 	default:
-		return nil, fmt.Errorf("%s: %w", name, UnknownTemplateName)
+		return nil, fmt.Errorf("%s: %w", params.Name, UnknownTemplateName)
 	}
 }
 
-type MonthsOnSides struct{}
+type MonthsOnSides struct {
+	params Params
+}
 
 func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
 	return nil
