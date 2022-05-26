@@ -1,15 +1,47 @@
 package planners
 
 import (
+	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 )
 
 type TemplateData struct {
-	Year   int
+	year   int
 	files  []string
 	device devices.Device
+	layout Layout
+}
+
+var UnknownDeviceTypeErr = errors.New("unknown device type")
+
+func newLayout(device devices.Device) (Layout, error) {
+	switch device.(type) {
+	case *devices.SupernoteA5X:
+		return Layout{
+			Margins: Margins{
+				Top:    "1cm",
+				Right:  "5mm",
+				Bottom: "5mm",
+				Left:   "1cm",
+			},
+		}, nil
+	default:
+		return Layout{}, fmt.Errorf("unknown device type %T: %w", device, UnknownDeviceTypeErr)
+	}
+}
+
+type Layout struct {
+	Margins Margins
+}
+
+type Margins struct {
+	Top    string
+	Right  string
+	Bottom string
+	Left   string
 }
 
 type ApplyToTemplateData func(*TemplateData)
@@ -26,6 +58,16 @@ func WithFiles(files ...string) ApplyToTemplateData {
 	return func(data *TemplateData) {
 		data.files = files
 	}
+}
+
+func WithLayout(layout Layout) ApplyToTemplateData {
+	return func(data *TemplateData) {
+		data.layout = layout
+	}
+}
+
+func (r TemplateData) Year() int {
+	return r.year
 }
 
 func (r TemplateData) Device() devices.Device {

@@ -34,7 +34,12 @@ func newMonthsOnSides(params Params) (*MonthsOnSides, error) {
 }
 
 func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
-	r.params.TemplateData.Apply(WithDevice(device))
+	layout, err := newLayout(device)
+	if err != nil {
+		return fmt.Errorf("new layout: %w", err)
+	}
+
+	r.params.TemplateData.Apply(WithLayout(layout), WithDevice(device))
 
 	if err := r.createTitle(); err != nil {
 		return fmt.Errorf("create title: %w", err)
