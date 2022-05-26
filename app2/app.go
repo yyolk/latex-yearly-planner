@@ -4,27 +4,17 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/kudrykv/latex-yearly-planner/app2/flags"
+	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/urfave/cli/v2"
 )
 
 type App struct {
-	app          *cli.App
-	deviceFlag   *flags.DeviceFlag
-	templateFlag *flags.TemplateFlag
+	app *cli.App
 }
 
 func New(reader io.Reader, writer, errWriter io.Writer) *App {
 	return (&App{}).
-		prepareFlags().
 		setupCli(reader, writer, errWriter)
-}
-
-func (r *App) prepareFlags() *App {
-	r.deviceFlag = flags.NewDeviceFlag()
-	r.templateFlag = flags.NewTemplateFlag()
-
-	return r
 }
 
 func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
@@ -44,8 +34,8 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 
 func (r *App) flags() []cli.Flag {
 	return []cli.Flag{
-		r.deviceFlag,
-		r.templateFlag,
+		&cli.StringFlag{Name: "device-name", Required: true},
+		&cli.StringFlag{Name: "template-name", Required: true},
 	}
 }
 
@@ -56,7 +46,7 @@ func (r *App) mainAction(appContext *cli.Context) error {
 	// - template - which template to use
 	//     sub-dependent are enabled template sections
 	//     based on what is selected, some links should or should not be displayed, etc
-	device, err := r.deviceFlag.Device()
+	device, err := devices.New(appContext.String("device-name"))
 	if err != nil {
 		return fmt.Errorf("get device: %w", err)
 	}
@@ -70,6 +60,6 @@ func (r *App) mainAction(appContext *cli.Context) error {
 	return nil
 }
 
-func (r App) Run(args []string) error {
+func (r *App) Run(args []string) error {
 	return r.app.Run(args)
 }
