@@ -12,7 +12,8 @@ const (
 )
 
 type Planner interface {
-	GenerateFor(device devices.Device) error
+	GenerateFor(devices.Device) error
+	WriteTo(dir string) error
 }
 
 var UnknownTemplateName = errors.New("unknown planner name")

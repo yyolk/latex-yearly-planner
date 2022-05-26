@@ -2,6 +2,8 @@ package planners
 
 import (
 	"fmt"
+	"os"
+	"path"
 	"strings"
 	"text/template"
 
@@ -10,8 +12,13 @@ import (
 
 type MonthsOnSides struct {
 	params      Params
-	futureFiles []*strings.Builder
+	futureFiles []futureFile
 	templates   *template.Template
+}
+
+type futureFile struct {
+	name    string
+	builder *strings.Builder
 }
 
 func newMonthsOnSides(params Params) (*MonthsOnSides, error) {
@@ -32,6 +39,16 @@ func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
 	return nil
 }
 
+func (r *MonthsOnSides) WriteTo(dir string) error {
+	for _, future := range r.futureFiles {
+		if err := os.WriteFile(path.Join(dir, future.name), []byte(future.builder.String()), 0600); err != nil {
+			return fmt.Errorf("write file %s: %w", future.name, err)
+		}
+	}
+
+	return nil
+}
+
 func (r *MonthsOnSides) init() error {
 	var err error
 
@@ -45,13 +62,17 @@ func (r *MonthsOnSides) init() error {
 func (r *MonthsOnSides) createTitle() error {
 	builder := &strings.Builder{}
 
-	if err := r.templates.ExecuteTemplate(builder, "title", r.params); err != nil {
+	if err := r.templates.ExecuteTemplate(builder, "title", r.params.TemplateData); err != nil {
 		return fmt.Errorf("execute template title: %w", err)
 	}
 
-	r.futureFiles = append(r.futureFiles, builder)
+	r.futureFiles = append(r.futureFiles, futureFile{name: "title.tex", builder: builder})
 
 	return nil
+}
+
+func (r *MonthsOnSides) writeTo(dir string) {
+
 }
 
 func bigTemplateStuff() (*template.Template, error) {
@@ -71,5 +92,5 @@ func bigTemplateStuff() (*template.Template, error) {
 }
 
 const titleTex = `\hspace{0pt}\vfil
-\hfill\resizebox{.7\linewidth}{!}{ {{- .Cfg.Year -}} }%
+\hfill\resizebox{.7\linewidth}{!}{ {{- .Year -}} }%
 \pagebreak`
