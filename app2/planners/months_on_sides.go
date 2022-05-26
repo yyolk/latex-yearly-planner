@@ -82,7 +82,7 @@ func (r *MonthsOnSides) Compile(ctx context.Context) error {
 func (r *MonthsOnSides) init() error {
 	var err error
 
-	if r.templates, err = bigTemplateStuff(); err != nil {
+	if r.templates, err = createTemplates(); err != nil {
 		return fmt.Errorf("big template stuff: %w", err)
 	}
 
@@ -119,12 +119,13 @@ func (r *MonthsOnSides) createRootDocument() error {
 	return nil
 }
 
-func bigTemplateStuff() (*template.Template, error) {
-	tpls := template.New("")
+func createTemplates() (*template.Template, error) {
+	var (
+		tpls = template.New("")
+		err  error
+	)
 
-	var err error
-
-	for _, row := range [][]string{{"title", titleTex}, {"root-document", rootDocumentTex}} {
+	for _, row := range templatesToCompile {
 		tpls = tpls.New(row[0])
 
 		if tpls, err = tpls.Parse(row[1]); err != nil {
@@ -134,54 +135,3 @@ func bigTemplateStuff() (*template.Template, error) {
 
 	return tpls, nil
 }
-
-const titleTex = `\hspace{0pt}\vfil
-\hfill\resizebox{.7\linewidth}{!}{ {{- .Year -}} }%
-\pagebreak`
-
-const rootDocumentTex = `\documentclass[9pt]{extarticle}
-
-\usepackage{geometry}
-\usepackage[table]{xcolor}
-\usepackage{calc}
-\usepackage{dashrule}
-\usepackage{setspace}
-\usepackage{array}
-\usepackage{tikz}
-\usepackage{varwidth}
-\usepackage{blindtext}
-\usepackage{tabularx}
-\usepackage{wrapfig}
-\usepackage{makecell}
-\usepackage{graphicx}
-\usepackage{multirow}
-\usepackage{amssymb}
-\usepackage{expl3}
-\usepackage{leading}
-\usepackage{pgffor}
-\usepackage{hyperref}
-\usepackage{marginnote}
-\usepackage{adjustbox}
-\usepackage{multido}
-
-
-\geometry{paperwidth={{.Device.Paper.Width}}, paperheight={{.Device.Paper.Height}}}
-\geometry{
-             top={{ .Layout.Margin.Top }},
-          bottom={{ .Layout.Margin.Bottom }},
-            left={{ .Layout.Margin.Left }},
-           right={{ .Layout.Margin.Right }},
-  marginparwidth={{ .MarginNotesWidth }},
-    marginparsep={{ .MarginNotesMargin }}
-}
-
-\pagestyle{empty}
-\newcolumntype{Y}{>{\centering\arraybackslash}X}
-\parindent=0pt
-\fboxsep0pt
-
-\begin{document}
-
-{{ .Files }}
-
-\end{document}`
