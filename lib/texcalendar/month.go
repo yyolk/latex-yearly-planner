@@ -20,8 +20,8 @@ func (m Month) Tabular() string {
 		weekdays = append(weekdays, weekday.String()[:1])
 	}
 
-	return `\renewcommand{\arraystretch}{2}%` + "\n" +
-		`\setlength{\tabcolsep}{3.5pt}%` + "\n" +
+	return `\renewcommand{\arraystretch}{1.5}%` + "\n" +
+		`%\setlength{\tabcolsep}{3.5pt}%` + "\n" +
 		`\begin{tabularx}{\linewidth}{Y*{7}{Y}}` + "\n" +
 		`\multicolumn{8}{c}{` + m.month.Month().String() + `} \\ \hline` + "\n" +
 		`\hline` + "\n" +
