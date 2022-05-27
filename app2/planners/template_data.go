@@ -3,6 +3,7 @@ package planners
 import (
 	"errors"
 	"strings"
+	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 )
@@ -89,4 +90,8 @@ func (r TemplateData) Files() string {
 	}
 
 	return strings.Join(wrappedPages, "\n")
+}
+
+func (r *TemplateData) Weekday() time.Weekday {
+	return time.Monday
 }

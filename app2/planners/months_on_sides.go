@@ -11,6 +11,8 @@ import (
 	"text/template"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
+	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
+	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
 type MonthsOnSides struct {
@@ -136,7 +138,10 @@ func (r *MonthsOnSides) createRootDocument() error {
 func (r *MonthsOnSides) annualSection() error {
 	buffer := &bytes.Buffer{}
 
-	buffer.Write([]byte("hello world"))
+	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
+	texYear := texcalendar.NewYear(year)
+
+	buffer.WriteString(texYear.BuildCalendar())
 
 	r.futureFiles = append(r.futureFiles, futureFile{name: "annual.tex", buffer: buffer})
 

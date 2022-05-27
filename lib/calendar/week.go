@@ -55,7 +55,15 @@ func (h Week) fillFromDay(n int) Week {
 }
 
 func (h Week) HeadMonth() time.Month {
-	return h.Days[0].Month()
+	for _, day := range h.Days {
+		if day.IsZero() {
+			continue
+		}
+
+		return day.Month()
+	}
+
+	return -1
 }
 
 func (h Week) TailMonth() time.Month {
