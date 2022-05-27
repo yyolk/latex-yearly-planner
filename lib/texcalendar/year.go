@@ -17,8 +17,14 @@ func NewYear(year calendar.Year) Year {
 func (r Year) BuildCalendar() string {
 	quarterRows := make([]string, 0, len(r.year.Quarters))
 
+	tabular := func(str string) string {
+		return `\begin{tabularx}{\linewidth}{@{}*{3}{X}@{}}` + "\n" +
+			str +
+			"\n" + `\end{tabularx}`
+	}
+
 	for _, quarter := range r.year.Quarters {
-		quarterRows = append(quarterRows, NewQuarter(quarter).Row())
+		quarterRows = append(quarterRows, tabular(NewQuarter(quarter).Row()))
 	}
 
 	return strings.Join(quarterRows, "\n"+`\vfill`+"\n")
