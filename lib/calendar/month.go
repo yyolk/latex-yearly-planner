@@ -15,19 +15,21 @@ func NewMonth(year int, mo time.Month, wd time.Weekday) Month {
 	for {
 		week = week.Next()
 
-		if week.HeadMonth() == currMo {
-			stop := false
+		if week.HeadMonth() != currMo {
+			break
+		}
 
-			if tailMo := week.TailMonth(); tailMo != currMo {
-				week = week.ZerofyMonth(tailMo)
-				stop = true
-			}
+		stop := false
 
-			month.Weeks = append(month.Weeks, week)
+		if tailMo := week.TailMonth(); tailMo != currMo {
+			week = week.ZerofyMonth(tailMo)
+			stop = true
+		}
 
-			if stop {
-				break
-			}
+		month.Weeks = append(month.Weeks, week)
+
+		if stop {
+			break
 		}
 	}
 

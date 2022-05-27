@@ -112,7 +112,7 @@ func (h Week) weekDays() []string {
 			continue
 		}
 
-		names = append(names, day.Weekday().String()[:1])
+		names = append(names, strconv.Itoa(day.Day()))
 	}
 
 	return names
