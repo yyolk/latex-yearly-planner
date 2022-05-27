@@ -2,7 +2,6 @@ package planners
 
 import (
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
@@ -21,33 +20,6 @@ type TemplateData struct {
 }
 
 var UnknownDeviceTypeErr = errors.New("unknown device type")
-
-func newLayout(device devices.Device) (Layout, error) {
-	switch device.(type) {
-	case *devices.SupernoteA5X:
-		return Layout{
-			Margin: Margin{
-				Top:    "1cm",
-				Right:  "5mm",
-				Bottom: "5mm",
-				Left:   "1cm",
-			},
-		}, nil
-	default:
-		return Layout{}, fmt.Errorf("unknown device type %T: %w", device, UnknownDeviceTypeErr)
-	}
-}
-
-type Layout struct {
-	Margin Margin
-}
-
-type Margin struct {
-	Top    string
-	Right  string
-	Bottom string
-	Left   string
-}
 
 type ApplyToTemplateData func(*TemplateData)
 
