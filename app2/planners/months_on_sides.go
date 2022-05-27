@@ -22,11 +22,6 @@ type MonthsOnSides struct {
 
 var UnknownSectionErr = errors.New("unknown section")
 
-type futureFile struct {
-	name   string
-	buffer *bytes.Buffer
-}
-
 func newMonthsOnSides(params Params) (*MonthsOnSides, error) {
 	mos := &MonthsOnSides{
 		params: params,
@@ -70,12 +65,6 @@ func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
 func (r *MonthsOnSides) sections() map[string]func() error {
 	return map[string]func() error{
 		TitleSection: r.createTitle,
-	}
-}
-
-func WithDevice(device devices.Device) ApplyToTemplateData {
-	return func(data *TemplateData) {
-		data.device = device
 	}
 }
 
@@ -141,21 +130,4 @@ func (r *MonthsOnSides) createRootDocument() error {
 	r.futureFiles = append(r.futureFiles, futureFile{name: "document.tex", buffer: buffer})
 
 	return nil
-}
-
-func createTemplates() (*template.Template, error) {
-	var (
-		tpls = template.New("")
-		err  error
-	)
-
-	for _, row := range templatesToCompile {
-		tpls = tpls.New(row[0])
-
-		if tpls, err = tpls.Parse(row[1]); err != nil {
-			return nil, fmt.Errorf("parse %s: %w", row[1], err)
-		}
-	}
-
-	return tpls, nil
 }

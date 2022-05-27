@@ -1,5 +1,27 @@
 package planners
 
+import (
+	"fmt"
+	"text/template"
+)
+
+func createTemplates() (*template.Template, error) {
+	var (
+		tpls = template.New("")
+		err  error
+	)
+
+	for _, row := range templatesToCompile {
+		tpls = tpls.New(row[0])
+
+		if tpls, err = tpls.Parse(row[1]); err != nil {
+			return nil, fmt.Errorf("parse %s: %w", row[1], err)
+		}
+	}
+
+	return tpls, nil
+}
+
 var templatesToCompile = [][]string{
 	{titleTpl, titleTex},
 	{rootDocumentTpl, rootDocumentTex},

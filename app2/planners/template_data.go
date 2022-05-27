@@ -81,6 +81,12 @@ func WithSections(sections []string) ApplyToTemplateData {
 	}
 }
 
+func WithDevice(device devices.Device) ApplyToTemplateData {
+	return func(data *TemplateData) {
+		data.device = device
+	}
+}
+
 func (r TemplateData) Year() int {
 	return r.year
 }
