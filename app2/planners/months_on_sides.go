@@ -64,7 +64,8 @@ func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
 
 func (r *MonthsOnSides) sections() map[string]func() error {
 	return map[string]func() error{
-		TitleSection: r.createTitle,
+		TitleSection:  r.createTitle,
+		AnnualSection: r.annualSection,
 	}
 }
 
@@ -128,6 +129,16 @@ func (r *MonthsOnSides) createRootDocument() error {
 	}
 
 	r.futureFiles = append(r.futureFiles, futureFile{name: "document.tex", buffer: buffer})
+
+	return nil
+}
+
+func (r *MonthsOnSides) annualSection() error {
+	buffer := &bytes.Buffer{}
+
+	buffer.Write([]byte("hello world"))
+
+	r.futureFiles = append(r.futureFiles, futureFile{name: "annual.tex", buffer: buffer})
 
 	return nil
 }
