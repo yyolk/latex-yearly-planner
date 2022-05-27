@@ -42,15 +42,15 @@ func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
 
 	r.params.TemplateData.Apply(WithLayout(layout), WithDevice(device))
 
-	funcs := r.sections()
+	sections := r.sections()
 
 	for _, section := range r.params.TemplateData.sections {
-		f, ok := funcs[section]
+		sectionFunc, ok := sections[section]
 		if !ok {
 			return fmt.Errorf("%v: %w", section, UnknownSectionErr)
 		}
 
-		if err = f(); err != nil {
+		if err = sectionFunc(); err != nil {
 			return fmt.Errorf("%v: %w", section, err)
 		}
 	}
