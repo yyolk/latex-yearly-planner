@@ -23,7 +23,7 @@ func (m Month) Tabular() string {
 	return `\renewcommand{\arraystretch}{2}%` + "\n" +
 		`\setlength{\tabcolsep}{3.5pt}%` + "\n" +
 		`\begin{tabularx}{\linewidth}{Y*{7}{Y}}` + "\n" +
-		`\multicolumn{8}{c}{` + m.month.Name().String() + `} \\ \hline` + "\n" +
+		`\multicolumn{8}{c}{` + m.month.Month().String() + `} \\ \hline` + "\n" +
 		`\hline` + "\n" +
 		strings.Join(append([]string{"W"}, weekdays...), ` & `) + `\\` + "\n" +
 		m.month.TabularWeeks() + "\n" +

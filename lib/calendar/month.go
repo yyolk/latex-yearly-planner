@@ -36,7 +36,7 @@ func NewMonth(year int, mo time.Month, wd time.Weekday) Month {
 	return month
 }
 
-func (m Month) Name() time.Month {
+func (m Month) Month() time.Month {
 	return m.Weeks[0].HeadMonth()
 }
 
