@@ -65,8 +65,8 @@ const rootDocumentTex = `\documentclass[9pt]{extarticle}
           bottom={{ .Layout.Margin.Bottom }},
             left={{ .Layout.Margin.Left }},
            right={{ .Layout.Margin.Right }},
-  marginparwidth={{ .MarginNotesWidth }},
-    marginparsep={{ .MarginNotesMargin }}
+  marginparwidth={{ .Layout.MarginNotes.Width }},
+    marginparsep={{ .Layout.MarginNotes.Margin }}
 }
 
 \pagestyle{empty}

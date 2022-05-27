@@ -16,6 +16,10 @@ func newLayout(device devices.Device) (Layout, error) {
 				Bottom: "5mm",
 				Left:   "1cm",
 			},
+			MarginNotes: MarginNotes{
+				Margin: "3mm",
+				Width:  "1cm",
+			},
 		}, nil
 	default:
 		return Layout{}, fmt.Errorf("unknown device type %T: %w", device, UnknownDeviceTypeErr)
@@ -23,7 +27,8 @@ func newLayout(device devices.Device) (Layout, error) {
 }
 
 type Layout struct {
-	Margin Margin
+	Margin      Margin
+	MarginNotes MarginNotes
 }
 
 type Margin struct {
@@ -31,4 +36,9 @@ type Margin struct {
 	Right  string
 	Bottom string
 	Left   string
+}
+
+type MarginNotes struct {
+	Margin string
+	Width  string
 }
