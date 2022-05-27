@@ -1,6 +1,9 @@
 package calendar
 
-import "time"
+import (
+	"strings"
+	"time"
+)
 
 type Month struct{ Weeks Weeks }
 
@@ -29,4 +32,28 @@ func NewMonth(year int, mo time.Month, wd time.Weekday) Month {
 	}
 
 	return month
+}
+
+func (m Month) Name() time.Month {
+	return m.Weeks[0].HeadMonth()
+}
+
+func (m Month) Weekdays() []time.Weekday {
+	weekdays := make([]time.Weekday, 0, 7)
+
+	for _, day := range m.Weeks[1].Days {
+		weekdays = append(weekdays, day.Weekday())
+	}
+
+	return weekdays
+}
+
+func (m Month) TabularWeeks() string {
+	out := make([]string, 0, len(m.Weeks))
+
+	for _, week := range m.Weeks {
+		out = append(out, week.TabularWeek())
+	}
+
+	return strings.Join(out, `\\`+"\n")
 }

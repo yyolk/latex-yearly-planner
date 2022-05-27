@@ -17,8 +17,10 @@ func NewQuarter(quarter calendar.Quarter) Quarter {
 func (q Quarter) Row() string {
 	monthsRow := make([]string, 0, len(q.quarter.Months))
 
+	adjustBox := func(str string) string { return `\adjustbox{valign=t}{` + str + `}` }
+
 	for _, month := range q.quarter.Months {
-		monthsRow = append(monthsRow, NewMonth(month).Tabular())
+		monthsRow = append(monthsRow, adjustBox(NewMonth(month).Tabular()))
 	}
 
 	return strings.Join(monthsRow, " & ")
