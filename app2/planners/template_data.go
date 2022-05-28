@@ -73,14 +73,6 @@ func (r TemplateData) Layout() Layout {
 	return r.layout
 }
 
-func (r TemplateData) MarginNotesWidth() string {
-	return "1cm"
-}
-
-func (r TemplateData) MarginNotesMargin() string {
-	return "3mm"
-}
-
 func (r TemplateData) Files() string {
 	include := func(str string) string { return `\include{` + str + `}` }
 
