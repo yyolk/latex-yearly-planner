@@ -85,21 +85,19 @@ func (h Week) ZerofyMonth(mo time.Month) Week {
 }
 
 func (h Week) TabularWeek() string {
-	return strings.Join(append([]string{h.weekNumber()}, h.weekDays()...), " & ")
+	return strings.Join(append([]string{strconv.Itoa(h.weekNumber())}, h.weekDays()...), " & ")
 }
 
-func (h Week) weekNumber() string {
+func (h Week) weekNumber() int {
+	_, weekNumber := h.Days[0].ISOWeek()
+
 	for _, day := range h.Days {
-		if day.Weekday() != time.Monday {
-			continue
+		if _, currDayWeekNumber := day.ISOWeek(); !day.IsZero() && currDayWeekNumber != weekNumber {
+			return currDayWeekNumber
 		}
-
-		_, week := day.ISOWeek()
-
-		return strconv.Itoa(week)
 	}
 
-	return "-1"
+	return weekNumber
 }
 
 func (h Week) weekDays() []string {
