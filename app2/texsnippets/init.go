@@ -21,16 +21,9 @@ type item struct {
 	body string
 }
 
-const (
-	Document = "document"
-	Title    = "title"
-)
-
 var templatesToCompile = []item{
+	{MOSHeader, mosHeader},
+
 	{Document, document},
 	{Title, title},
 }
-
-const title = `\hspace{0pt}\vfil
-\hfill\resizebox{.7\linewidth}{!}{ {{- .Year -}} }%
-\pagebreak`

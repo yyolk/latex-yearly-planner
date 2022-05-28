@@ -123,6 +123,13 @@ func (r *MonthsOnSides) createRootDocument() error {
 func (r *MonthsOnSides) annualSection() error {
 	buffer := &bytes.Buffer{}
 
+	header, err := texsnippets.Build(texsnippets.MOSHeader, nil)
+	if err != nil {
+		return fmt.Errorf("build mos header: %w", err)
+	}
+
+	buffer.WriteString(header)
+
 	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
 	texYear := texcalendar.NewYear(year)
 
