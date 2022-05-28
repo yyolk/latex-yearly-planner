@@ -25,6 +25,16 @@ func (r Weeks) Tabular() string {
 	return strings.Join(out, `\\`+"\n")
 }
 
+func (r Weeks) Matrix() [][]string {
+	rows := make([][]string, 0, len(r.weeks))
+
+	for _, week := range r.weeks {
+		rows = append(rows, NewWeek(week).Row())
+	}
+
+	return rows
+}
+
 type Week struct {
 	week calendar.Week
 }
@@ -51,4 +61,8 @@ func (r Week) weekDays() []string {
 	}
 
 	return names
+}
+
+func (r Week) Row() []string {
+	return append([]string{strconv.Itoa(r.week.WeekNumber())}, r.weekDays()...)
 }
