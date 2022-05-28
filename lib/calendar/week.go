@@ -1,8 +1,6 @@
 package calendar
 
 import (
-	"strconv"
-	"strings"
 	"time"
 )
 
@@ -84,11 +82,7 @@ func (h Week) ZerofyMonth(mo time.Month) Week {
 	return h
 }
 
-func (h Week) TabularWeek() string {
-	return strings.Join(append([]string{strconv.Itoa(h.weekNumber())}, h.weekDays()...), " & ")
-}
-
-func (h Week) weekNumber() int {
+func (h Week) WeekNumber() int {
 	_, weekNumber := h.Days[0].ISOWeek()
 
 	for _, day := range h.Days {
@@ -98,20 +92,4 @@ func (h Week) weekNumber() int {
 	}
 
 	return weekNumber
-}
-
-func (h Week) weekDays() []string {
-	names := make([]string, 0, 7)
-
-	for _, day := range h.Days {
-		if day.IsZero() {
-			names = append(names, "")
-
-			continue
-		}
-
-		names = append(names, strconv.Itoa(day.Day()))
-	}
-
-	return names
 }

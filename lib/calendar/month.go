@@ -1,7 +1,6 @@
 package calendar
 
 import (
-	"strings"
 	"time"
 )
 
@@ -48,14 +47,4 @@ func (m Month) Weekdays() []time.Weekday {
 	}
 
 	return weekdays
-}
-
-func (m Month) TabularWeeks() string {
-	out := make([]string, 0, len(m.Weeks))
-
-	for _, week := range m.Weeks {
-		out = append(out, week.TabularWeek())
-	}
-
-	return strings.Join(out, `\\`+"\n")
 }
