@@ -35,3 +35,7 @@ func Multirow(rows int, text string) string {
 func Bold(text string) string {
 	return fmt.Sprintf(`\textbf{%s}`, text)
 }
+
+func AdjustBox(text string) string {
+	return `\adjustbox{valign=t}{` + text + `}`
+}
