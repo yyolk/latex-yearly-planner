@@ -8,9 +8,9 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"text/template"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
+	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
@@ -18,7 +18,6 @@ import (
 type MonthsOnSides struct {
 	params      Params
 	futureFiles []futureFile
-	templates   *template.Template
 	dir         string
 }
 
@@ -27,10 +26,6 @@ var UnknownSectionErr = errors.New("unknown section")
 func newMonthsOnSides(params Params) (*MonthsOnSides, error) {
 	mos := &MonthsOnSides{
 		params: params,
-	}
-
-	if err := mos.init(); err != nil {
-		return nil, fmt.Errorf("init: %w", err)
 	}
 
 	return mos, nil
@@ -94,20 +89,10 @@ func (r *MonthsOnSides) Compile(ctx context.Context) error {
 	return nil
 }
 
-func (r *MonthsOnSides) init() error {
-	var err error
-
-	if r.templates, err = createTemplates(); err != nil {
-		return fmt.Errorf("big template stuff: %w", err)
-	}
-
-	return nil
-}
-
 func (r *MonthsOnSides) createTitle() error {
 	buffer := &bytes.Buffer{}
 
-	if err := r.templates.ExecuteTemplate(buffer, titleTpl, r.params.TemplateData); err != nil {
+	if err := texsnippets.Execute(buffer, texsnippets.Title, r.params.TemplateData); err != nil {
 		return fmt.Errorf("execute template title: %w", err)
 	}
 
@@ -126,7 +111,7 @@ func (r *MonthsOnSides) createRootDocument() error {
 	r.params.TemplateData.Apply(WithFiles(files))
 
 	buffer := &bytes.Buffer{}
-	if err := r.templates.ExecuteTemplate(buffer, rootDocumentTpl, r.params.TemplateData); err != nil {
+	if err := texsnippets.Execute(buffer, texsnippets.Document, r.params.TemplateData); err != nil {
 		return fmt.Errorf("execute template root-document: %w", err)
 	}
 
