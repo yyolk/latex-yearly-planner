@@ -44,8 +44,12 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 							&cli.IntFlag{Name: year, Value: time.Now().Year()},
 							&cli.StringFlag{Name: deviceName, Required: true},
 							&cli.StringSliceFlag{
-								Name:  sections,
-								Value: cli.NewStringSlice(planners.TitleSection, planners.AnnualSection),
+								Name: sections,
+								Value: cli.NewStringSlice(
+									planners.TitleSection,
+									planners.AnnualSection,
+									planners.QuarterliesSection,
+								),
 							},
 						},
 						Action: func(appContext *cli.Context) error {

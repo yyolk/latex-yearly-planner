@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	TitleSection  = "title"
-	AnnualSection = "annual"
+	TitleSection       = "title"
+	AnnualSection      = "annual"
+	QuarterliesSection = "quarterlies"
 )
 
 type TemplateData struct {
