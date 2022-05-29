@@ -79,11 +79,13 @@ func (r *MonthsOnSides) WriteTeXTo(dir string) error {
 }
 
 func (r *MonthsOnSides) Compile(ctx context.Context) error {
-	cmd := exec.CommandContext(ctx, "pdflatex", "./document.tex")
-	cmd.Dir = r.dir
+	for i := 0; i < 2; i++ {
+		cmd := exec.CommandContext(ctx, "pdflatex", "./document.tex")
+		cmd.Dir = r.dir
 
-	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("run pdflatex: %w", err)
+		if err := cmd.Run(); err != nil {
+			return fmt.Errorf("run pdflatex: %w", err)
+		}
 	}
 
 	return nil

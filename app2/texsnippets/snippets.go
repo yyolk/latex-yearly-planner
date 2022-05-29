@@ -56,9 +56,11 @@ const title = `\hspace{0pt}\vfil
 \pagebreak`
 
 const MOSHeader = "mos-header"
-const mosHeader = `header
-\marginnote{%
-	\rotatebox[origin=tr]{90}{hello world}
-}
+const mosHeader = `\marginnote{\rotatebox[origin=tr]{90}{%
+\begin{tabularx}{\linewidth}{|r|}
+hello
+\end{tabularx}%
+}}%
+header
 
 `
