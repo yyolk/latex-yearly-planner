@@ -57,10 +57,8 @@ const title = `\hspace{0pt}\vfil
 
 const MOSHeader = "mos-header"
 const mosHeader = `\marginnote{\rotatebox[origin=tr]{90}{%
-\begin{tabularx}{\linewidth}{|r|}
-hello
-\end{tabularx}%
+{{ .MarginNotes }}%
 }}%
-header
+{{ .Header }}
 
 `

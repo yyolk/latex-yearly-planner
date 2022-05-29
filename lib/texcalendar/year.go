@@ -29,3 +29,29 @@ func (r Year) BuildCalendar() string {
 
 	return strings.Join(quarterRows, "\n"+`\vfill`+"\n")
 }
+
+func (r Year) Quarters() string {
+	quarters := make([]string, 0, 4)
+
+	for i := len(r.year.Quarters) - 1; i >= 0; i-- {
+		quarters = append(quarters, r.year.Quarters[i].Name())
+	}
+
+	return `\begin{tabularx}{5cm}{*{4}{|Y}|}
+	` + strings.Join(quarters, " & ") + `
+\end{tabularx}`
+}
+
+func (r Year) Months() string {
+	months := make([]string, 0, 12)
+
+	for i := len(r.year.Quarters) - 1; i >= 0; i-- {
+		for j := 2; j >= 0; j-- {
+			months = append(months, r.year.Quarters[i].Months[j].Month().String()[:3])
+		}
+	}
+
+	return `\begin{tabularx}{15.5cm}{*{12}{|Y}|}
+	` + strings.Join(months, " & ") + `
+\end{tabularx}`
+}

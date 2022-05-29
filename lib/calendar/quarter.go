@@ -1,9 +1,17 @@
 package calendar
 
-import "time"
+import (
+	"strconv"
+	"time"
+)
 
 type Quarter struct {
 	Months [3]Month
+	number int
+}
+
+func (q Quarter) Name() string {
+	return "Q" + strconv.Itoa(q.number)
 }
 
 func NewQuarter(year int, qrtr int, wd time.Weekday) Quarter {
@@ -14,6 +22,8 @@ func NewQuarter(year int, qrtr int, wd time.Weekday) Quarter {
 	mo := time.Month((qrtr+1)*3 - 2) //nolint:gomnd
 
 	return Quarter{
+		number: qrtr + 1,
+
 		Months: [3]Month{
 			NewMonth(year, mo, wd),
 			NewMonth(year, mo+1, wd),
