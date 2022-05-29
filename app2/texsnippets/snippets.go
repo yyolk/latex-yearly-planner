@@ -5,6 +5,7 @@ const document = `\documentclass[9pt]{extarticle}
 
 \usepackage{geometry}
 \usepackage[table]{xcolor}
+\usepackage{showframe}
 \usepackage{calc}
 \usepackage{dashrule}
 \usepackage{setspace}
@@ -36,6 +37,7 @@ const document = `\documentclass[9pt]{extarticle}
   marginparwidth={{ .Layout.MarginNotes.Width }},
     marginparsep={{ .Layout.MarginNotes.Margin }}
 }
+{{ .Layout.MarginNotes.Reverse }}
 
 \pagestyle{empty}
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
@@ -55,5 +57,8 @@ const title = `\hspace{0pt}\vfil
 
 const MOSHeader = "mos-header"
 const mosHeader = `header
+\marginnote{%
+	\rotatebox[origin=tr]{90}{hello world}
+}
 
 `
