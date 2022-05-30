@@ -24,3 +24,7 @@ func (q Quarter) Row() string {
 
 	return strings.Join(monthsRow, " & ")
 }
+
+func (q Quarter) BuildPage() string {
+	return q.quarter.Name()
+}

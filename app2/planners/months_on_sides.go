@@ -153,7 +153,19 @@ func (r *MonthsOnSides) quarterliesSection() error {
 	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
 	texYear := texcalendar.NewYear(year)
 
-	buffer.WriteString(texYear.BuildQuarterliesPages())
+	for _, quarter := range year.Quarters {
+		header, err := texsnippets.Build(texsnippets.MOSHeader, map[string]string{
+			"MarginNotes": texYear.Months() + `\qquad{}` + texYear.Quarters(),
+			"Header":      "hello world header",
+		})
+
+		if err != nil {
+			return fmt.Errorf("build mos header: %w", err)
+		}
+
+		buffer.WriteString(header)
+		buffer.WriteString(texcalendar.NewQuarter(quarter).BuildPage() + "\n\n" + `\pagebreak{}`)
+	}
 
 	r.futureFiles = append(r.futureFiles, futureFile{name: "quarterlies.tex", buffer: buffer})
 

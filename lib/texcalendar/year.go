@@ -55,13 +55,3 @@ func (r Year) Months() string {
 	` + strings.Join(months, " & ") + `
 \end{tabularx}`
 }
-
-func (r Year) BuildQuarterliesPages() string {
-	quarterlies := make([]string, 0, 4)
-
-	for _, quarter := range r.year.Quarters {
-		quarterlies = append(quarterlies, quarter.Name())
-	}
-
-	return strings.Join(quarterlies, "\n\n"+`\pagebreak{}`)
-}
