@@ -1,6 +1,8 @@
 package planners
 
-import "bytes"
+import (
+	"bytes"
+)
 
 type futureFile struct {
 	name   string
