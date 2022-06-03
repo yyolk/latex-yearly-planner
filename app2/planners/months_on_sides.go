@@ -72,6 +72,7 @@ func (r *MonthsOnSides) sections() map[string]sectionFunc {
 		TitleSection:       r.createTitle,
 		AnnualSection:      r.annualSection,
 		QuarterliesSection: r.quarterliesSection,
+		MonthliesSection:   r.monthliesSection,
 	}
 }
 
@@ -124,7 +125,7 @@ func (r *MonthsOnSides) createRootDocument() error {
 		return fmt.Errorf("execute template root-document: %w", err)
 	}
 
-	r.futureFiles = append(r.futureFiles, futureFile{name: "document.tex", buffer: buffer})
+	r.futureFiles = append(r.futureFiles, futureFile{name: "document", buffer: buffer})
 
 	return nil
 }
@@ -169,6 +170,22 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 
 		buffer.WriteString(header)
 		buffer.WriteString(texcalendar.NewQuarter(quarter).BuildPage() + "\n\n" + `\pagebreak{}`)
+	}
+
+	return buffer, nil
+}
+
+func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
+	buffer := &bytes.Buffer{}
+
+	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
+
+	for _, quarter := range year.Quarters {
+		for _, month := range quarter.Months {
+			month := texcalendar.NewMonth(month)
+
+			buffer.WriteString(month.Tabloid() + "\n\n" + `\pagebreak` + "\n")
+		}
 	}
 
 	return buffer, nil

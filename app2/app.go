@@ -49,6 +49,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 									planners.TitleSection,
 									planners.AnnualSection,
 									planners.QuarterliesSection,
+									planners.MonthliesSection,
 								),
 							},
 						},

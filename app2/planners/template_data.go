@@ -12,6 +12,7 @@ const (
 	TitleSection       = "title"
 	AnnualSection      = "annual"
 	QuarterliesSection = "quarterlies"
+	MonthliesSection   = "monthlies"
 )
 
 type TemplateData struct {

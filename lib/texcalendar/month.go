@@ -45,3 +45,7 @@ func (m Month) tabulate(matrix [][]string) string {
 
 	return strings.Join(rows, `\\`+"\n")
 }
+
+func (m Month) Tabloid() string {
+	return m.month.Month().String()
+}
