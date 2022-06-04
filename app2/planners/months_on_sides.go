@@ -159,13 +159,12 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	buffer := &bytes.Buffer{}
 
 	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
-	texYear := texcalendar.NewYear(year)
 
 	r.params.TemplateData.Layout()
 
 	for _, quarter := range year.Quarters {
 		compiledPages, err := pages.
-			NewPage(mosQuarterlyHeader{texYear: texYear}, mosQuarterlyContents{quarter: quarter}).
+			NewPage(mosQuarterlyHeader{year: year}, mosQuarterlyContents{quarter: quarter}).
 			Build()
 
 		if err != nil {

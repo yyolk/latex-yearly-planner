@@ -4,16 +4,19 @@ import (
 	"fmt"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
+	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
 type mosQuarterlyHeader struct {
-	texYear texcalendar.Year
+	year calendar.Year
 }
 
 func (r mosQuarterlyHeader) Build() ([]string, error) {
+	texYear := texcalendar.NewYear(r.year)
+
 	built, err := texsnippets.Build(texsnippets.MOSHeader, map[string]string{
-		"MarginNotes": r.texYear.Months() + `\qquad{}` + r.texYear.Quarters(),
+		"MarginNotes": texYear.Months() + `\qquad{}` + texYear.Quarters(),
 		"Header":      "hello world header",
 	})
 
