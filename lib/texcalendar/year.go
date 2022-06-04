@@ -38,7 +38,7 @@ func (r Year) Quarters() string {
 	}
 
 	return `\begin{tabularx}{5cm}{*{4}{|Y}|}
-	` + strings.Join(quarters, " & ") + `
+	` + strings.Join(quarters, " & ") + ` \\ \hline
 \end{tabularx}`
 }
 
@@ -52,6 +52,6 @@ func (r Year) Months() string {
 	}
 
 	return `\begin{tabularx}{15.5cm}{*{12}{|Y}|}
-	` + strings.Join(months, " & ") + `
+	` + strings.Join(months, " & ") + `\\ \hline
 \end{tabularx}`
 }

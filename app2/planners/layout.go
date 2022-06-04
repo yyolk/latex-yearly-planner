@@ -17,8 +17,8 @@ func newLayout(device devices.Device) (Layout, error) {
 				Left:   "1cm",
 			},
 			MarginNotes: MarginNotes{
-				Margin:  "3mm",
-				Width:   "7mm",
+				Margin:  "2mm",
+				Width:   "8mm",
 				Reverse: `\reversemarginpar`,
 			},
 		}, nil

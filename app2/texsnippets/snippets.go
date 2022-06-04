@@ -26,8 +26,6 @@ const document = `\documentclass[9pt]{extarticle}
 \usepackage{marginnote}
 \usepackage{adjustbox}
 \usepackage{multido}
-\usepackage{easytable}
-
 
 \geometry{paperwidth={{.Device.Paper.Width}}, paperheight={{.Device.Paper.Height}}}
 \geometry{

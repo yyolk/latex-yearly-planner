@@ -60,3 +60,7 @@ func (y Year) Days() Days {
 
 	return days
 }
+
+func (y Year) Year() int {
+	return y.year
+}
