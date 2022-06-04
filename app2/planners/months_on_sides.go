@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strconv"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
@@ -73,6 +74,7 @@ func (r *MonthsOnSides) sections() map[string]sectionFunc {
 		AnnualSection:      r.annualSection,
 		QuarterliesSection: r.quarterliesSection,
 		MonthliesSection:   r.monthliesSection,
+		WeekliesSection:    r.weekliesSection,
 	}
 }
 
@@ -186,6 +188,20 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 
 			buffer.WriteString(month.Tabloid() + "\n\n" + `\pagebreak` + "\n")
 		}
+	}
+
+	return buffer, nil
+}
+
+func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
+	buffer := &bytes.Buffer{}
+
+	weeks := calendar.
+		NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday()).
+		InWeeks()
+
+	for _, week := range weeks {
+		buffer.WriteString(strconv.Itoa(week.WeekNumber()) + "\n\n" + `\pagebreak{}` + "\n")
 	}
 
 	return buffer, nil

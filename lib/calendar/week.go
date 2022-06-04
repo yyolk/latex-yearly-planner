@@ -93,3 +93,39 @@ func (h Week) WeekNumber() int {
 
 	return weekNumber
 }
+
+func (h Week) backfill() Week {
+	for i := range h.Days {
+		if h.Days[i].IsZero() {
+			continue
+		}
+
+		for j := i - 1; j >= 0; j-- {
+			h.Days[j] = h.Days[j+1].Add(-1)
+		}
+
+		break
+	}
+
+	for i := 6; i >= 0; i-- {
+		if h.Days[i].IsZero() {
+			continue
+		}
+
+		for j := i + 1; j < 7; j++ {
+			h.Days[j] = h.Days[j-1].Add(1)
+		}
+
+		break
+	}
+
+	return h
+}
+
+func (h Week) TailYear() int {
+	return h.Days[6].Year()
+}
+
+func (h Week) HeadYear() int {
+	return h.Days[0].Year()
+}
