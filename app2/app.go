@@ -46,12 +46,12 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 							&cli.StringSliceFlag{
 								Name: sections,
 								Value: cli.NewStringSlice(
-									planners.TitleSection,
+									//planners.TitleSection,
 									planners.AnnualSection,
-									planners.QuarterliesSection,
-									planners.MonthliesSection,
-									planners.WeekliesSection,
-									planners.DailiesSection,
+									//planners.QuarterliesSection,
+									//planners.MonthliesSection,
+									//planners.WeekliesSection,
+									//planners.DailiesSection,
 								),
 							},
 						},

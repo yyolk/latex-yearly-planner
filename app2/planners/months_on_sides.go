@@ -133,9 +133,14 @@ func (r *MonthsOnSides) createRootDocument() error {
 }
 
 func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
-	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
+	templateData := r.params.TemplateData
+	year := calendar.NewYear(templateData.Year(), templateData.Weekday())
 
-	buffer, err := writeToBuffer(&bytes.Buffer{}, mosAnnualHeader{year: year}, mosAnnualContents{year: year})
+	buffer, err := writeToBuffer(
+		&bytes.Buffer{},
+		newMOSAnnualHeader(year, templateData.Layout()),
+		mosAnnualContents{year: year},
+	)
 	if err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}

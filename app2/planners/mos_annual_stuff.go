@@ -9,14 +9,19 @@ import (
 )
 
 type mosAnnualHeader struct {
-	year calendar.Year
+	year   calendar.Year
+	layout Layout
+}
+
+func newMOSAnnualHeader(year calendar.Year, layout Layout) mosAnnualHeader {
+	return mosAnnualHeader{year: year, layout: layout}
 }
 
 func (m mosAnnualHeader) Build() ([]string, error) {
 	texYear := texcalendar.NewYear(m.year)
 
 	header, err := texsnippets.Build(texsnippets.MOSHeader, map[string]string{
-		"MarginNotes": texYear.Months() + `\qquad{}` + texYear.Quarters(),
+		"MarginNotes": `\renewcommand*{\arraystretch}{1.8185}` + texYear.Months() + `\qquad{}` + texYear.Quarters(),
 		"Header":      "hello world header",
 	})
 
