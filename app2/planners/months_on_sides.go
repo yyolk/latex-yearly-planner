@@ -133,11 +133,12 @@ func (r *MonthsOnSides) createRootDocument() error {
 	return nil
 }
 
-func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
-	buffer := &bytes.Buffer{}
+type mosAnnualHeader struct {
+	year calendar.Year
+}
 
-	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
-	texYear := texcalendar.NewYear(year)
+func (m mosAnnualHeader) Build() ([]string, error) {
+	texYear := texcalendar.NewYear(m.year)
 
 	header, err := texsnippets.Build(texsnippets.MOSHeader, map[string]string{
 		"MarginNotes": texYear.Months() + `\qquad{}` + texYear.Quarters(),
@@ -145,34 +146,47 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 	})
 
 	if err != nil {
-		return nil, fmt.Errorf("build mos header: %w", err)
+		return nil, fmt.Errorf("build header: %w", err)
 	}
 
-	buffer.WriteString(header)
+	return []string{header}, nil
+}
 
-	buffer.WriteString(texYear.BuildCalendar())
+type mosAnnualContents struct {
+	year calendar.Year
+}
+
+func (m mosAnnualContents) Build() ([]string, error) {
+	texYear := texcalendar.NewYear(m.year)
+
+	return []string{texYear.BuildCalendar()}, nil
+}
+
+func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
+	buffer := &bytes.Buffer{}
+
+	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
+
+	buffer, err := writeToBuffer(buffer, mosAnnualHeader{year: year}, mosAnnualContents{year: year})
+	if err != nil {
+		return nil, fmt.Errorf("write to buffer: %w", err)
+	}
 
 	return buffer, nil
 }
 
 func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
-	buffer := &bytes.Buffer{}
+	var (
+		buffer = &bytes.Buffer{}
+		err    error
+	)
 
 	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
 
-	r.params.TemplateData.Layout()
-
 	for _, quarter := range year.Quarters {
-		compiledPages, err := pages.
-			NewPage(mosQuarterlyHeader{year: year}, mosQuarterlyContents{quarter: quarter}).
-			Build()
-
+		buffer, err = writeToBuffer(buffer, mosQuarterlyHeader{year: year}, mosQuarterlyContents{quarter: quarter})
 		if err != nil {
-			return nil, fmt.Errorf("build new page: %w", err)
-		}
-
-		for _, page := range compiledPages {
-			buffer.WriteString(page + "\n\n" + `\pagebreak{}` + "\n")
+			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
 
@@ -204,6 +218,20 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 
 	for _, week := range weeks {
 		buffer.WriteString(strconv.Itoa(week.WeekNumber()) + "\n\n" + `\pagebreak{}` + "\n")
+	}
+
+	return buffer, nil
+}
+
+func writeToBuffer(buffer *bytes.Buffer, blocks ...pages.Block) (*bytes.Buffer, error) {
+	compiledPages, err := pages.NewPage(blocks...).Build()
+
+	if err != nil {
+		return nil, fmt.Errorf("build new page: %w", err)
+	}
+
+	for _, page := range compiledPages {
+		buffer.WriteString(page + "\n\n" + `\pagebreak{}` + "\n")
 	}
 
 	return buffer, nil
