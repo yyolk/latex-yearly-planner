@@ -208,20 +208,10 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 
 	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
 
-	for _, quarter := range year.Quarters {
-		for _, month := range quarter.Months {
-			for _, week := range month.Weeks {
-				for _, day := range week.Days {
-					if day.IsZero() {
-						continue
-					}
-
-					buffer, err = writeToBuffer(buffer, mosDailyHeader{year: year}, mosDailyContents{day: day})
-					if err != nil {
-						return nil, fmt.Errorf("write to buffer: %w", err)
-					}
-				}
-			}
+	for _, day := range year.Days() {
+		buffer, err = writeToBuffer(buffer, mosDailyHeader{year: year}, mosDailyContents{day: day})
+		if err != nil {
+			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
 

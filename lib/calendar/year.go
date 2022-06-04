@@ -40,3 +40,23 @@ func (y Year) InWeeks() Weeks {
 
 	return weeks
 }
+
+func (y Year) Days() Days {
+	days := make(Days, 0, 366)
+
+	for _, quarter := range y.Quarters {
+		for _, month := range quarter.Months {
+			for _, week := range month.Weeks {
+				for _, day := range week.Days {
+					if day.IsZero() {
+						continue
+					}
+
+					days = append(days, day)
+				}
+			}
+		}
+	}
+
+	return days
+}

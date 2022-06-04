@@ -2,6 +2,8 @@ package calendar
 
 import "time"
 
+type Days []Day
+
 type Day struct{ time.Time }
 
 func (h Day) Add(days int) Day {
