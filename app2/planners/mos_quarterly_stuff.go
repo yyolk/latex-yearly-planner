@@ -26,3 +26,11 @@ func (r mosQuarterlyHeader) Build() ([]string, error) {
 
 	return []string{built}, nil
 }
+
+type mosQuarterlyContents struct {
+	quarter calendar.Quarter
+}
+
+func (r mosQuarterlyContents) Build() ([]string, error) {
+	return []string{texcalendar.NewQuarter(r.quarter).BuildPage()}, nil
+}
