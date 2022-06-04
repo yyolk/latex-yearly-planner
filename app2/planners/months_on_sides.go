@@ -164,7 +164,7 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	r.params.TemplateData.Layout()
 
 	for _, quarter := range year.Quarters {
-		compiledPage, err := pages.
+		compiledPages, err := pages.
 			NewPage(mosQuarterlyHeader{texYear: texYear}, mosQuarterlyContents{quarter: quarter}).
 			Build()
 
@@ -172,7 +172,9 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 			return nil, fmt.Errorf("build new page: %w", err)
 		}
 
-		buffer.WriteString(compiledPage[0] + "\n\n" + `\pagebreak{}`)
+		for _, page := range compiledPages {
+			buffer.WriteString(page + "\n\n" + `\pagebreak{}` + "\n")
+		}
 	}
 
 	return buffer, nil
