@@ -209,15 +209,47 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 	return buffer, nil
 }
 
-func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
-	buffer := &bytes.Buffer{}
+type mosWeeklyHeader struct {
+	year calendar.Year
+}
 
-	weeks := calendar.
-		NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday()).
-		InWeeks()
+func (m mosWeeklyHeader) Build() ([]string, error) {
+	texYear := texcalendar.NewYear(m.year)
+
+	header, err := texsnippets.Build(texsnippets.MOSHeader, map[string]string{
+		"MarginNotes": texYear.Months() + `\qquad{}` + texYear.Quarters(),
+		"Header":      "hello world header",
+	})
+
+	if err != nil {
+		return nil, fmt.Errorf("build header: %w", err)
+	}
+
+	return []string{header}, nil
+}
+
+type mosWeeklyContents struct {
+	week calendar.Week
+}
+
+func (m mosWeeklyContents) Build() ([]string, error) {
+	return []string{strconv.Itoa(m.week.WeekNumber())}, nil
+}
+
+func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
+	var (
+		buffer = &bytes.Buffer{}
+		err    error
+	)
+
+	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
+	weeks := year.InWeeks()
 
 	for _, week := range weeks {
-		buffer.WriteString(strconv.Itoa(week.WeekNumber()) + "\n\n" + `\pagebreak{}` + "\n")
+		buffer, err = writeToBuffer(buffer, mosWeeklyHeader{year: year}, mosWeeklyContents{week: week})
+		if err != nil {
+			return nil, fmt.Errorf("write to buffer: %w", err)
+		}
 	}
 
 	return buffer, nil
