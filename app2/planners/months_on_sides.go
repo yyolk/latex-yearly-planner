@@ -11,6 +11,7 @@ import (
 	"strconv"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
+	"github.com/kudrykv/latex-yearly-planner/app2/pages"
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
@@ -161,17 +162,15 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	texYear := texcalendar.NewYear(year)
 
 	for _, quarter := range year.Quarters {
-		header, err := texsnippets.Build(texsnippets.MOSHeader, map[string]string{
-			"MarginNotes": texYear.Months() + `\qquad{}` + texYear.Quarters(),
-			"Header":      "hello world header",
-		})
+		compiledPage, err := pages.
+			NewPage(mosQuarterlyHeader{texYear: texYear}, mosQuarterlyContents{quarter: quarter}).
+			Build()
 
 		if err != nil {
-			return nil, fmt.Errorf("build mos header: %w", err)
+			return nil, fmt.Errorf("build new page: %w", err)
 		}
 
-		buffer.WriteString(header)
-		buffer.WriteString(texcalendar.NewQuarter(quarter).BuildPage() + "\n\n" + `\pagebreak{}`)
+		buffer.WriteString(compiledPage + "\n\n" + `\pagebreak{}`)
 	}
 
 	return buffer, nil
