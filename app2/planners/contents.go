@@ -9,6 +9,6 @@ type mosQuarterlyContents struct {
 	quarter calendar.Quarter
 }
 
-func (r mosQuarterlyContents) Build() (string, error) {
-	return texcalendar.NewQuarter(r.quarter).BuildPage(), nil
+func (r mosQuarterlyContents) Build() ([]string, error) {
+	return []string{texcalendar.NewQuarter(r.quarter).BuildPage()}, nil
 }
