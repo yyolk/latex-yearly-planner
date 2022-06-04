@@ -74,6 +74,7 @@ func (r *MonthsOnSides) sections() map[string]sectionFunc {
 		QuarterliesSection: r.quarterliesSection,
 		MonthliesSection:   r.monthliesSection,
 		WeekliesSection:    r.weekliesSection,
+		DailiesSection:     r.dailiesSection,
 	}
 }
 
@@ -193,6 +194,34 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 		buffer, err = writeToBuffer(buffer, mosWeeklyHeader{year: year}, mosWeeklyContents{week: week})
 		if err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
+		}
+	}
+
+	return buffer, nil
+}
+
+func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
+	var (
+		buffer = &bytes.Buffer{}
+		err    error
+	)
+
+	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
+
+	for _, quarter := range year.Quarters {
+		for _, month := range quarter.Months {
+			for _, week := range month.Weeks {
+				for _, day := range week.Days {
+					if day.IsZero() {
+						continue
+					}
+
+					buffer, err = writeToBuffer(buffer, mosDailyHeader{year: year}, mosDailyContents{day: day})
+					if err != nil {
+						return nil, fmt.Errorf("write to buffer: %w", err)
+					}
+				}
+			}
 		}
 	}
 
