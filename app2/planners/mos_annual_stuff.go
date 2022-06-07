@@ -2,6 +2,7 @@ package planners
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
@@ -11,10 +12,19 @@ import (
 type mosAnnualHeader struct {
 	year   calendar.Year
 	layout Layout
+
+	left  string
+	right []string
 }
 
-func newMOSAnnualHeader(year calendar.Year, layout Layout) mosAnnualHeader {
-	return mosAnnualHeader{year: year, layout: layout}
+func newMOSAnnualHeader(year calendar.Year, layout Layout, left string, right []string) mosAnnualHeader {
+	return mosAnnualHeader{
+		year:   year,
+		layout: layout,
+
+		left:  left,
+		right: right,
+	}
 }
 
 func (m mosAnnualHeader) Build() ([]string, error) {
@@ -22,8 +32,8 @@ func (m mosAnnualHeader) Build() ([]string, error) {
 
 	header, err := texsnippets.Build(texsnippets.MOSHeader, map[string]string{
 		"MarginNotes": `\renewcommand{\arraystretch}{2.042}` + texYear.Months() + `\qquad{}` + texYear.Quarters(),
-		"Header": `{\renewcommand{\arraystretch}{1.8185}\begin{tabularx}{\linewidth}{@{}lY|r|r|r|@{}}
-\Huge 2022\color{white}{Q} & & Calendar & To Do & Notes \\ \hline
+		"Header": `{\renewcommand{\arraystretch}{1.8185}\begin{tabularx}{\linewidth}{@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(m.right)), ""), "|") + `|@{}}
+\Huge ` + m.left + `{\Huge\color{white}{Q}} & & Calendar & To Do & Notes \\ \hline
 \end{tabularx}}`,
 	})
 

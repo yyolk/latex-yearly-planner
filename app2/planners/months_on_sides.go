@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strconv"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
@@ -138,7 +139,7 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 
 	buffer, err := writeToBuffer(
 		&bytes.Buffer{},
-		newMOSAnnualHeader(year, templateData.Layout()),
+		newMOSAnnualHeader(year, templateData.Layout(), strconv.Itoa(year.Year()), []string{"Calendar", "To Do", "Notes"}),
 		mosAnnualContents{year: year},
 	)
 	if err != nil {
