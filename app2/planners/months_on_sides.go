@@ -18,10 +18,8 @@ type MonthsOnSides struct {
 func newMonthsOnSides(params Params) MonthsOnSides {
 	return MonthsOnSides{
 		parameters: MonthsOnSidesDetails{
-			details: Details{
-				year:    params.year,
-				weekday: params.weekday,
-			},
+			year:    params.year,
+			weekday: params.weekday,
 		},
 	}
 }
@@ -50,7 +48,7 @@ func (r MonthsOnSides) Sections() map[string]sectionFunc {
 func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 	buffer := &bytes.Buffer{}
 
-	title := strconv.Itoa(r.parameters.details.year)
+	title := strconv.Itoa(r.parameters.year)
 	if err := texsnippets.Execute(buffer, texsnippets.Title, map[string]string{"Title": title}); err != nil {
 		return nil, fmt.Errorf("execute template title: %w", err)
 	}
@@ -59,7 +57,7 @@ func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 }
 
 func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
-	year := calendar.NewYear(r.parameters.details.year, r.parameters.details.weekday)
+	year := calendar.NewYear(r.parameters.year, r.parameters.weekday)
 
 	rightItems := cell.Cells{cell.New("Calendar").Ref(), cell.New("To Do"), cell.New("Notes")}
 	header := newMOSAnnualHeader(
@@ -83,7 +81,7 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	year := calendar.NewYear(r.parameters.details.year, r.parameters.details.weekday)
+	year := calendar.NewYear(r.parameters.year, r.parameters.weekday)
 
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
@@ -112,7 +110,7 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	year := calendar.NewYear(r.parameters.details.year, r.parameters.details.weekday)
+	year := calendar.NewYear(r.parameters.year, r.parameters.weekday)
 
 	for _, quarter := range year.Quarters {
 		for _, month := range quarter.Months {
@@ -132,7 +130,7 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	year := calendar.NewYear(r.parameters.details.year, r.parameters.details.weekday)
+	year := calendar.NewYear(r.parameters.year, r.parameters.weekday)
 	weeks := year.InWeeks()
 
 	for _, week := range weeks {
@@ -151,7 +149,7 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	year := calendar.NewYear(r.parameters.details.year, r.parameters.details.weekday)
+	year := calendar.NewYear(r.parameters.year, r.parameters.weekday)
 
 	for _, day := range year.Days() {
 		buffer, err = writeToBuffer(buffer, mosDailyHeader{year: year}, mosDailyContents{day: day})
