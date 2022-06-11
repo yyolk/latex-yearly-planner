@@ -2,100 +2,160 @@ package planners
 
 import (
 	"bytes"
-	"context"
-	"errors"
 	"fmt"
-	"os"
-	"os/exec"
-	"path"
+	"strconv"
 
-	"github.com/kudrykv/latex-yearly-planner/app2/devices"
+	"github.com/kudrykv/latex-yearly-planner/app2/pages"
+	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
+	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
-type Planner struct {
-	params      Params
-	futureFiles []futureFile
-	dir         string
-	builder     MonthsOnSides
+type MonthsOnSides struct {
+	templateData TemplateData
 }
 
-var UnknownSectionErr = errors.New("unknown section")
-
-func (r *Planner) GenerateFor(device devices.Device) error {
-	layout, err := newLayout(device)
-	if err != nil {
-		return fmt.Errorf("new layout: %w", err)
+func newMonthOnSides(templateData TemplateData) MonthsOnSides {
+	return MonthsOnSides{
+		templateData: templateData,
 	}
-
-	r.params.TemplateData.Apply(WithLayout(layout), WithDevice(device))
-
-	sections := r.builder.Sections()
-
-	for _, name := range r.params.TemplateData.sections {
-		sectionFunc, ok := sections[name]
-		if !ok {
-			return fmt.Errorf("%v: %w", name, UnknownSectionErr)
-		}
-
-		buffer, err := sectionFunc()
-		if err != nil {
-			return fmt.Errorf("%v: %w", name, err)
-		}
-
-		r.futureFiles = append(r.futureFiles, futureFile{
-			name:   name,
-			buffer: buffer,
-		})
-	}
-
-	if err := r.createRootDocument(); err != nil {
-		return fmt.Errorf("create root document: %w", err)
-	}
-
-	return nil
 }
 
-func (r *Planner) WriteTeXTo(dir string) error {
-	for _, future := range r.futureFiles {
-		if err := os.WriteFile(path.Join(dir, future.name+".tex"), future.buffer.Bytes(), 0600); err != nil {
-			return fmt.Errorf("write file %s: %w", future.name, err)
-		}
+type sectionFunc func() (*bytes.Buffer, error)
+
+func (r MonthsOnSides) Sections() map[string]sectionFunc {
+	return map[string]sectionFunc{
+		TitleSection:       r.titleSection,
+		AnnualSection:      r.annualSection,
+		QuarterliesSection: r.quarterliesSection,
+		MonthliesSection:   r.monthliesSection,
+		WeekliesSection:    r.weekliesSection,
+		DailiesSection:     r.dailiesSection,
 	}
-
-	r.dir = dir
-
-	return nil
 }
 
-func (r *Planner) Compile(ctx context.Context) error {
-	for i := 0; i < 2; i++ {
-		cmd := exec.CommandContext(ctx, "pdflatex", "./document.tex")
-		cmd.Dir = r.dir
-
-		if err := cmd.Run(); err != nil {
-			return fmt.Errorf("run pdflatex: %w", err)
-		}
-	}
-
-	return nil
-}
-
-func (r *Planner) createRootDocument() error {
-	files := make([]string, 0, len(r.futureFiles))
-
-	for _, file := range r.futureFiles {
-		files = append(files, file.name)
-	}
-
-	r.params.TemplateData.Apply(WithFiles(files))
-
+func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 	buffer := &bytes.Buffer{}
-	if err := texsnippets.Execute(buffer, texsnippets.Document, r.params.TemplateData); err != nil {
-		return fmt.Errorf("execute template root-document: %w", err)
+
+	if err := texsnippets.Execute(buffer, texsnippets.Title, r.templateData); err != nil {
+		return nil, fmt.Errorf("execute template title: %w", err)
 	}
 
-	r.futureFiles = append(r.futureFiles, futureFile{name: "document", buffer: buffer})
+	return buffer, nil
+}
 
-	return nil
+func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
+	templateData := r.templateData
+	year := calendar.NewYear(templateData.Year(), templateData.Weekday())
+
+	rightItems := cell.Cells{cell.New("Calendar").Ref(), cell.New("To Do"), cell.New("Notes")}
+	header := newMOSAnnualHeader(
+		templateData.Layout(),
+		headerWithYear(year),
+		headerWithLeft(strconv.Itoa(year.Year())),
+		headerWithRight(rightItems.Slice()),
+	)
+
+	buffer, err := writeToBuffer(&bytes.Buffer{}, header, mosAnnualContents{year: year})
+	if err != nil {
+		return nil, fmt.Errorf("write to buffer: %w", err)
+	}
+
+	return buffer, nil
+}
+
+func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
+	var (
+		buffer = &bytes.Buffer{}
+		err    error
+	)
+
+	year := calendar.NewYear(r.templateData.Year(), r.templateData.Weekday())
+
+	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
+	header := newMOSAnnualHeader(
+		r.templateData.Layout(),
+		headerWithYear(year),
+		headerWithLeft(strconv.Itoa(year.Year())),
+		headerWithRight(rightItems.Slice()),
+	)
+
+	for _, quarter := range year.Quarters {
+		buffer, err = writeToBuffer(buffer, header, mosQuarterlyContents{quarter: quarter})
+		if err != nil {
+			return nil, fmt.Errorf("write to buffer: %w", err)
+		}
+	}
+
+	return buffer, nil
+}
+
+func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
+	var (
+		buffer = &bytes.Buffer{}
+		err    error
+	)
+
+	year := calendar.NewYear(r.templateData.Year(), r.templateData.Weekday())
+
+	for _, quarter := range year.Quarters {
+		for _, month := range quarter.Months {
+			buffer, err = writeToBuffer(buffer, mosMonthlyHeader{year: year}, mosMonthlyContents{month: month})
+			if err != nil {
+				return nil, fmt.Errorf("write to buffer: %w", err)
+			}
+		}
+	}
+
+	return buffer, nil
+}
+
+func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
+	var (
+		buffer = &bytes.Buffer{}
+		err    error
+	)
+
+	year := calendar.NewYear(r.templateData.Year(), r.templateData.Weekday())
+	weeks := year.InWeeks()
+
+	for _, week := range weeks {
+		buffer, err = writeToBuffer(buffer, mosWeeklyHeader{year: year}, mosWeeklyContents{week: week})
+		if err != nil {
+			return nil, fmt.Errorf("write to buffer: %w", err)
+		}
+	}
+
+	return buffer, nil
+}
+
+func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
+	var (
+		buffer = &bytes.Buffer{}
+		err    error
+	)
+
+	year := calendar.NewYear(r.templateData.Year(), r.templateData.Weekday())
+
+	for _, day := range year.Days() {
+		buffer, err = writeToBuffer(buffer, mosDailyHeader{year: year}, mosDailyContents{day: day})
+		if err != nil {
+			return nil, fmt.Errorf("write to buffer: %w", err)
+		}
+	}
+
+	return buffer, nil
+}
+
+func writeToBuffer(buffer *bytes.Buffer, blocks ...pages.Block) (*bytes.Buffer, error) {
+	compiledPages, err := pages.NewPage(blocks...).Build()
+	if err != nil {
+		return nil, fmt.Errorf("build new page: %w", err)
+	}
+
+	for _, page := range compiledPages {
+		buffer.WriteString(page + "\n\n" + `\pagebreak{}` + "\n")
+	}
+
+	return buffer, nil
 }
