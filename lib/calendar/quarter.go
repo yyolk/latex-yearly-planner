@@ -10,10 +10,6 @@ type Quarter struct {
 	number int
 }
 
-func (q Quarter) Name() string {
-	return "Q" + strconv.Itoa(q.number)
-}
-
 func NewQuarter(year int, qrtr int, wd time.Weekday) Quarter {
 	if qrtr < FirstQuarter || qrtr > FourthQuarter {
 		return Quarter{} //nolint:exhaustivestruct
@@ -30,4 +26,8 @@ func NewQuarter(year int, qrtr int, wd time.Weekday) Quarter {
 			NewMonth(year, mo+2, wd), //nolint:gomnd
 		},
 	}
+}
+
+func (r Quarter) Name() string {
+	return "Q" + strconv.Itoa(r.number)
 }

@@ -73,14 +73,17 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	year := calendar.NewYear(r.templateData.Year(), r.templateData.Weekday())
 
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
-	header := newMOSAnnualHeader(
-		r.templateData.Layout(),
-		headerWithYear(year),
-		headerWithLeft(strconv.Itoa(year.Year())),
-		headerWithRight(rightItems.Slice()),
-	)
 
 	for _, quarter := range year.Quarters {
+		header := newMOSAnnualHeader(
+			r.templateData.Layout(),
+			headerWithYear(year),
+			headerWithLeft(strconv.Itoa(year.Year())),
+			headerWithRight(rightItems.Slice()),
+
+			headerSelectQuarter(quarter),
+		)
+
 		buffer, err = writeToBuffer(buffer, header, mosQuarterlyContents{quarter: quarter})
 		if err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
