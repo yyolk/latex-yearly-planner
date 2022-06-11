@@ -8,6 +8,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
@@ -27,14 +28,14 @@ type Planner struct {
 	builder     MonthsOnSides
 }
 
-func New(params Params) (*Planner, error) {
+func New(template string, params Params) (*Planner, error) {
 	var builder MonthsOnSides
 
-	switch params.Name {
+	switch template {
 	case MonthsOnSidesTemplate:
-		builder = newMonthOnSides(params.TemplateData)
+		builder = newMonthsOnSides(params)
 	default:
-		return nil, fmt.Errorf("%s: %w", params.Name, UnknownTemplateName)
+		return nil, fmt.Errorf("%s: %w", template, UnknownTemplateName)
 	}
 
 	return &Planner{
@@ -51,11 +52,11 @@ func (r *Planner) GenerateFor(device devices.Device, hand MainHand) error {
 		return fmt.Errorf("new layout: %w", err)
 	}
 
-	r.params.TemplateData.Apply(WithLayout(layout), WithDevice(device))
+	r.builder.SetLayout(layout)
 
 	sections := r.builder.Sections()
 
-	for _, name := range r.params.TemplateData.sections {
+	for _, name := range r.params.sections {
 		sectionFunc, ok := sections[name]
 		if !ok {
 			return fmt.Errorf("%v: %w", name, UnknownSectionErr)
@@ -105,16 +106,18 @@ func (r *Planner) Compile(ctx context.Context) error {
 }
 
 func (r *Planner) createRootDocument() error {
-	files := make([]string, 0, len(r.futureFiles))
+	futureFiles := make([]string, 0, len(r.futureFiles))
 
 	for _, file := range r.futureFiles {
-		files = append(files, file.name)
+		futureFiles = append(futureFiles, `\include{`+file.name+`}`)
 	}
 
-	r.params.TemplateData.Apply(WithFiles(files))
-
 	buffer := &bytes.Buffer{}
-	if err := texsnippets.Execute(buffer, texsnippets.Document, r.params.TemplateData); err != nil {
+	if err := texsnippets.Execute(buffer, texsnippets.Document, map[string]interface{}{
+		"Device": r.params.device,
+		"Layout": r.builder.Layout(),
+		"Files":  strings.Join(futureFiles, "\n"),
+	}); err != nil {
 		return fmt.Errorf("execute template root-document: %w", err)
 	}
 

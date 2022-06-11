@@ -1,13 +1,46 @@
 package planners
 
+import (
+	"time"
+
+	"github.com/kudrykv/latex-yearly-planner/app2/devices"
+)
+
 type Params struct {
-	Name         string
-	TemplateData TemplateData
+	year     int
+	weekday  time.Weekday
+	device   devices.Device
+	sections []string
 }
 
-func NewParams(name string) Params {
-	return Params{
-		Name:         name,
-		TemplateData: TemplateData{},
+type ApplyParameterOption func(*Params)
+
+func NewParams(options ...ApplyParameterOption) Params {
+	params := Params{
+		weekday: time.Monday,
+	}
+
+	for _, option := range options {
+		option(&params)
+	}
+
+	return params
+}
+
+func ParamWithYear(year int) ApplyParameterOption {
+	return func(params *Params) {
+		params.year = year
+	}
+}
+
+func ParamWithDevice(device devices.Device) ApplyParameterOption {
+	return func(params *Params) {
+		params.device = device
+	}
+}
+
+func ParamWithSections(sections []string) ApplyParameterOption {
+	return func(params *Params) {
+		params.sections = sections
 	}
 }

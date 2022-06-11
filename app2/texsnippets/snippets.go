@@ -51,7 +51,7 @@ const document = `\documentclass[9pt]{extarticle}
 
 const Title = "title"
 const title = `\hspace{0pt}\vfil
-\hfill\resizebox{.7\linewidth}{!}{ {{- .Year -}} }%
+\hfill\resizebox{.7\linewidth}{!}{ {{- .Title -}} }%
 \pagebreak`
 
 const MOSHeader = "mos-header"

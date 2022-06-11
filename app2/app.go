@@ -69,13 +69,13 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								hand = planners.LeftHand
 							}
 
-							params := planners.NewParams(planners.MonthsOnSidesTemplate)
-							params.TemplateData.Apply(
-								planners.WithYear(appContext.Int(yearFlag)),
-								planners.WithSections(appContext.StringSlice(sectionsFlag)),
+							params := planners.NewParams(
+								planners.ParamWithYear(appContext.Int(yearFlag)),
+								planners.ParamWithDevice(device),
+								planners.ParamWithSections(appContext.StringSlice(sectionsFlag)),
 							)
 
-							planner, err := planners.New(params)
+							planner, err := planners.New(planners.MonthsOnSidesTemplate, params)
 							if err != nil {
 								return fmt.Errorf("new planner: %w", err)
 							}
