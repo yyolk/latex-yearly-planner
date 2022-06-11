@@ -8,26 +8,24 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"strconv"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
-	"github.com/kudrykv/latex-yearly-planner/app2/pages"
-	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
-	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
 type MonthsOnSides struct {
 	params      Params
 	futureFiles []futureFile
 	dir         string
+	builder     monthsOnSidesBuilder
 }
 
 var UnknownSectionErr = errors.New("unknown section")
 
 func newMonthsOnSides(params Params) (*MonthsOnSides, error) {
 	mos := &MonthsOnSides{
-		params: params,
+		params:  params,
+		builder: newMonthOnSidesBuilder(params.TemplateData),
 	}
 
 	return mos, nil
@@ -41,7 +39,7 @@ func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
 
 	r.params.TemplateData.Apply(WithLayout(layout), WithDevice(device))
 
-	sections := r.sections()
+	sections := r.builder.sections()
 
 	for _, name := range r.params.TemplateData.sections {
 		sectionFunc, ok := sections[name]
@@ -65,19 +63,6 @@ func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
 	}
 
 	return nil
-}
-
-type sectionFunc func() (*bytes.Buffer, error)
-
-func (r *MonthsOnSides) sections() map[string]sectionFunc {
-	return map[string]sectionFunc{
-		TitleSection:       r.createTitle,
-		AnnualSection:      r.annualSection,
-		QuarterliesSection: r.quarterliesSection,
-		MonthliesSection:   r.monthliesSection,
-		WeekliesSection:    r.weekliesSection,
-		DailiesSection:     r.dailiesSection,
-	}
 }
 
 func (r *MonthsOnSides) WriteTeXTo(dir string) error {
@@ -105,16 +90,6 @@ func (r *MonthsOnSides) Compile(ctx context.Context) error {
 	return nil
 }
 
-func (r *MonthsOnSides) createTitle() (*bytes.Buffer, error) {
-	buffer := &bytes.Buffer{}
-
-	if err := texsnippets.Execute(buffer, texsnippets.Title, r.params.TemplateData); err != nil {
-		return nil, fmt.Errorf("execute template title: %w", err)
-	}
-
-	return buffer, nil
-}
-
 func (r *MonthsOnSides) createRootDocument() error {
 	files := make([]string, 0, len(r.futureFiles))
 
@@ -132,120 +107,4 @@ func (r *MonthsOnSides) createRootDocument() error {
 	r.futureFiles = append(r.futureFiles, futureFile{name: "document", buffer: buffer})
 
 	return nil
-}
-
-func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
-	templateData := r.params.TemplateData
-	year := calendar.NewYear(templateData.Year(), templateData.Weekday())
-
-	rightItems := cell.Cells{cell.New("Calendar").Ref(), cell.New("To Do"), cell.New("Notes")}
-	header := newMOSAnnualHeader(
-		templateData.Layout(),
-		headerWithYear(year),
-		headerWithLeft(strconv.Itoa(year.Year())),
-		headerWithRight(rightItems.Slice()),
-	)
-
-	buffer, err := writeToBuffer(&bytes.Buffer{}, header, mosAnnualContents{year: year})
-	if err != nil {
-		return nil, fmt.Errorf("write to buffer: %w", err)
-	}
-
-	return buffer, nil
-}
-
-func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
-	var (
-		buffer = &bytes.Buffer{}
-		err    error
-	)
-
-	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
-
-	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
-	header := newMOSAnnualHeader(
-		r.params.TemplateData.Layout(),
-		headerWithYear(year),
-		headerWithLeft(strconv.Itoa(year.Year())),
-		headerWithRight(rightItems.Slice()),
-	)
-
-	for _, quarter := range year.Quarters {
-		buffer, err = writeToBuffer(buffer, header, mosQuarterlyContents{quarter: quarter})
-		if err != nil {
-			return nil, fmt.Errorf("write to buffer: %w", err)
-		}
-	}
-
-	return buffer, nil
-}
-
-func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
-	var (
-		buffer = &bytes.Buffer{}
-		err    error
-	)
-
-	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
-
-	for _, quarter := range year.Quarters {
-		for _, month := range quarter.Months {
-			buffer, err = writeToBuffer(buffer, mosMonthlyHeader{year: year}, mosMonthlyContents{month: month})
-			if err != nil {
-				return nil, fmt.Errorf("write to buffer: %w", err)
-			}
-		}
-	}
-
-	return buffer, nil
-}
-
-func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
-	var (
-		buffer = &bytes.Buffer{}
-		err    error
-	)
-
-	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
-	weeks := year.InWeeks()
-
-	for _, week := range weeks {
-		buffer, err = writeToBuffer(buffer, mosWeeklyHeader{year: year}, mosWeeklyContents{week: week})
-		if err != nil {
-			return nil, fmt.Errorf("write to buffer: %w", err)
-		}
-	}
-
-	return buffer, nil
-}
-
-func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
-	var (
-		buffer = &bytes.Buffer{}
-		err    error
-	)
-
-	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
-
-	for _, day := range year.Days() {
-		buffer, err = writeToBuffer(buffer, mosDailyHeader{year: year}, mosDailyContents{day: day})
-		if err != nil {
-			return nil, fmt.Errorf("write to buffer: %w", err)
-		}
-	}
-
-	return buffer, nil
-}
-
-func writeToBuffer(buffer *bytes.Buffer, blocks ...pages.Block) (*bytes.Buffer, error) {
-	compiledPages, err := pages.NewPage(blocks...).Build()
-	if err != nil {
-		return nil, fmt.Errorf("build new page: %w", err)
-	}
-
-	for _, page := range compiledPages {
-		buffer.WriteString(page + "\n\n" + `\pagebreak{}` + "\n")
-	}
-
-	return buffer, nil
 }
