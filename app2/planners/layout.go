@@ -6,10 +6,18 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 )
 
-func newLayout(device devices.Device) (Layout, error) {
+type MainHand int
+
+const (
+	LeftHand MainHand = iota + 1
+	RightHand
+)
+
+func newLayout(device devices.Device, hand MainHand) (Layout, error) {
 	switch device.(type) {
 	case *devices.SupernoteA5X:
-		return Layout{
+		layout := Layout{
+			Hand: hand,
 			Margin: Margin{
 				Top:    "1cm",
 				Right:  "5mm",
@@ -21,13 +29,21 @@ func newLayout(device devices.Device) (Layout, error) {
 				Width:   "8mm",
 				Reverse: `\reversemarginpar`,
 			},
-		}, nil
+		}
+
+		if hand == LeftHand {
+			layout.Margin.Left, layout.Margin.Right = layout.Margin.Right, layout.Margin.Left
+			layout.MarginNotes.Reverse = ""
+		}
+
+		return layout, nil
 	default:
 		return Layout{}, fmt.Errorf("unknown device type %T: %w", device, UnknownDeviceTypeErr)
 	}
 }
 
 type Layout struct {
+	Hand        MainHand
 	Margin      Margin
 	MarginNotes MarginNotes
 }

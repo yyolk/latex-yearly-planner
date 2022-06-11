@@ -45,8 +45,8 @@ func New(params Params) (*Planner, error) {
 	}, nil
 }
 
-func (r *Planner) GenerateFor(device devices.Device) error {
-	layout, err := newLayout(device)
+func (r *Planner) GenerateFor(device devices.Device, hand MainHand) error {
+	layout, err := newLayout(device, hand)
 	if err != nil {
 		return fmt.Errorf("new layout: %w", err)
 	}

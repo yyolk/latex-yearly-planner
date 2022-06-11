@@ -15,10 +15,12 @@ type App struct {
 }
 
 const (
-	year     = "year"
-	sections = "sections"
+	yearFlag     = "year"
+	sectionsFlag = "sections"
 
-	deviceName = "device-name"
+	deviceNameFlag = "device-name"
+
+	handFlag = "hand"
 )
 
 func New(reader io.Reader, writer, errWriter io.Writer) *App {
@@ -41,10 +43,11 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 					&cli.Command{
 						Name: "mos",
 						Flags: []cli.Flag{
-							&cli.IntFlag{Name: year, Value: time.Now().Year()},
-							&cli.StringFlag{Name: deviceName, Required: true},
+							&cli.IntFlag{Name: yearFlag, Value: time.Now().Year()},
+							&cli.StringFlag{Name: deviceNameFlag, Required: true},
+							&cli.StringFlag{Name: handFlag, Value: "right"},
 							&cli.StringSliceFlag{
-								Name: sections,
+								Name: sectionsFlag,
 								Value: cli.NewStringSlice(
 									//planners.TitleSection,
 									planners.AnnualSection,
@@ -56,15 +59,20 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 							},
 						},
 						Action: func(appContext *cli.Context) error {
-							device, err := devices.New(appContext.String(deviceName))
+							device, err := devices.New(appContext.String(deviceNameFlag))
 							if err != nil {
 								return fmt.Errorf("new device: %w", err)
 							}
 
+							hand := planners.RightHand
+							if appContext.String(handFlag) == "left" {
+								hand = planners.LeftHand
+							}
+
 							params := planners.NewParams(planners.MonthsOnSidesTemplate)
 							params.TemplateData.Apply(
-								planners.WithYear(appContext.Int(year)),
-								planners.WithSections(appContext.StringSlice(sections)),
+								planners.WithYear(appContext.Int(yearFlag)),
+								planners.WithSections(appContext.StringSlice(sectionsFlag)),
 							)
 
 							planner, err := planners.New(params)
@@ -72,7 +80,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								return fmt.Errorf("new planner: %w", err)
 							}
 
-							if err = planner.GenerateFor(device); err != nil {
+							if err = planner.GenerateFor(device, hand); err != nil {
 								return fmt.Errorf("generate: %w", err)
 							}
 
