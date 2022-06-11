@@ -17,13 +17,38 @@ type mosAnnualHeader struct {
 	right []string
 }
 
-func newMOSAnnualHeader(year calendar.Year, layout Layout, left string, right []string) mosAnnualHeader {
-	return mosAnnualHeader{
-		year:   year,
-		layout: layout,
+type mosAnnualHeaderOption func(*mosAnnualHeader)
 
-		left:  left,
-		right: right,
+func newMOSAnnualHeader(layout Layout, options ...mosAnnualHeaderOption) mosAnnualHeader {
+	header := mosAnnualHeader{layout: layout}
+
+	for _, option := range options {
+		option(&header)
+	}
+
+	return header
+}
+
+func headerWithYear(year calendar.Year) mosAnnualHeaderOption {
+	return func(header *mosAnnualHeader) {
+		header.year = year
+	}
+}
+
+func headerWithLeft(left string) mosAnnualHeaderOption {
+	return func(header *mosAnnualHeader) {
+		header.left = left
+	}
+}
+
+func headerWithRight(right []string) mosAnnualHeaderOption {
+	return func(header *mosAnnualHeader) {
+		if len(right) == 0 {
+			return
+		}
+
+		header.right = make([]string, len(right))
+		copy(header.right, right)
 	}
 }
 
@@ -33,7 +58,7 @@ func (m mosAnnualHeader) Build() ([]string, error) {
 	header, err := texsnippets.Build(texsnippets.MOSHeader, map[string]string{
 		"MarginNotes": `\renewcommand{\arraystretch}{2.042}` + texYear.Months() + `\qquad{}` + texYear.Quarters(),
 		"Header": `{\renewcommand{\arraystretch}{1.8185}\begin{tabularx}{\linewidth}{@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(m.right)), ""), "|") + `|@{}}
-\Huge ` + m.left + `{\Huge\color{white}{Q}} & & Calendar & To Do & Notes \\ \hline
+\Huge ` + m.left + `{\Huge\color{white}{Q}} & & ` + strings.Join(m.right, " & ") + ` \\ \hline
 \end{tabularx}}`,
 	})
 

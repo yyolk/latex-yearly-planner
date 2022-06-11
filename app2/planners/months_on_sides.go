@@ -12,6 +12,7 @@ import (
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
+	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
@@ -137,11 +138,15 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 	templateData := r.params.TemplateData
 	year := calendar.NewYear(templateData.Year(), templateData.Weekday())
 
-	buffer, err := writeToBuffer(
-		&bytes.Buffer{},
-		newMOSAnnualHeader(year, templateData.Layout(), strconv.Itoa(year.Year()), []string{"Calendar", "To Do", "Notes"}),
-		mosAnnualContents{year: year},
+	rightItems := cell.Cells{cell.New("Calendar").Ref(), cell.New("To Do"), cell.New("Notes")}
+	header := newMOSAnnualHeader(
+		templateData.Layout(),
+		headerWithYear(year),
+		headerWithLeft(strconv.Itoa(year.Year())),
+		headerWithRight(rightItems.Slice()),
 	)
+
+	buffer, err := writeToBuffer(&bytes.Buffer{}, header, mosAnnualContents{year: year})
 	if err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
@@ -157,8 +162,16 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 
 	year := calendar.NewYear(r.params.TemplateData.Year(), r.params.TemplateData.Weekday())
 
+	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
+	header := newMOSAnnualHeader(
+		r.params.TemplateData.Layout(),
+		headerWithYear(year),
+		headerWithLeft(strconv.Itoa(year.Year())),
+		headerWithRight(rightItems.Slice()),
+	)
+
 	for _, quarter := range year.Quarters {
-		buffer, err = writeToBuffer(buffer, mosQuarterlyHeader{year: year}, mosQuarterlyContents{quarter: quarter})
+		buffer, err = writeToBuffer(buffer, header, mosQuarterlyContents{quarter: quarter})
 		if err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}

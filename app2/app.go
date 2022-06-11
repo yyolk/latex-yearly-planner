@@ -48,7 +48,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								Value: cli.NewStringSlice(
 									//planners.TitleSection,
 									planners.AnnualSection,
-									//planners.QuarterliesSection,
+									planners.QuarterliesSection,
 									//planners.MonthliesSection,
 									//planners.WeekliesSection,
 									//planners.DailiesSection,
