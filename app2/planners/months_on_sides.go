@@ -30,7 +30,7 @@ func (r *Planner) GenerateFor(device devices.Device) error {
 
 	r.params.TemplateData.Apply(WithLayout(layout), WithDevice(device))
 
-	sections := r.builder.sections()
+	sections := r.builder.Sections()
 
 	for _, name := range r.params.TemplateData.sections {
 		sectionFunc, ok := sections[name]

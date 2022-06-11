@@ -23,7 +23,7 @@ func newMonthOnSides(templateData TemplateData) MonthsOnSides {
 
 type sectionFunc func() (*bytes.Buffer, error)
 
-func (r MonthsOnSides) sections() map[string]sectionFunc {
+func (r MonthsOnSides) Sections() map[string]sectionFunc {
 	return map[string]sectionFunc{
 		TitleSection:       r.titleSection,
 		AnnualSection:      r.annualSection,
