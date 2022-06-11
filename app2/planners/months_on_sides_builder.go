@@ -11,19 +11,19 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
-type monthsOnSidesBuilder struct {
+type MonthsOnSides struct {
 	templateData TemplateData
 }
 
-func newMonthOnSidesBuilder(templateData TemplateData) monthsOnSidesBuilder {
-	return monthsOnSidesBuilder{
+func newMonthOnSides(templateData TemplateData) MonthsOnSides {
+	return MonthsOnSides{
 		templateData: templateData,
 	}
 }
 
 type sectionFunc func() (*bytes.Buffer, error)
 
-func (r monthsOnSidesBuilder) sections() map[string]sectionFunc {
+func (r MonthsOnSides) sections() map[string]sectionFunc {
 	return map[string]sectionFunc{
 		TitleSection:       r.titleSection,
 		AnnualSection:      r.annualSection,
@@ -34,7 +34,7 @@ func (r monthsOnSidesBuilder) sections() map[string]sectionFunc {
 	}
 }
 
-func (r *monthsOnSidesBuilder) titleSection() (*bytes.Buffer, error) {
+func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 	buffer := &bytes.Buffer{}
 
 	if err := texsnippets.Execute(buffer, texsnippets.Title, r.templateData); err != nil {
@@ -44,7 +44,7 @@ func (r *monthsOnSidesBuilder) titleSection() (*bytes.Buffer, error) {
 	return buffer, nil
 }
 
-func (r *monthsOnSidesBuilder) annualSection() (*bytes.Buffer, error) {
+func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 	templateData := r.templateData
 	year := calendar.NewYear(templateData.Year(), templateData.Weekday())
 
@@ -64,7 +64,7 @@ func (r *monthsOnSidesBuilder) annualSection() (*bytes.Buffer, error) {
 	return buffer, nil
 }
 
-func (r *monthsOnSidesBuilder) quarterliesSection() (*bytes.Buffer, error) {
+func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	var (
 		buffer = &bytes.Buffer{}
 		err    error
@@ -90,7 +90,7 @@ func (r *monthsOnSidesBuilder) quarterliesSection() (*bytes.Buffer, error) {
 	return buffer, nil
 }
 
-func (r *monthsOnSidesBuilder) monthliesSection() (*bytes.Buffer, error) {
+func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 	var (
 		buffer = &bytes.Buffer{}
 		err    error
@@ -110,7 +110,7 @@ func (r *monthsOnSidesBuilder) monthliesSection() (*bytes.Buffer, error) {
 	return buffer, nil
 }
 
-func (r *monthsOnSidesBuilder) weekliesSection() (*bytes.Buffer, error) {
+func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 	var (
 		buffer = &bytes.Buffer{}
 		err    error
@@ -129,7 +129,7 @@ func (r *monthsOnSidesBuilder) weekliesSection() (*bytes.Buffer, error) {
 	return buffer, nil
 }
 
-func (r *monthsOnSidesBuilder) dailiesSection() (*bytes.Buffer, error) {
+func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 	var (
 		buffer = &bytes.Buffer{}
 		err    error

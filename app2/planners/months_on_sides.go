@@ -13,16 +13,16 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 )
 
-type MonthsOnSides struct {
+type Planner struct {
 	params      Params
 	futureFiles []futureFile
 	dir         string
-	builder     monthsOnSidesBuilder
+	builder     MonthsOnSides
 }
 
 var UnknownSectionErr = errors.New("unknown section")
 
-func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
+func (r *Planner) GenerateFor(device devices.Device) error {
 	layout, err := newLayout(device)
 	if err != nil {
 		return fmt.Errorf("new layout: %w", err)
@@ -56,7 +56,7 @@ func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
 	return nil
 }
 
-func (r *MonthsOnSides) WriteTeXTo(dir string) error {
+func (r *Planner) WriteTeXTo(dir string) error {
 	for _, future := range r.futureFiles {
 		if err := os.WriteFile(path.Join(dir, future.name+".tex"), future.buffer.Bytes(), 0600); err != nil {
 			return fmt.Errorf("write file %s: %w", future.name, err)
@@ -68,7 +68,7 @@ func (r *MonthsOnSides) WriteTeXTo(dir string) error {
 	return nil
 }
 
-func (r *MonthsOnSides) Compile(ctx context.Context) error {
+func (r *Planner) Compile(ctx context.Context) error {
 	for i := 0; i < 2; i++ {
 		cmd := exec.CommandContext(ctx, "pdflatex", "./document.tex")
 		cmd.Dir = r.dir
@@ -81,7 +81,7 @@ func (r *MonthsOnSides) Compile(ctx context.Context) error {
 	return nil
 }
 
-func (r *MonthsOnSides) createRootDocument() error {
+func (r *Planner) createRootDocument() error {
 	files := make([]string, 0, len(r.futureFiles))
 
 	for _, file := range r.futureFiles {
