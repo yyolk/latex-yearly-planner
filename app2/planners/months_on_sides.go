@@ -22,15 +22,6 @@ type MonthsOnSides struct {
 
 var UnknownSectionErr = errors.New("unknown section")
 
-func newMonthsOnSides(params Params) (*MonthsOnSides, error) {
-	mos := &MonthsOnSides{
-		params:  params,
-		builder: newMonthOnSidesBuilder(params.TemplateData),
-	}
-
-	return mos, nil
-}
-
 func (r *MonthsOnSides) GenerateFor(device devices.Device) error {
 	layout, err := newLayout(device)
 	if err != nil {

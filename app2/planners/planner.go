@@ -20,11 +20,20 @@ type Planner interface {
 
 var UnknownTemplateName = errors.New("unknown planner name")
 
-func New(params Params) (Planner, error) {
+func New(params Params) (*MonthsOnSides, error) {
+	var builder monthsOnSidesBuilder
+
 	switch params.Name {
 	case MonthsOnSidesTemplate:
-		return newMonthsOnSides(params)
+		builder = newMonthOnSidesBuilder(params.TemplateData)
 	default:
 		return nil, fmt.Errorf("%s: %w", params.Name, UnknownTemplateName)
 	}
+
+	return &MonthsOnSides{
+		params:      params,
+		futureFiles: nil,
+		dir:         "",
+		builder:     builder,
+	}, nil
 }
