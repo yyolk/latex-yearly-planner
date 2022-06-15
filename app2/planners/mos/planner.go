@@ -119,8 +119,7 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 			headerSelectQuarter(quarter),
 		)
 
-		buffer, err = writeToBuffer(buffer, header, quarterlyContents{quarter: quarter})
-		if err != nil {
+		if buffer, err = writeToBuffer(buffer, header, quarterlyContents{quarter: quarter}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
@@ -146,8 +145,7 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 			headerSelectMonths(month.Month()),
 		)
 
-		buffer, err = writeToBuffer(buffer, header, monthlyContents{month: month})
-		if err != nil {
+		if buffer, err = writeToBuffer(buffer, header, monthlyContents{month: month}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
@@ -175,8 +173,7 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 			headerSelectMonths(week.HeadMonth(), week.TailMonth()),
 		)
 
-		buffer, err = writeToBuffer(buffer, header, weeklyContents{week: week})
-		if err != nil {
+		if buffer, err = writeToBuffer(buffer, header, weeklyContents{week: week}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
@@ -202,8 +199,7 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 			headerSelectMonths(day.Month()),
 		)
 
-		buffer, err = writeToBuffer(buffer, header, dailyContents{day: day})
-		if err != nil {
+		if buffer, err = writeToBuffer(buffer, header, dailyContents{day: day}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
