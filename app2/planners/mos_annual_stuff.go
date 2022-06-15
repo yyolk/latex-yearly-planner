@@ -91,8 +91,19 @@ func (m mosAnnualHeader) quarters() string {
 		quarters = append(quarters, item.Build())
 	}
 
+	var hLineLeft string
+	var hLineRight string
+
+	if m.layout.Hand == LeftHand {
+		hLineLeft = `\hline{}`
+	}
+
+	if m.layout.Hand == RightHand {
+		hLineRight = `\hline{}`
+	}
+
 	return `\begin{tabularx}{5cm}{*{4}{|Y}|}
-	` + strings.Join(quarters, " & ") + ` \\ \hline
+	` + hLineLeft + strings.Join(quarters, " & ") + ` \\ ` + hLineRight + `
 \end{tabularx}`
 }
 
