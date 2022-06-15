@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
@@ -30,6 +31,19 @@ func (r *MonthsOnSides) SetLayout(layout Layout) {
 
 func (r MonthsOnSides) Layout() Layout {
 	return r.parameters.layout
+}
+
+func (r *MonthsOnSides) PrepareDetails(device devices.Device) error {
+	r.parameters.device = device
+
+	switch device.(type) {
+	case *devices.SupernoteA5X:
+		r.parameters.ui = mosUI{}
+	default:
+		return fmt.Errorf("%T: %w", device, UnknownDeviceTypeErr)
+	}
+
+	return nil
 }
 
 type sectionFunc func() (*bytes.Buffer, error)
@@ -62,6 +76,7 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 	rightItems := cell.Cells{cell.New("Calendar").Ref(), cell.New("To Do"), cell.New("Notes")}
 	header := newMOSAnnualHeader(
 		r.parameters.layout,
+		r.parameters.ui,
 		headerWithYear(year),
 		headerWithLeft(strconv.Itoa(year.Year())),
 		headerWithRight(rightItems.Slice()),
@@ -88,10 +103,10 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	for _, quarter := range year.Quarters {
 		header := newMOSAnnualHeader(
 			r.parameters.layout,
+			r.parameters.ui,
 			headerWithYear(year),
 			headerWithLeft(strconv.Itoa(year.Year())),
 			headerWithRight(rightItems.Slice()),
-
 			headerSelectQuarter(quarter),
 		)
 

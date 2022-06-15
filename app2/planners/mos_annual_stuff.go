@@ -17,12 +17,13 @@ type mosAnnualHeader struct {
 	left            string
 	right           []string
 	selectedQuarter calendar.Quarter
+	ui              mosUI
 }
 
 type mosAnnualHeaderOption func(*mosAnnualHeader)
 
-func newMOSAnnualHeader(layout Layout, options ...mosAnnualHeaderOption) mosAnnualHeader {
-	header := mosAnnualHeader{layout: layout}
+func newMOSAnnualHeader(layout Layout, ui mosUI, options ...mosAnnualHeaderOption) mosAnnualHeader {
+	header := mosAnnualHeader{layout: layout, ui: ui}
 
 	for _, option := range options {
 		option(&header)

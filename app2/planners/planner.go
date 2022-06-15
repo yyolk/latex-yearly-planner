@@ -53,6 +53,7 @@ func (r *Planner) GenerateFor(device devices.Device, hand MainHand) error {
 	}
 
 	r.builder.SetLayout(layout)
+	r.builder.PrepareDetails(device)
 
 	sections := r.builder.Sections()
 
