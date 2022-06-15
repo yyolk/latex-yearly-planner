@@ -62,10 +62,8 @@ func headerSelectQuarter(quarter calendar.Quarter) mosAnnualHeaderOption {
 }
 
 func (m mosAnnualHeader) Build() ([]string, error) {
-	texYear := texcalendar.NewYear(m.year)
-
 	header, err := texsnippets.Build(texsnippets.MOSHeader, map[string]string{
-		"MarginNotes": `\renewcommand{\arraystretch}{2.042}` + texYear.Months() + `\qquad{}` + m.quarters(),
+		"MarginNotes": `\renewcommand{\arraystretch}{2.042}` + m.months() + `\qquad{}` + m.quarters(),
 		"Header": `{\renewcommand{\arraystretch}{1.8185}\begin{tabularx}{\linewidth}{@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(m.right)), ""), "|") + `|@{}}
 \Huge ` + m.left + `{\Huge\color{white}{Q}} & & ` + strings.Join(m.right, " & ") + ` \\ \hline
 \end{tabularx}}`,
@@ -76,6 +74,19 @@ func (m mosAnnualHeader) Build() ([]string, error) {
 	}
 
 	return []string{header}, nil
+}
+
+func (m mosAnnualHeader) months() string {
+	strs := make([]string, 0, 12)
+	months := m.year.Months()
+
+	for i := len(months) - 1; i >= 0; i-- {
+		strs = append(strs, months[i].Month().String()[:3])
+	}
+
+	return `\begin{tabularx}{15.5cm}{*{12}{|Y}|}
+	` + m.maybeHLineLeft() + strings.Join(strs, " & ") + `\\ ` + m.maybeHLineRight() + `
+\end{tabularx}`
 }
 
 func (m mosAnnualHeader) quarters() string {

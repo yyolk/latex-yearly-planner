@@ -64,3 +64,15 @@ func (y Year) Days() Days {
 func (y Year) Year() int {
 	return y.year
 }
+
+func (y Year) Months() []Month {
+	out := make([]Month, 0, 12)
+
+	for _, quarter := range y.Quarters {
+		for _, month := range quarter.Months {
+			out = append(out, month)
+		}
+	}
+
+	return out
+}
