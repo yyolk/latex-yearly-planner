@@ -8,4 +8,5 @@ const (
 	WeekliesSection    = "weeklies"
 	DailiesSection     = "dailies"
 	ToDoSection        = "todo"
+	NotesSection       = "notes"
 )

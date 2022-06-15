@@ -61,3 +61,15 @@ type todoContents struct{}
 func (t todoContents) Build() ([]string, error) {
 	return []string{"page with todos"}, nil
 }
+
+type notesIndex struct{}
+
+func (r notesIndex) Build() ([]string, error) {
+	return []string{"notes index"}, nil
+}
+
+type notesContents struct{}
+
+func (r notesContents) Build() ([]string, error) {
+	return []string{"notes"}, nil
+}
