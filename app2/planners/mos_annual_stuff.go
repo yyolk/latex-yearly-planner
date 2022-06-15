@@ -1,11 +1,9 @@
 package planners
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
-	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
@@ -62,18 +60,16 @@ func headerSelectQuarter(quarter calendar.Quarter) mosAnnualHeaderOption {
 }
 
 func (m mosAnnualHeader) Build() ([]string, error) {
-	header, err := texsnippets.Build(texsnippets.MOSHeader, map[string]string{
-		"MarginNotes": `\renewcommand{\arraystretch}{2.042}` + m.months() + `\qquad{}` + m.quarters(),
-		"Header": `{\renewcommand{\arraystretch}{1.8185}\begin{tabularx}{\linewidth}{@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(m.right)), ""), "|") + `|@{}}
+	return []string{
+		`\marginnote{\rotatebox[origin=tr]{90}{%
+\renewcommand{\arraystretch}{2.042}` + m.months() + `\qquad{}` + m.quarters() + `%
+}}%
+{\renewcommand{\arraystretch}{1.8185}\begin{tabularx}{\linewidth}{@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(m.right)), ""), "|") + `|@{}}
 \Huge ` + m.left + `{\Huge\color{white}{Q}} & & ` + strings.Join(m.right, " & ") + ` \\ \hline
-\end{tabularx}}`,
-	})
+\end{tabularx}}
 
-	if err != nil {
-		return nil, fmt.Errorf("build header: %w", err)
-	}
-
-	return []string{header}, nil
+`,
+	}, nil
 }
 
 func (m mosAnnualHeader) months() string {
