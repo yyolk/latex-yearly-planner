@@ -111,7 +111,7 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 			r.parameters.layout,
 			r.parameters.ui,
 			headerWithYear(year),
-			headerWithLeft(strconv.Itoa(year.Year())),
+			headerWithLeft(quarter.Name()),
 			headerWithRight(rightItems.Slice()),
 			headerSelectQuarter(quarter),
 		)
@@ -139,7 +139,7 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 			r.parameters.layout,
 			r.parameters.ui,
 			headerWithYear(year),
-			headerWithLeft(strconv.Itoa(year.Year())),
+			headerWithLeft(month.Month().String()),
 			headerWithRight(rightItems.Slice()),
 			headerSelectMonths(month.Month()),
 		)
@@ -169,7 +169,7 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 			r.parameters.layout,
 			r.parameters.ui,
 			headerWithYear(year),
-			headerWithLeft(strconv.Itoa(year.Year())),
+			headerWithLeft("Week "+strconv.Itoa(week.WeekNumber())),
 			headerWithRight(rightItems.Slice()),
 			headerSelectMonths(week.HeadMonth(), week.TailMonth()),
 		)
@@ -197,7 +197,7 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 			r.parameters.layout,
 			r.parameters.ui,
 			headerWithYear(year),
-			headerWithLeft(strconv.Itoa(year.Year())),
+			headerWithLeft(day.Format("Mon Jan _2")),
 			headerWithRight(rightItems.Slice()),
 			headerSelectMonths(day.Month()),
 		)
