@@ -18,7 +18,7 @@ type header struct {
 	ui    mosUI
 
 	selectedQuarter calendar.Quarter
-	selectedMonth   time.Month
+	selectedMonths  []time.Month
 }
 
 type mosAnnualHeaderOption func(*header)
@@ -62,9 +62,9 @@ func headerSelectQuarter(quarter calendar.Quarter) mosAnnualHeaderOption {
 	}
 }
 
-func headerSelectMonth(month time.Month) mosAnnualHeaderOption {
+func headerSelectMonths(months ...time.Month) mosAnnualHeaderOption {
 	return func(header *header) {
-		header.selectedMonth = month
+		header.selectedMonths = months
 	}
 }
 
@@ -88,8 +88,12 @@ func (m header) months() string {
 	for i := len(months) - 1; i >= 0; i-- {
 		item := cell.New(months[i].Month().String()[:3])
 
-		if months[i].Month() == m.selectedMonth {
-			item = item.Ref()
+		for _, selectedMonth := range m.selectedMonths {
+			if months[i].Month() == selectedMonth {
+				item = item.Ref()
+
+				break
+			}
 		}
 
 		strs = append(strs, item.Build())

@@ -141,7 +141,7 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 			headerWithYear(year),
 			headerWithLeft(strconv.Itoa(year.Year())),
 			headerWithRight(rightItems.Slice()),
-			headerSelectMonth(month.Month()),
+			headerSelectMonths(month.Month()),
 		)
 
 		buffer, err = writeToBuffer(buffer, header, monthlyContents{month: month})
@@ -171,6 +171,7 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 			headerWithYear(year),
 			headerWithLeft(strconv.Itoa(year.Year())),
 			headerWithRight(rightItems.Slice()),
+			headerSelectMonths(week.HeadMonth(), week.TailMonth()),
 		)
 
 		buffer, err = writeToBuffer(buffer, header, weeklyContents{week: week})
