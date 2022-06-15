@@ -91,20 +91,25 @@ func (m mosAnnualHeader) quarters() string {
 		quarters = append(quarters, item.Build())
 	}
 
-	var hLineLeft string
-	var hLineRight string
-
-	if m.layout.Hand == LeftHand {
-		hLineLeft = `\hline{}`
-	}
-
-	if m.layout.Hand == RightHand {
-		hLineRight = `\hline{}`
-	}
-
 	return `\begin{tabularx}{5cm}{*{4}{|Y}|}
-	` + hLineLeft + strings.Join(quarters, " & ") + ` \\ ` + hLineRight + `
+	` + m.maybeHLineLeft() + strings.Join(quarters, " & ") + ` \\ ` + m.maybeHLineRight() + `
 \end{tabularx}`
+}
+
+func (m mosAnnualHeader) maybeHLineLeft() string {
+	if m.layout.Hand == LeftHand {
+		return `\hline{}`
+	}
+
+	return ""
+}
+
+func (m mosAnnualHeader) maybeHLineRight() string {
+	if m.layout.Hand == RightHand {
+		return `\hline{}`
+	}
+
+	return ""
 }
 
 type mosAnnualContents struct {
