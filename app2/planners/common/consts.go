@@ -1,8 +1,4 @@
-package planners
-
-import (
-	"errors"
-)
+package common
 
 const (
 	TitleSection       = "title"
@@ -12,5 +8,3 @@ const (
 	WeekliesSection    = "weeklies"
 	DailiesSection     = "dailies"
 )
-
-var UnknownDeviceTypeErr = errors.New("unknown device type")

@@ -1,6 +1,7 @@
-package planners
+package common
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
@@ -8,12 +9,14 @@ import (
 
 type MainHand int
 
+var UnknownDeviceTypeErr = errors.New("unknown device type")
+
 const (
 	LeftHand MainHand = iota + 1
 	RightHand
 )
 
-func newLayout(device devices.Device, hand MainHand) (Layout, error) {
+func NewLayout(device devices.Device, hand MainHand) (Layout, error) {
 	switch device.(type) {
 	case *devices.SupernoteA5X:
 		layout := Layout{

@@ -1,4 +1,4 @@
-package planners
+package mos
 
 import (
 	"fmt"

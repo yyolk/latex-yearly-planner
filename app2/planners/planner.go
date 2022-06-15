@@ -11,6 +11,8 @@ import (
 	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/mos"
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 )
 
@@ -22,18 +24,18 @@ var UnknownTemplateName = errors.New("unknown planner name")
 var UnknownSectionErr = errors.New("unknown section")
 
 type Planner struct {
-	params      Params
+	params      common.Params
 	futureFiles []futureFile
 	dir         string
-	builder     MonthsOnSides
+	builder     mos.MonthsOnSides
 }
 
-func New(template string, params Params) (*Planner, error) {
-	var builder MonthsOnSides
+func New(template string, params common.Params) (*Planner, error) {
+	var builder mos.MonthsOnSides
 
 	switch template {
 	case MonthsOnSidesTemplate:
-		builder = newMonthsOnSides(params)
+		builder = mos.NewMonthsOnSides(params)
 	default:
 		return nil, fmt.Errorf("%s: %w", template, UnknownTemplateName)
 	}
@@ -46,18 +48,21 @@ func New(template string, params Params) (*Planner, error) {
 	}, nil
 }
 
-func (r *Planner) GenerateFor(device devices.Device, hand MainHand) error {
-	layout, err := newLayout(device, hand)
+func (r *Planner) GenerateFor(device devices.Device, hand common.MainHand) error {
+	layout, err := common.NewLayout(device, hand)
 	if err != nil {
 		return fmt.Errorf("new layout: %w", err)
 	}
 
 	r.builder.SetLayout(layout)
-	r.builder.PrepareDetails(device)
+
+	if err = r.builder.PrepareDetails(device); err != nil {
+		return fmt.Errorf("prepare details: %w", err)
+	}
 
 	sections := r.builder.Sections()
 
-	for _, name := range r.params.sections {
+	for _, name := range r.params.Sections {
 		sectionFunc, ok := sections[name]
 		if !ok {
 			return fmt.Errorf("%v: %w", name, UnknownSectionErr)
@@ -115,7 +120,7 @@ func (r *Planner) createRootDocument() error {
 
 	buffer := &bytes.Buffer{}
 	if err := texsnippets.Execute(buffer, texsnippets.Document, map[string]interface{}{
-		"Device": r.params.device,
+		"Device": r.params.Device,
 		"Layout": r.builder.Layout(),
 		"Files":  strings.Join(futureFiles, "\n"),
 	}); err != nil {

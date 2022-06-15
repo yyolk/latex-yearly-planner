@@ -1,19 +1,19 @@
-package planners
+package mos
 
 import (
 	"fmt"
-	"strconv"
+	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
-type mosWeeklyHeader struct {
+type mosDailyHeader struct {
 	year calendar.Year
 }
 
-func (m mosWeeklyHeader) Build() ([]string, error) {
+func (m mosDailyHeader) Build() ([]string, error) {
 	texYear := texcalendar.NewYear(m.year)
 
 	header, err := texsnippets.Build(texsnippets.MOSHeader, map[string]string{
@@ -28,10 +28,10 @@ func (m mosWeeklyHeader) Build() ([]string, error) {
 	return []string{header}, nil
 }
 
-type mosWeeklyContents struct {
-	week calendar.Week
+type mosDailyContents struct {
+	day calendar.Day
 }
 
-func (m mosWeeklyContents) Build() ([]string, error) {
-	return []string{strconv.Itoa(m.week.WeekNumber())}, nil
+func (m mosDailyContents) Build() ([]string, error) {
+	return []string{m.day.Format(time.RFC3339)}, nil
 }

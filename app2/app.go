@@ -7,6 +7,7 @@ import (
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners"
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/urfave/cli/v2"
 )
 
@@ -50,9 +51,9 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								Name: sectionsFlag,
 								Value: cli.NewStringSlice(
 									//planners.TitleSection,
-									planners.AnnualSection,
-									planners.QuarterliesSection,
-									planners.MonthliesSection,
+									common.AnnualSection,
+									common.QuarterliesSection,
+									common.MonthliesSection,
 									//planners.WeekliesSection,
 									//planners.DailiesSection,
 								),
@@ -64,15 +65,15 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								return fmt.Errorf("new device: %w", err)
 							}
 
-							hand := planners.RightHand
+							hand := common.RightHand
 							if appContext.String(handFlag) == "left" {
-								hand = planners.LeftHand
+								hand = common.LeftHand
 							}
 
-							params := planners.NewParams(
-								planners.ParamWithYear(appContext.Int(yearFlag)),
-								planners.ParamWithDevice(device),
-								planners.ParamWithSections(appContext.StringSlice(sectionsFlag)),
+							params := common.NewParams(
+								common.ParamWithYear(appContext.Int(yearFlag)),
+								common.ParamWithDevice(device),
+								common.ParamWithSections(appContext.StringSlice(sectionsFlag)),
 							)
 
 							planner, err := planners.New(planners.MonthsOnSidesTemplate, params)

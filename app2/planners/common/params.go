@@ -1,4 +1,4 @@
-package planners
+package common
 
 import (
 	"time"
@@ -7,17 +7,17 @@ import (
 )
 
 type Params struct {
-	year     int
-	weekday  time.Weekday
-	device   devices.Device
-	sections []string
+	Year     int
+	Weekday  time.Weekday
+	Device   devices.Device
+	Sections []string
 }
 
 type ApplyParameterOption func(*Params)
 
 func NewParams(options ...ApplyParameterOption) Params {
 	params := Params{
-		weekday: time.Monday,
+		Weekday: time.Monday,
 	}
 
 	for _, option := range options {
@@ -29,18 +29,18 @@ func NewParams(options ...ApplyParameterOption) Params {
 
 func ParamWithYear(year int) ApplyParameterOption {
 	return func(params *Params) {
-		params.year = year
+		params.Year = year
 	}
 }
 
 func ParamWithDevice(device devices.Device) ApplyParameterOption {
 	return func(params *Params) {
-		params.device = device
+		params.Device = device
 	}
 }
 
 func ParamWithSections(sections []string) ApplyParameterOption {
 	return func(params *Params) {
-		params.sections = sections
+		params.Sections = sections
 	}
 }

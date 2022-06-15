@@ -1,8 +1,9 @@
-package planners
+package mos
 
 import (
 	"strings"
 
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
@@ -10,7 +11,7 @@ import (
 
 type mosAnnualHeader struct {
 	year   calendar.Year
-	layout Layout
+	layout common.Layout
 
 	left  string
 	right []string
@@ -22,7 +23,7 @@ type mosAnnualHeader struct {
 
 type mosAnnualHeaderOption func(*mosAnnualHeader)
 
-func newMOSAnnualHeader(layout Layout, ui mosUI, options ...mosAnnualHeaderOption) mosAnnualHeader {
+func newMOSAnnualHeader(layout common.Layout, ui mosUI, options ...mosAnnualHeaderOption) mosAnnualHeader {
 	header := mosAnnualHeader{layout: layout, ui: ui}
 
 	for _, option := range options {
@@ -118,7 +119,7 @@ func (m mosAnnualHeader) quarters() string {
 }
 
 func (m mosAnnualHeader) maybeHLineLeft() string {
-	if m.layout.Hand == LeftHand {
+	if m.layout.Hand == common.LeftHand {
 		return `\hline{}`
 	}
 
@@ -126,7 +127,7 @@ func (m mosAnnualHeader) maybeHLineLeft() string {
 }
 
 func (m mosAnnualHeader) maybeHLineRight() string {
-	if m.layout.Hand == RightHand {
+	if m.layout.Hand == common.RightHand {
 		return `\hline{}`
 	}
 

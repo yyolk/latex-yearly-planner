@@ -1,4 +1,4 @@
-package planners
+package mos
 
 import (
 	"bytes"
@@ -7,6 +7,7 @@ import (
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
@@ -16,20 +17,20 @@ type MonthsOnSides struct {
 	parameters MonthsOnSidesDetails
 }
 
-func newMonthsOnSides(params Params) MonthsOnSides {
+func NewMonthsOnSides(params common.Params) MonthsOnSides {
 	return MonthsOnSides{
 		parameters: MonthsOnSidesDetails{
-			year:    params.year,
-			weekday: params.weekday,
+			year:    params.Year,
+			weekday: params.Weekday,
 		},
 	}
 }
 
-func (r *MonthsOnSides) SetLayout(layout Layout) {
+func (r *MonthsOnSides) SetLayout(layout common.Layout) {
 	r.parameters.layout = layout
 }
 
-func (r MonthsOnSides) Layout() Layout {
+func (r MonthsOnSides) Layout() common.Layout {
 	return r.parameters.layout
 }
 
@@ -45,7 +46,7 @@ func (r *MonthsOnSides) PrepareDetails(device devices.Device) error {
 			HeaderArrayStretch:             "1.8185",
 		}
 	default:
-		return fmt.Errorf("%T: %w", device, UnknownDeviceTypeErr)
+		return fmt.Errorf("%T: %w", device, common.UnknownDeviceTypeErr)
 	}
 
 	return nil
@@ -55,12 +56,12 @@ type sectionFunc func() (*bytes.Buffer, error)
 
 func (r MonthsOnSides) Sections() map[string]sectionFunc {
 	return map[string]sectionFunc{
-		TitleSection:       r.titleSection,
-		AnnualSection:      r.annualSection,
-		QuarterliesSection: r.quarterliesSection,
-		MonthliesSection:   r.monthliesSection,
-		WeekliesSection:    r.weekliesSection,
-		DailiesSection:     r.dailiesSection,
+		common.TitleSection:       r.titleSection,
+		common.AnnualSection:      r.annualSection,
+		common.QuarterliesSection: r.quarterliesSection,
+		common.MonthliesSection:   r.monthliesSection,
+		common.WeekliesSection:    r.weekliesSection,
+		common.DailiesSection:     r.dailiesSection,
 	}
 }
 
