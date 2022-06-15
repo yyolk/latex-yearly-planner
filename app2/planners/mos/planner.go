@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
@@ -14,32 +15,35 @@ import (
 )
 
 type MonthsOnSides struct {
-	parameters Parameters
+	device devices.Device
+	layout common.Layout
+
+	ui      mosUI
+	year    int
+	weekday time.Weekday
 }
 
 func New(params common.Params) MonthsOnSides {
 	return MonthsOnSides{
-		parameters: Parameters{
-			year:    params.Year,
-			weekday: params.Weekday,
-		},
+		year:    params.Year,
+		weekday: params.Weekday,
 	}
 }
 
 func (r *MonthsOnSides) SetLayout(layout common.Layout) {
-	r.parameters.layout = layout
+	r.layout = layout
 }
 
 func (r MonthsOnSides) Layout() common.Layout {
-	return r.parameters.layout
+	return r.layout
 }
 
 func (r *MonthsOnSides) PrepareDetails(device devices.Device) error {
-	r.parameters.device = device
+	r.device = device
 
 	switch device.(type) {
 	case *devices.SupernoteA5X:
-		r.parameters.ui = mosUI{
+		r.ui = mosUI{
 			HeaderMarginNotesArrayStretch:  "2.042",
 			HeaderMarginNotesMonthsWidth:   "15.7cm",
 			HeaderMarginNotesQuartersWidth: "5cm",
@@ -68,7 +72,7 @@ func (r MonthsOnSides) Sections() map[string]sectionFunc {
 func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 	buffer := &bytes.Buffer{}
 
-	title := strconv.Itoa(r.parameters.year)
+	title := strconv.Itoa(r.year)
 	if err := texsnippets.Execute(buffer, texsnippets.Title, map[string]string{"Title": title}); err != nil {
 		return nil, fmt.Errorf("execute template title: %w", err)
 	}
@@ -77,12 +81,12 @@ func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 }
 
 func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
-	year := calendar.NewYear(r.parameters.year, r.parameters.weekday)
+	year := calendar.NewYear(r.year, r.weekday)
 
 	rightItems := cell.Cells{cell.New("Calendar").Ref(), cell.New("To Do"), cell.New("Notes")}
 	header := newMOSAnnualHeader(
-		r.parameters.layout,
-		r.parameters.ui,
+		r.layout,
+		r.ui,
 		headerWithYear(year),
 		headerWithLeft(strconv.Itoa(year.Year())),
 		headerWithRight(rightItems.Slice()),
@@ -102,14 +106,14 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	year := calendar.NewYear(r.parameters.year, r.parameters.weekday)
+	year := calendar.NewYear(r.year, r.weekday)
 
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
 	for _, quarter := range year.Quarters {
 		header := newMOSAnnualHeader(
-			r.parameters.layout,
-			r.parameters.ui,
+			r.layout,
+			r.ui,
 			headerWithYear(year),
 			headerWithLeft(quarter.Name()),
 			headerWithRight(rightItems.Slice()),
@@ -131,13 +135,13 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	year := calendar.NewYear(r.parameters.year, r.parameters.weekday)
+	year := calendar.NewYear(r.year, r.weekday)
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
 	for _, month := range year.Months() {
 		header := newMOSAnnualHeader(
-			r.parameters.layout,
-			r.parameters.ui,
+			r.layout,
+			r.ui,
 			headerWithYear(year),
 			headerWithLeft(month.Month().String()),
 			headerWithRight(rightItems.Slice()),
@@ -159,15 +163,15 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	year := calendar.NewYear(r.parameters.year, r.parameters.weekday)
+	year := calendar.NewYear(r.year, r.weekday)
 	weeks := year.InWeeks()
 
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
 	for _, week := range weeks {
 		header := newMOSAnnualHeader(
-			r.parameters.layout,
-			r.parameters.ui,
+			r.layout,
+			r.ui,
 			headerWithYear(year),
 			headerWithLeft("Week "+strconv.Itoa(week.WeekNumber())),
 			headerWithRight(rightItems.Slice()),
@@ -189,13 +193,13 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	year := calendar.NewYear(r.parameters.year, r.parameters.weekday)
+	year := calendar.NewYear(r.year, r.weekday)
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
 	for _, day := range year.Days() {
 		header := newMOSAnnualHeader(
-			r.parameters.layout,
-			r.parameters.ui,
+			r.layout,
+			r.ui,
 			headerWithYear(year),
 			headerWithLeft(day.Format("Mon Jan _2")),
 			headerWithRight(rightItems.Slice()),
