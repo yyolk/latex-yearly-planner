@@ -12,4 +12,9 @@ type MonthsOnSidesDetails struct {
 
 	year    int
 	weekday time.Weekday
+
+	ui mosUI
+}
+
+type mosUI struct {
 }
