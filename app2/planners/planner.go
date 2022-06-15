@@ -35,7 +35,7 @@ func New(template string, params common.Params) (*Planner, error) {
 
 	switch template {
 	case MonthsOnSidesTemplate:
-		builder = mos.NewMonthsOnSides(params)
+		builder = mos.New(params)
 	default:
 		return nil, fmt.Errorf("%s: %w", template, UnknownTemplateName)
 	}

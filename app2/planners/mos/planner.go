@@ -17,7 +17,7 @@ type MonthsOnSides struct {
 	parameters MonthsOnSidesDetails
 }
 
-func NewMonthsOnSides(params common.Params) MonthsOnSides {
+func New(params common.Params) MonthsOnSides {
 	return MonthsOnSides{
 		parameters: MonthsOnSidesDetails{
 			year:    params.Year,
