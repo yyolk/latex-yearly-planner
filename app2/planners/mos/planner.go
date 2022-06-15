@@ -18,15 +18,18 @@ type MonthsOnSides struct {
 	device devices.Device
 	layout common.Layout
 
-	ui      mosUI
-	year    int
-	weekday time.Weekday
+	ui           mosUI
+	year         int
+	weekday      time.Weekday
+	calendarYear calendar.Year
 }
 
 func New(params common.Params) MonthsOnSides {
 	return MonthsOnSides{
 		year:    params.Year,
 		weekday: params.Weekday,
+
+		calendarYear: calendar.NewYear(params.Year, params.Weekday),
 	}
 }
 
@@ -81,18 +84,16 @@ func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 }
 
 func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
-	year := calendar.NewYear(r.year, r.weekday)
-
 	rightItems := cell.Cells{cell.New("Calendar").Ref(), cell.New("To Do"), cell.New("Notes")}
 	header := newMOSAnnualHeader(
 		r.layout,
 		r.ui,
-		headerWithYear(year),
-		headerWithLeft(strconv.Itoa(year.Year())),
+		headerWithYear(r.calendarYear),
+		headerWithLeft(strconv.Itoa(r.year)),
 		headerWithRight(rightItems.Slice()),
 	)
 
-	buffer, err := writeToBuffer(&bytes.Buffer{}, header, annualContents{year: year})
+	buffer, err := writeToBuffer(&bytes.Buffer{}, header, annualContents{year: r.calendarYear})
 	if err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
@@ -106,15 +107,13 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	year := calendar.NewYear(r.year, r.weekday)
-
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
-	for _, quarter := range year.Quarters {
+	for _, quarter := range r.calendarYear.Quarters {
 		header := newMOSAnnualHeader(
 			r.layout,
 			r.ui,
-			headerWithYear(year),
+			headerWithYear(r.calendarYear),
 			headerWithLeft(quarter.Name()),
 			headerWithRight(rightItems.Slice()),
 			headerSelectQuarter(quarter),
@@ -135,14 +134,13 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	year := calendar.NewYear(r.year, r.weekday)
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
-	for _, month := range year.Months() {
+	for _, month := range r.calendarYear.Months() {
 		header := newMOSAnnualHeader(
 			r.layout,
 			r.ui,
-			headerWithYear(year),
+			headerWithYear(r.calendarYear),
 			headerWithLeft(month.Month().String()),
 			headerWithRight(rightItems.Slice()),
 			headerSelectMonths(month.Month()),
@@ -163,8 +161,7 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	year := calendar.NewYear(r.year, r.weekday)
-	weeks := year.InWeeks()
+	weeks := r.calendarYear.InWeeks()
 
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
@@ -172,7 +169,7 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 		header := newMOSAnnualHeader(
 			r.layout,
 			r.ui,
-			headerWithYear(year),
+			headerWithYear(r.calendarYear),
 			headerWithLeft("Week "+strconv.Itoa(week.WeekNumber())),
 			headerWithRight(rightItems.Slice()),
 			headerSelectMonths(week.HeadMonth(), week.TailMonth()),
@@ -193,14 +190,13 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	year := calendar.NewYear(r.year, r.weekday)
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
-	for _, day := range year.Days() {
+	for _, day := range r.calendarYear.Days() {
 		header := newMOSAnnualHeader(
 			r.layout,
 			r.ui,
-			headerWithYear(year),
+			headerWithYear(r.calendarYear),
 			headerWithLeft(day.Format("Mon Jan _2")),
 			headerWithRight(rightItems.Slice()),
 			headerSelectMonths(day.Month()),
