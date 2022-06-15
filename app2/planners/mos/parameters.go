@@ -7,7 +7,7 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 )
 
-type MonthsOnSidesDetails struct {
+type Parameters struct {
 	device devices.Device
 	layout common.Layout
 

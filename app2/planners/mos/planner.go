@@ -14,12 +14,12 @@ import (
 )
 
 type MonthsOnSides struct {
-	parameters MonthsOnSidesDetails
+	parameters Parameters
 }
 
 func New(params common.Params) MonthsOnSides {
 	return MonthsOnSides{
-		parameters: MonthsOnSidesDetails{
+		parameters: Parameters{
 			year:    params.Year,
 			weekday: params.Weekday,
 		},
