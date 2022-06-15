@@ -69,6 +69,7 @@ func (r MonthsOnSides) Sections() map[string]sectionFunc {
 		common.MonthliesSection:   r.monthliesSection,
 		common.WeekliesSection:    r.weekliesSection,
 		common.DailiesSection:     r.dailiesSection,
+		common.ToDoSection:        r.toDoSection,
 	}
 }
 
@@ -200,6 +201,45 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 		)
 
 		if buffer, err = writeToBuffer(buffer, header, dailyContents{day: day}); err != nil {
+			return nil, fmt.Errorf("write to buffer: %w", err)
+		}
+	}
+
+	return buffer, nil
+}
+
+func (r *MonthsOnSides) toDoSection() (*bytes.Buffer, error) {
+	var (
+		buffer = &bytes.Buffer{}
+		err    error
+	)
+
+	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do").Ref(), cell.New("Notes")}
+
+	header := newHeader(
+		r.layout,
+		r.ui,
+		headerWithYear(r.calendarYear),
+		headerWithLeft("To Do Index"),
+		headerWithRight(rightItems.Slice()),
+	)
+
+	if buffer, err = writeToBuffer(buffer, header, todoIndex{}); err != nil {
+		return nil, fmt.Errorf("write to buffer: %w", err)
+	}
+
+	rightItems = cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
+
+	for i := 1; i <= 100; i++ {
+		header := newHeader(
+			r.layout,
+			r.ui,
+			headerWithYear(r.calendarYear),
+			headerWithLeft(strconv.Itoa(i)),
+			headerWithRight(rightItems.Slice()),
+		)
+
+		if buffer, err = writeToBuffer(buffer, header, todoContents{}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
