@@ -36,6 +36,10 @@ func NewMonth(year int, mo time.Month, wd time.Weekday) Month {
 }
 
 func (m Month) Month() time.Month {
+	if len(m.Weeks) == 0 {
+		return -1
+	}
+
 	return m.Weeks[0].HeadMonth()
 }
 

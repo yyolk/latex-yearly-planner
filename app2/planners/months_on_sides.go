@@ -131,13 +131,21 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 	)
 
 	year := calendar.NewYear(r.parameters.year, r.parameters.weekday)
+	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
-	for _, quarter := range year.Quarters {
-		for _, month := range quarter.Months {
-			buffer, err = writeToBuffer(buffer, mosMonthlyHeader{year: year}, mosMonthlyContents{month: month})
-			if err != nil {
-				return nil, fmt.Errorf("write to buffer: %w", err)
-			}
+	for _, month := range year.Months() {
+		header := newMOSAnnualHeader(
+			r.parameters.layout,
+			r.parameters.ui,
+			headerWithYear(year),
+			headerWithLeft(strconv.Itoa(year.Year())),
+			headerWithRight(rightItems.Slice()),
+			headerSelectMonth(month),
+		)
+
+		buffer, err = writeToBuffer(buffer, header, mosMonthlyContents{month: month})
+		if err != nil {
+			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
 

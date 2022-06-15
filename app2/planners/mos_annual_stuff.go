@@ -12,10 +12,12 @@ type mosAnnualHeader struct {
 	year   calendar.Year
 	layout Layout
 
-	left            string
-	right           []string
+	left  string
+	right []string
+	ui    mosUI
+
 	selectedQuarter calendar.Quarter
-	ui              mosUI
+	selectedMonth   calendar.Month
 }
 
 type mosAnnualHeaderOption func(*mosAnnualHeader)
@@ -59,6 +61,12 @@ func headerSelectQuarter(quarter calendar.Quarter) mosAnnualHeaderOption {
 	}
 }
 
+func headerSelectMonth(month calendar.Month) mosAnnualHeaderOption {
+	return func(header *mosAnnualHeader) {
+		header.selectedMonth = month
+	}
+}
+
 func (m mosAnnualHeader) Build() ([]string, error) {
 	return []string{
 		`\marginnote{\rotatebox[origin=tr]{90}{%
@@ -77,7 +85,13 @@ func (m mosAnnualHeader) months() string {
 	months := m.year.Months()
 
 	for i := len(months) - 1; i >= 0; i-- {
-		strs = append(strs, months[i].Month().String()[:3])
+		item := cell.New(months[i].Month().String()[:3])
+
+		if months[i].Month() == m.selectedMonth.Month() {
+			item = item.Ref()
+		}
+
+		strs = append(strs, item.Build())
 	}
 
 	return `\begin{tabularx}{` + m.ui.HeaderMarginNotesMonthsWidth + `}{*{12}{|Y}|}
