@@ -88,7 +88,7 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 		headerWithRight(rightItems.Slice()),
 	)
 
-	buffer, err := writeToBuffer(&bytes.Buffer{}, header, mosAnnualContents{year: year})
+	buffer, err := writeToBuffer(&bytes.Buffer{}, header, annualContents{year: year})
 	if err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
@@ -116,7 +116,7 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 			headerSelectQuarter(quarter),
 		)
 
-		buffer, err = writeToBuffer(buffer, header, mosQuarterlyContents{quarter: quarter})
+		buffer, err = writeToBuffer(buffer, header, quarterlyContents{quarter: quarter})
 		if err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
@@ -144,7 +144,7 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 			headerSelectMonth(month),
 		)
 
-		buffer, err = writeToBuffer(buffer, header, mosMonthlyContents{month: month})
+		buffer, err = writeToBuffer(buffer, header, monthlyContents{month: month})
 		if err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
@@ -163,7 +163,7 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 	weeks := year.InWeeks()
 
 	for _, week := range weeks {
-		buffer, err = writeToBuffer(buffer, mosWeeklyHeader{year: year}, mosWeeklyContents{week: week})
+		buffer, err = writeToBuffer(buffer, mosWeeklyHeader{year: year}, weeklyContents{week: week})
 		if err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
@@ -181,7 +181,7 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 	year := calendar.NewYear(r.parameters.year, r.parameters.weekday)
 
 	for _, day := range year.Days() {
-		buffer, err = writeToBuffer(buffer, mosDailyHeader{year: year}, mosDailyContents{day: day})
+		buffer, err = writeToBuffer(buffer, mosDailyHeader{year: year}, dailyContents{day: day})
 		if err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}

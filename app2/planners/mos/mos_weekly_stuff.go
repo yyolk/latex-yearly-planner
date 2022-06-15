@@ -2,7 +2,6 @@ package mos
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
@@ -26,12 +25,4 @@ func (m mosWeeklyHeader) Build() ([]string, error) {
 	}
 
 	return []string{header}, nil
-}
-
-type mosWeeklyContents struct {
-	week calendar.Week
-}
-
-func (m mosWeeklyContents) Build() ([]string, error) {
-	return []string{strconv.Itoa(m.week.WeekNumber())}, nil
 }

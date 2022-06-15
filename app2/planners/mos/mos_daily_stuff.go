@@ -2,7 +2,6 @@ package mos
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
@@ -26,12 +25,4 @@ func (m mosDailyHeader) Build() ([]string, error) {
 	}
 
 	return []string{header}, nil
-}
-
-type mosDailyContents struct {
-	day calendar.Day
-}
-
-func (m mosDailyContents) Build() ([]string, error) {
-	return []string{m.day.Format(time.RFC3339)}, nil
 }

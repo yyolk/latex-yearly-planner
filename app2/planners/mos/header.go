@@ -6,10 +6,9 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
-	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
-type mosAnnualHeader struct {
+type header struct {
 	year   calendar.Year
 	layout common.Layout
 
@@ -21,10 +20,10 @@ type mosAnnualHeader struct {
 	selectedMonth   calendar.Month
 }
 
-type mosAnnualHeaderOption func(*mosAnnualHeader)
+type mosAnnualHeaderOption func(*header)
 
-func newMOSAnnualHeader(layout common.Layout, ui mosUI, options ...mosAnnualHeaderOption) mosAnnualHeader {
-	header := mosAnnualHeader{layout: layout, ui: ui}
+func newMOSAnnualHeader(layout common.Layout, ui mosUI, options ...mosAnnualHeaderOption) header {
+	header := header{layout: layout, ui: ui}
 
 	for _, option := range options {
 		option(&header)
@@ -34,19 +33,19 @@ func newMOSAnnualHeader(layout common.Layout, ui mosUI, options ...mosAnnualHead
 }
 
 func headerWithYear(year calendar.Year) mosAnnualHeaderOption {
-	return func(header *mosAnnualHeader) {
+	return func(header *header) {
 		header.year = year
 	}
 }
 
 func headerWithLeft(left string) mosAnnualHeaderOption {
-	return func(header *mosAnnualHeader) {
+	return func(header *header) {
 		header.left = left
 	}
 }
 
 func headerWithRight(right []string) mosAnnualHeaderOption {
-	return func(header *mosAnnualHeader) {
+	return func(header *header) {
 		if len(right) == 0 {
 			return
 		}
@@ -57,18 +56,18 @@ func headerWithRight(right []string) mosAnnualHeaderOption {
 }
 
 func headerSelectQuarter(quarter calendar.Quarter) mosAnnualHeaderOption {
-	return func(header *mosAnnualHeader) {
+	return func(header *header) {
 		header.selectedQuarter = quarter
 	}
 }
 
 func headerSelectMonth(month calendar.Month) mosAnnualHeaderOption {
-	return func(header *mosAnnualHeader) {
+	return func(header *header) {
 		header.selectedMonth = month
 	}
 }
 
-func (m mosAnnualHeader) Build() ([]string, error) {
+func (m header) Build() ([]string, error) {
 	return []string{
 		`\marginnote{\rotatebox[origin=tr]{90}{%
 \renewcommand{\arraystretch}{` + m.ui.HeaderMarginNotesArrayStretch + `}` + m.months() + `\qquad{}` + m.quarters() + `%
@@ -81,7 +80,7 @@ func (m mosAnnualHeader) Build() ([]string, error) {
 	}, nil
 }
 
-func (m mosAnnualHeader) months() string {
+func (m header) months() string {
 	strs := make([]string, 0, 12)
 	months := m.year.Months()
 
@@ -100,7 +99,7 @@ func (m mosAnnualHeader) months() string {
 \end{tabularx}`
 }
 
-func (m mosAnnualHeader) quarters() string {
+func (m header) quarters() string {
 	quarters := make([]string, 0, 4)
 
 	for i := 3; i >= 0; i-- {
@@ -118,7 +117,7 @@ func (m mosAnnualHeader) quarters() string {
 \end{tabularx}`
 }
 
-func (m mosAnnualHeader) maybeHLineLeft() string {
+func (m header) maybeHLineLeft() string {
 	if m.layout.Hand == common.LeftHand {
 		return `\hline{}`
 	}
@@ -126,20 +125,10 @@ func (m mosAnnualHeader) maybeHLineLeft() string {
 	return ""
 }
 
-func (m mosAnnualHeader) maybeHLineRight() string {
+func (m header) maybeHLineRight() string {
 	if m.layout.Hand == common.RightHand {
 		return `\hline{}`
 	}
 
 	return ""
-}
-
-type mosAnnualContents struct {
-	year calendar.Year
-}
-
-func (m mosAnnualContents) Build() ([]string, error) {
-	texYear := texcalendar.NewYear(m.year)
-
-	return []string{texYear.BuildCalendar()}, nil
 }
