@@ -23,7 +23,7 @@ type header struct {
 
 type mosAnnualHeaderOption func(*header)
 
-func newMOSAnnualHeader(layout common.Layout, ui mosUI, options ...mosAnnualHeaderOption) header {
+func newHeader(layout common.Layout, ui mosUI, options ...mosAnnualHeaderOption) header {
 	header := header{layout: layout, ui: ui}
 
 	for _, option := range options {

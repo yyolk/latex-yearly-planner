@@ -85,7 +85,7 @@ func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 
 func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 	rightItems := cell.Cells{cell.New("Calendar").Ref(), cell.New("To Do"), cell.New("Notes")}
-	header := newMOSAnnualHeader(
+	header := newHeader(
 		r.layout,
 		r.ui,
 		headerWithYear(r.calendarYear),
@@ -110,7 +110,7 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
 	for _, quarter := range r.calendarYear.Quarters {
-		header := newMOSAnnualHeader(
+		header := newHeader(
 			r.layout,
 			r.ui,
 			headerWithYear(r.calendarYear),
@@ -137,7 +137,7 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
 	for _, month := range r.calendarYear.Months() {
-		header := newMOSAnnualHeader(
+		header := newHeader(
 			r.layout,
 			r.ui,
 			headerWithYear(r.calendarYear),
@@ -166,7 +166,7 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
 	for _, week := range weeks {
-		header := newMOSAnnualHeader(
+		header := newHeader(
 			r.layout,
 			r.ui,
 			headerWithYear(r.calendarYear),
@@ -193,7 +193,7 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
 	for _, day := range r.calendarYear.Days() {
-		header := newMOSAnnualHeader(
+		header := newHeader(
 			r.layout,
 			r.ui,
 			headerWithYear(r.calendarYear),
