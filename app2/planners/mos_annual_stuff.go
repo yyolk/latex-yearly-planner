@@ -62,9 +62,9 @@ func headerSelectQuarter(quarter calendar.Quarter) mosAnnualHeaderOption {
 func (m mosAnnualHeader) Build() ([]string, error) {
 	return []string{
 		`\marginnote{\rotatebox[origin=tr]{90}{%
-\renewcommand{\arraystretch}{2.042}` + m.months() + `\qquad{}` + m.quarters() + `%
+\renewcommand{\arraystretch}{` + m.ui.HeaderMarginNotesArrayStretch + `}` + m.months() + `\qquad{}` + m.quarters() + `%
 }}%
-{\renewcommand{\arraystretch}{1.8185}\begin{tabularx}{\linewidth}{@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(m.right)), ""), "|") + `|@{}}
+{\renewcommand{\arraystretch}{` + m.ui.HeaderArrayStretch + `}\begin{tabularx}{\linewidth}{@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(m.right)), ""), "|") + `|@{}}
 \Huge ` + m.left + `{\Huge\color{white}{Q}} & & ` + strings.Join(m.right, " & ") + ` \\ \hline
 \end{tabularx}}
 
@@ -80,7 +80,7 @@ func (m mosAnnualHeader) months() string {
 		strs = append(strs, months[i].Month().String()[:3])
 	}
 
-	return `\begin{tabularx}{15.5cm}{*{12}{|Y}|}
+	return `\begin{tabularx}{` + m.ui.HeaderMarginNotesMonthsWidth + `}{*{12}{|Y}|}
 	` + m.maybeHLineLeft() + strings.Join(strs, " & ") + `\\ ` + m.maybeHLineRight() + `
 \end{tabularx}`
 }
@@ -98,7 +98,7 @@ func (m mosAnnualHeader) quarters() string {
 		quarters = append(quarters, item.Build())
 	}
 
-	return `\begin{tabularx}{5cm}{*{4}{|Y}|}
+	return `\begin{tabularx}{` + m.ui.HeaderMarginNotesQuartersWidth + `}{*{4}{|Y}|}
 	` + m.maybeHLineLeft() + strings.Join(quarters, " & ") + ` \\ ` + m.maybeHLineRight() + `
 \end{tabularx}`
 }

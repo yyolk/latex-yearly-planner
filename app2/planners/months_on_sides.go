@@ -38,7 +38,12 @@ func (r *MonthsOnSides) PrepareDetails(device devices.Device) error {
 
 	switch device.(type) {
 	case *devices.SupernoteA5X:
-		r.parameters.ui = mosUI{}
+		r.parameters.ui = mosUI{
+			HeaderMarginNotesArrayStretch:  "2.042",
+			HeaderMarginNotesMonthsWidth:   "15.7cm",
+			HeaderMarginNotesQuartersWidth: "5cm",
+			HeaderArrayStretch:             "1.8185",
+		}
 	default:
 		return fmt.Errorf("%T: %w", device, UnknownDeviceTypeErr)
 	}

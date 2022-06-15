@@ -17,4 +17,8 @@ type MonthsOnSidesDetails struct {
 }
 
 type mosUI struct {
+	HeaderMarginNotesArrayStretch  string
+	HeaderArrayStretch             string
+	HeaderMarginNotesMonthsWidth   string
+	HeaderMarginNotesQuartersWidth string
 }
