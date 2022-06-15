@@ -190,9 +190,19 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 	)
 
 	year := calendar.NewYear(r.parameters.year, r.parameters.weekday)
+	rightItems := cell.Cells{cell.New("Calendar"), cell.New("To Do"), cell.New("Notes")}
 
 	for _, day := range year.Days() {
-		buffer, err = writeToBuffer(buffer, mosDailyHeader{year: year}, dailyContents{day: day})
+		header := newMOSAnnualHeader(
+			r.parameters.layout,
+			r.parameters.ui,
+			headerWithYear(year),
+			headerWithLeft(strconv.Itoa(year.Year())),
+			headerWithRight(rightItems.Slice()),
+			headerSelectMonths(day.Month()),
+		)
+
+		buffer, err = writeToBuffer(buffer, header, dailyContents{day: day})
 		if err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
