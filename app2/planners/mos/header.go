@@ -2,6 +2,7 @@ package mos
 
 import (
 	"strings"
+	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
@@ -17,7 +18,7 @@ type header struct {
 	ui    mosUI
 
 	selectedQuarter calendar.Quarter
-	selectedMonth   calendar.Month
+	selectedMonth   time.Month
 }
 
 type mosAnnualHeaderOption func(*header)
@@ -61,7 +62,7 @@ func headerSelectQuarter(quarter calendar.Quarter) mosAnnualHeaderOption {
 	}
 }
 
-func headerSelectMonth(month calendar.Month) mosAnnualHeaderOption {
+func headerSelectMonth(month time.Month) mosAnnualHeaderOption {
 	return func(header *header) {
 		header.selectedMonth = month
 	}
@@ -87,7 +88,7 @@ func (m header) months() string {
 	for i := len(months) - 1; i >= 0; i-- {
 		item := cell.New(months[i].Month().String()[:3])
 
-		if months[i].Month() == m.selectedMonth.Month() {
+		if months[i].Month() == m.selectedMonth {
 			item = item.Ref()
 		}
 

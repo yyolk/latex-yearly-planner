@@ -54,7 +54,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 									common.AnnualSection,
 									common.QuarterliesSection,
 									common.MonthliesSection,
-									//planners.WeekliesSection,
+									common.WeekliesSection,
 									//planners.DailiesSection,
 								),
 							},
