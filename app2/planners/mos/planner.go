@@ -93,26 +93,25 @@ func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 }
 
 func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
+	buffer := pages.NewBuffer()
 	header := r.headerWithTitleAndSelection(r.yearStr, calendarText)
 
-	buffer, err := writeToBuffer(&bytes.Buffer{}, header, annualContents{year: r.calendarYear})
-	if err != nil {
+	if err := buffer.WriteBlocks(header, annualContents{year: r.calendarYear}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
-	return buffer, nil
+	return buffer.Buffer, nil
 }
 
 func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
-	var (
-		buffer = pages.NewBuffer()
-		err    error
-	)
+	buffer := pages.NewBuffer()
 
 	for _, quarter := range r.calendarYear.Quarters {
-		header := r.headerWithTitle(quarter.Name()).apply(headerSelectQuarter(quarter))
+		header := r.
+			headerWithTitle(quarter.Name()).
+			apply(headerSelectQuarter(quarter))
 
-		if err = buffer.WriteBlocks(header, quarterlyContents{quarter: quarter}); err != nil {
+		if err := buffer.WriteBlocks(header, quarterlyContents{quarter: quarter}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
@@ -121,102 +120,89 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 }
 
 func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
-	var (
-		buffer = &bytes.Buffer{}
-		err    error
-	)
+	buffer := pages.NewBuffer()
 
 	for _, month := range r.calendarYear.Months() {
-		header := r.headerWithTitle(month.Month().String()).apply(headerSelectMonths(month.Month()))
+		header := r.
+			headerWithTitle(month.Month().String()).
+			apply(headerSelectMonths(month.Month()))
 
-		if buffer, err = writeToBuffer(buffer, header, monthlyContents{month: month}); err != nil {
+		if err := buffer.WriteBlocks(header, monthlyContents{month: month}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
 
-	return buffer, nil
+	return buffer.Buffer, nil
 }
 
 func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
-	var (
-		buffer = &bytes.Buffer{}
-		err    error
-	)
+	buffer := pages.NewBuffer()
 
 	for _, week := range r.calendarYear.InWeeks() {
 		header := r.
 			headerWithTitle("Week " + strconv.Itoa(week.WeekNumber())).
 			apply(headerSelectMonths(week.HeadMonth(), week.TailMonth()))
 
-		if buffer, err = writeToBuffer(buffer, header, weeklyContents{week: week}); err != nil {
+		if err := buffer.WriteBlocks(header, weeklyContents{week: week}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
 
-	return buffer, nil
+	return buffer.Buffer, nil
 }
 
 func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
-	var (
-		buffer = &bytes.Buffer{}
-		err    error
-	)
+	buffer := pages.NewBuffer()
 
 	for _, day := range r.calendarYear.Days() {
-		header := r.headerWithTitle(day.Format("Mon Jan _2")).apply(headerSelectMonths(day.Month()))
+		header := r.
+			headerWithTitle(day.Format("Mon Jan _2")).
+			apply(headerSelectMonths(day.Month()))
 
-		if buffer, err = writeToBuffer(buffer, header, dailyContents{day: day}); err != nil {
+		if err := buffer.WriteBlocks(header, dailyContents{day: day}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
 
-	return buffer, nil
+	return buffer.Buffer, nil
 }
 
 func (r *MonthsOnSides) toDoSection() (*bytes.Buffer, error) {
-	var (
-		buffer = &bytes.Buffer{}
-		err    error
-	)
-
+	buffer := pages.NewBuffer()
 	header := r.headerWithTitleAndSelection("To Do Index", toDoText)
 
-	if buffer, err = writeToBuffer(buffer, header, todoIndex{}); err != nil {
+	if err := buffer.WriteBlocks(header, todoIndex{}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
 	for i := 1; i <= 100; i++ {
 		header := r.headerWithTitle(strconv.Itoa(i))
 
-		if buffer, err = writeToBuffer(buffer, header, todoContents{}); err != nil {
+		if err := buffer.WriteBlocks(header, todoContents{}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
 
-	return buffer, nil
+	return buffer.Buffer, nil
 }
 
 func (r *MonthsOnSides) notesSection() (*bytes.Buffer, error) {
-	var (
-		buffer = &bytes.Buffer{}
-		err    error
-	)
-
+	buffer := pages.NewBuffer()
 	header := r.headerWithTitleAndSelection("Notes Index", notesText)
 
-	if buffer, err = writeToBuffer(buffer, header, notesIndex{}); err != nil {
+	if err := buffer.WriteBlocks(header, notesIndex{}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
 	for i := 1; i <= 100; i++ {
 		header := r.headerWithTitle(strconv.Itoa(i))
 
-		if buffer, err = writeToBuffer(buffer, header, notesContents{}); err != nil {
+		if err := buffer.WriteBlocks(header, notesContents{}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
 
-	return buffer, nil
+	return buffer.Buffer, nil
 }
 
 func (r *MonthsOnSides) headerWithTitle(title string) header {
@@ -240,17 +226,4 @@ func (r *MonthsOnSides) baseHeader() header {
 
 func (r *MonthsOnSides) rightCells() cell.Cells {
 	return cell.NewCells(calendarText, toDoText, notesText)
-}
-
-func writeToBuffer(buffer *bytes.Buffer, blocks ...pages.Block) (*bytes.Buffer, error) {
-	compiledPages, err := pages.NewPage(blocks...).Build()
-	if err != nil {
-		return nil, fmt.Errorf("build new page: %w", err)
-	}
-
-	for _, page := range compiledPages {
-		buffer.WriteString(page + "\n\n" + `\pagebreak{}` + "\n")
-	}
-
-	return buffer, nil
 }
