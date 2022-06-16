@@ -103,17 +103,6 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 	return buffer, nil
 }
 
-func (r *MonthsOnSides) headerWithTitle(title string) header {
-	return r.headerWithTitleAndSelection(title, "")
-}
-
-func (r *MonthsOnSides) headerWithTitleAndSelection(title string, selectText string) header {
-	return r.baseHeader().apply(
-		headerWithLeft(title),
-		headerWithRight(r.rightCells().Ref(selectText).Slice()),
-	)
-}
-
 func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	var (
 		buffer = &bytes.Buffer{}
@@ -138,11 +127,7 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, month := range r.calendarYear.Months() {
-		header := r.baseHeader().apply(
-			headerWithLeft(month.Month().String()),
-			headerWithRight(r.rightCells().Slice()),
-			headerSelectMonths(month.Month()),
-		)
+		header := r.headerWithTitle(month.Month().String()).apply(headerSelectMonths(month.Month()))
 
 		if buffer, err = writeToBuffer(buffer, header, monthlyContents{month: month}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
@@ -159,11 +144,9 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, week := range r.calendarYear.InWeeks() {
-		header := r.baseHeader().apply(
-			headerWithLeft("Week "+strconv.Itoa(week.WeekNumber())),
-			headerWithRight(r.rightCells().Slice()),
-			headerSelectMonths(week.HeadMonth(), week.TailMonth()),
-		)
+		header := r.
+			headerWithTitle("Week " + strconv.Itoa(week.WeekNumber())).
+			apply(headerSelectMonths(week.HeadMonth(), week.TailMonth()))
 
 		if buffer, err = writeToBuffer(buffer, header, weeklyContents{week: week}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
@@ -180,11 +163,7 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, day := range r.calendarYear.Days() {
-		header := r.baseHeader().apply(
-			headerWithLeft(day.Format("Mon Jan _2")),
-			headerWithRight(r.rightCells().Slice()),
-			headerSelectMonths(day.Month()),
-		)
+		header := r.headerWithTitle(day.Format("Mon Jan _2")).apply(headerSelectMonths(day.Month()))
 
 		if buffer, err = writeToBuffer(buffer, header, dailyContents{day: day}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
@@ -200,20 +179,14 @@ func (r *MonthsOnSides) toDoSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	header := r.baseHeader().apply(
-		headerWithLeft("To Do Index"),
-		headerWithRight(r.rightCells().Ref(toDoText).Slice()),
-	)
+	header := r.headerWithTitleAndSelection("To Do Index", toDoText)
 
 	if buffer, err = writeToBuffer(buffer, header, todoIndex{}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
 	for i := 1; i <= 100; i++ {
-		header := r.baseHeader().apply(
-			headerWithLeft(strconv.Itoa(i)),
-			headerWithRight(r.rightCells().Slice()),
-		)
+		header := r.headerWithTitle(strconv.Itoa(i))
 
 		if buffer, err = writeToBuffer(buffer, header, todoContents{}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
@@ -229,20 +202,14 @@ func (r *MonthsOnSides) notesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	header := r.baseHeader().apply(
-		headerWithLeft("Notes Index"),
-		headerWithRight(r.rightCells().Ref(notesText).Slice()),
-	)
+	header := r.headerWithTitleAndSelection("Notes Index", notesText)
 
 	if buffer, err = writeToBuffer(buffer, header, notesIndex{}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
 	for i := 1; i <= 100; i++ {
-		header := r.baseHeader().apply(
-			headerWithLeft(strconv.Itoa(i)),
-			headerWithRight(r.rightCells().Slice()),
-		)
+		header := r.headerWithTitle(strconv.Itoa(i))
 
 		if buffer, err = writeToBuffer(buffer, header, notesContents{}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
@@ -250,6 +217,17 @@ func (r *MonthsOnSides) notesSection() (*bytes.Buffer, error) {
 	}
 
 	return buffer, nil
+}
+
+func (r *MonthsOnSides) headerWithTitle(title string) header {
+	return r.headerWithTitleAndSelection(title, "")
+}
+
+func (r *MonthsOnSides) headerWithTitleAndSelection(title string, selectText string) header {
+	return r.baseHeader().apply(
+		headerWithLeft(title),
+		headerWithRight(r.rightCells().Ref(selectText).Slice()),
+	)
 }
 
 func (r *MonthsOnSides) baseHeader() header {
