@@ -25,9 +25,9 @@ type MonthsOnSides struct {
 }
 
 const (
-	calendarCell = "Calendar"
-	toDoCell     = "To Do"
-	notesCell    = "Notes"
+	calendarText = "Calendar"
+	toDoText     = "To Do"
+	notesText    = "Notes"
 )
 
 func New(params common.Params) MonthsOnSides {
@@ -92,12 +92,9 @@ func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 }
 
 func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
-	header := newHeader(
-		r.layout,
-		r.ui,
-		headerWithYear(r.calendarYear),
+	header := r.prepareHeader().apply(
 		headerWithLeft(strconv.Itoa(r.year)),
-		headerWithRight(r.headerRightCells().Ref(calendarCell).Slice()),
+		headerWithRight(r.headerRightCells().Ref(calendarText).Slice()),
 	)
 
 	buffer, err := writeToBuffer(&bytes.Buffer{}, header, annualContents{year: r.calendarYear})
@@ -115,10 +112,7 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, quarter := range r.calendarYear.Quarters {
-		header := newHeader(
-			r.layout,
-			r.ui,
-			headerWithYear(r.calendarYear),
+		header := r.prepareHeader().apply(
 			headerWithLeft(quarter.Name()),
 			headerWithRight(r.headerRightCells().Slice()),
 			headerSelectQuarter(quarter),
@@ -139,10 +133,7 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, month := range r.calendarYear.Months() {
-		header := newHeader(
-			r.layout,
-			r.ui,
-			headerWithYear(r.calendarYear),
+		header := r.prepareHeader().apply(
 			headerWithLeft(month.Month().String()),
 			headerWithRight(r.headerRightCells().Slice()),
 			headerSelectMonths(month.Month()),
@@ -165,10 +156,7 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 	weeks := r.calendarYear.InWeeks()
 
 	for _, week := range weeks {
-		header := newHeader(
-			r.layout,
-			r.ui,
-			headerWithYear(r.calendarYear),
+		header := r.prepareHeader().apply(
 			headerWithLeft("Week "+strconv.Itoa(week.WeekNumber())),
 			headerWithRight(r.headerRightCells().Slice()),
 			headerSelectMonths(week.HeadMonth(), week.TailMonth()),
@@ -189,10 +177,7 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, day := range r.calendarYear.Days() {
-		header := newHeader(
-			r.layout,
-			r.ui,
-			headerWithYear(r.calendarYear),
+		header := r.prepareHeader().apply(
 			headerWithLeft(day.Format("Mon Jan _2")),
 			headerWithRight(r.headerRightCells().Slice()),
 			headerSelectMonths(day.Month()),
@@ -212,12 +197,9 @@ func (r *MonthsOnSides) toDoSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	header := newHeader(
-		r.layout,
-		r.ui,
-		headerWithYear(r.calendarYear),
+	header := r.prepareHeader().apply(
 		headerWithLeft("To Do Index"),
-		headerWithRight(r.headerRightCells().Ref(toDoCell).Slice()),
+		headerWithRight(r.headerRightCells().Ref(toDoText).Slice()),
 	)
 
 	if buffer, err = writeToBuffer(buffer, header, todoIndex{}); err != nil {
@@ -225,10 +207,7 @@ func (r *MonthsOnSides) toDoSection() (*bytes.Buffer, error) {
 	}
 
 	for i := 1; i <= 100; i++ {
-		header := newHeader(
-			r.layout,
-			r.ui,
-			headerWithYear(r.calendarYear),
+		header := r.prepareHeader().apply(
 			headerWithLeft(strconv.Itoa(i)),
 			headerWithRight(r.headerRightCells().Slice()),
 		)
@@ -247,12 +226,9 @@ func (r *MonthsOnSides) notesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	header := newHeader(
-		r.layout,
-		r.ui,
-		headerWithYear(r.calendarYear),
+	header := r.prepareHeader().apply(
 		headerWithLeft("Notes Index"),
-		headerWithRight(r.headerRightCells().Ref(notesCell).Slice()),
+		headerWithRight(r.headerRightCells().Ref(notesText).Slice()),
 	)
 
 	if buffer, err = writeToBuffer(buffer, header, notesIndex{}); err != nil {
@@ -260,10 +236,7 @@ func (r *MonthsOnSides) notesSection() (*bytes.Buffer, error) {
 	}
 
 	for i := 1; i <= 100; i++ {
-		header := newHeader(
-			r.layout,
-			r.ui,
-			headerWithYear(r.calendarYear),
+		header := r.prepareHeader().apply(
 			headerWithLeft(strconv.Itoa(i)),
 			headerWithRight(r.headerRightCells().Slice()),
 		)
@@ -276,8 +249,16 @@ func (r *MonthsOnSides) notesSection() (*bytes.Buffer, error) {
 	return buffer, nil
 }
 
+func (r *MonthsOnSides) prepareHeader() header {
+	return newHeader(
+		r.layout,
+		r.ui,
+		headerWithYear(r.calendarYear),
+	)
+}
+
 func (r *MonthsOnSides) headerRightCells() cell.Cells {
-	return cell.NewCells(calendarCell, toDoCell, notesCell)
+	return cell.NewCells(calendarText, toDoText, notesText)
 }
 
 func writeToBuffer(buffer *bytes.Buffer, blocks ...pages.Block) (*bytes.Buffer, error) {
