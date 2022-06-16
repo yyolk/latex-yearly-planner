@@ -22,6 +22,7 @@ type MonthsOnSides struct {
 	year         int
 	weekday      time.Weekday
 	calendarYear calendar.Year
+	yearStr      string
 }
 
 const (
@@ -36,6 +37,7 @@ func New(params common.Params) MonthsOnSides {
 		weekday: params.Weekday,
 
 		calendarYear: calendar.NewYear(params.Year, params.Weekday),
+		yearStr:      strconv.Itoa(params.Year),
 	}
 }
 
@@ -83,8 +85,7 @@ func (r MonthsOnSides) Sections() map[string]sectionFunc {
 func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 	buffer := &bytes.Buffer{}
 
-	title := strconv.Itoa(r.year)
-	if err := texsnippets.Execute(buffer, texsnippets.Title, map[string]string{"Title": title}); err != nil {
+	if err := texsnippets.Execute(buffer, texsnippets.Title, map[string]string{"Title": r.yearStr}); err != nil {
 		return nil, fmt.Errorf("execute template title: %w", err)
 	}
 
@@ -92,10 +93,7 @@ func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 }
 
 func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
-	header := r.prepareHeader().apply(
-		headerWithLeft(strconv.Itoa(r.year)),
-		headerWithRight(r.headerRightCells().Ref(calendarText).Slice()),
-	)
+	header := r.headerWithTitleAndSelection(r.yearStr, calendarText)
 
 	buffer, err := writeToBuffer(&bytes.Buffer{}, header, annualContents{year: r.calendarYear})
 	if err != nil {
@@ -105,6 +103,17 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 	return buffer, nil
 }
 
+func (r *MonthsOnSides) headerWithTitle(title string) header {
+	return r.headerWithTitleAndSelection(title, "")
+}
+
+func (r *MonthsOnSides) headerWithTitleAndSelection(title string, selectText string) header {
+	return r.baseHeader().apply(
+		headerWithLeft(title),
+		headerWithRight(r.rightCells().Ref(selectText).Slice()),
+	)
+}
+
 func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	var (
 		buffer = &bytes.Buffer{}
@@ -112,11 +121,7 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, quarter := range r.calendarYear.Quarters {
-		header := r.prepareHeader().apply(
-			headerWithLeft(quarter.Name()),
-			headerWithRight(r.headerRightCells().Slice()),
-			headerSelectQuarter(quarter),
-		)
+		header := r.headerWithTitle(quarter.Name()).apply(headerSelectQuarter(quarter))
 
 		if buffer, err = writeToBuffer(buffer, header, quarterlyContents{quarter: quarter}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
@@ -133,9 +138,9 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, month := range r.calendarYear.Months() {
-		header := r.prepareHeader().apply(
+		header := r.baseHeader().apply(
 			headerWithLeft(month.Month().String()),
-			headerWithRight(r.headerRightCells().Slice()),
+			headerWithRight(r.rightCells().Slice()),
 			headerSelectMonths(month.Month()),
 		)
 
@@ -153,12 +158,10 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	weeks := r.calendarYear.InWeeks()
-
-	for _, week := range weeks {
-		header := r.prepareHeader().apply(
+	for _, week := range r.calendarYear.InWeeks() {
+		header := r.baseHeader().apply(
 			headerWithLeft("Week "+strconv.Itoa(week.WeekNumber())),
-			headerWithRight(r.headerRightCells().Slice()),
+			headerWithRight(r.rightCells().Slice()),
 			headerSelectMonths(week.HeadMonth(), week.TailMonth()),
 		)
 
@@ -177,9 +180,9 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, day := range r.calendarYear.Days() {
-		header := r.prepareHeader().apply(
+		header := r.baseHeader().apply(
 			headerWithLeft(day.Format("Mon Jan _2")),
-			headerWithRight(r.headerRightCells().Slice()),
+			headerWithRight(r.rightCells().Slice()),
 			headerSelectMonths(day.Month()),
 		)
 
@@ -197,9 +200,9 @@ func (r *MonthsOnSides) toDoSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	header := r.prepareHeader().apply(
+	header := r.baseHeader().apply(
 		headerWithLeft("To Do Index"),
-		headerWithRight(r.headerRightCells().Ref(toDoText).Slice()),
+		headerWithRight(r.rightCells().Ref(toDoText).Slice()),
 	)
 
 	if buffer, err = writeToBuffer(buffer, header, todoIndex{}); err != nil {
@@ -207,9 +210,9 @@ func (r *MonthsOnSides) toDoSection() (*bytes.Buffer, error) {
 	}
 
 	for i := 1; i <= 100; i++ {
-		header := r.prepareHeader().apply(
+		header := r.baseHeader().apply(
 			headerWithLeft(strconv.Itoa(i)),
-			headerWithRight(r.headerRightCells().Slice()),
+			headerWithRight(r.rightCells().Slice()),
 		)
 
 		if buffer, err = writeToBuffer(buffer, header, todoContents{}); err != nil {
@@ -226,9 +229,9 @@ func (r *MonthsOnSides) notesSection() (*bytes.Buffer, error) {
 		err    error
 	)
 
-	header := r.prepareHeader().apply(
+	header := r.baseHeader().apply(
 		headerWithLeft("Notes Index"),
-		headerWithRight(r.headerRightCells().Ref(notesText).Slice()),
+		headerWithRight(r.rightCells().Ref(notesText).Slice()),
 	)
 
 	if buffer, err = writeToBuffer(buffer, header, notesIndex{}); err != nil {
@@ -236,9 +239,9 @@ func (r *MonthsOnSides) notesSection() (*bytes.Buffer, error) {
 	}
 
 	for i := 1; i <= 100; i++ {
-		header := r.prepareHeader().apply(
+		header := r.baseHeader().apply(
 			headerWithLeft(strconv.Itoa(i)),
-			headerWithRight(r.headerRightCells().Slice()),
+			headerWithRight(r.rightCells().Slice()),
 		)
 
 		if buffer, err = writeToBuffer(buffer, header, notesContents{}); err != nil {
@@ -249,7 +252,7 @@ func (r *MonthsOnSides) notesSection() (*bytes.Buffer, error) {
 	return buffer, nil
 }
 
-func (r *MonthsOnSides) prepareHeader() header {
+func (r *MonthsOnSides) baseHeader() header {
 	return newHeader(
 		r.layout,
 		r.ui,
@@ -257,7 +260,7 @@ func (r *MonthsOnSides) prepareHeader() header {
 	)
 }
 
-func (r *MonthsOnSides) headerRightCells() cell.Cells {
+func (r *MonthsOnSides) rightCells() cell.Cells {
 	return cell.NewCells(calendarText, toDoText, notesText)
 }
 
