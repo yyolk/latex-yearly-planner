@@ -57,6 +57,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 									common.WeekliesSection,
 									common.DailiesSection,
 									common.ToDoSection,
+									common.NotesSection,
 								),
 							},
 						},
