@@ -21,31 +21,33 @@ type header struct {
 	selectedMonths  []time.Month
 }
 
-type mosAnnualHeaderOption func(*header)
+type headerOption func(*header)
 
-func newHeader(layout common.Layout, ui mosUI, options ...mosAnnualHeaderOption) header {
-	header := header{layout: layout, ui: ui}
-
-	for _, option := range options {
-		option(&header)
-	}
-
-	return header
+func newHeader(layout common.Layout, ui mosUI, options ...headerOption) header {
+	return header{layout: layout, ui: ui}.apply(options...)
 }
 
-func headerWithYear(year calendar.Year) mosAnnualHeaderOption {
+func (r header) apply(options ...headerOption) header {
+	for _, option := range options {
+		option(&r)
+	}
+
+	return r
+}
+
+func headerWithYear(year calendar.Year) headerOption {
 	return func(header *header) {
 		header.year = year
 	}
 }
 
-func headerWithLeft(left string) mosAnnualHeaderOption {
+func headerWithLeft(left string) headerOption {
 	return func(header *header) {
 		header.left = left
 	}
 }
 
-func headerWithRight(right []string) mosAnnualHeaderOption {
+func headerWithRight(right []string) headerOption {
 	return func(header *header) {
 		if len(right) == 0 {
 			return
@@ -56,39 +58,39 @@ func headerWithRight(right []string) mosAnnualHeaderOption {
 	}
 }
 
-func headerSelectQuarter(quarter calendar.Quarter) mosAnnualHeaderOption {
+func headerSelectQuarter(quarter calendar.Quarter) headerOption {
 	return func(header *header) {
 		header.selectedQuarter = quarter
 	}
 }
 
-func headerSelectMonths(months ...time.Month) mosAnnualHeaderOption {
+func headerSelectMonths(months ...time.Month) headerOption {
 	return func(header *header) {
 		header.selectedMonths = months
 	}
 }
 
-func (m header) Build() ([]string, error) {
+func (r header) Build() ([]string, error) {
 	return []string{
 		`\marginnote{\rotatebox[origin=tr]{90}{%
-\renewcommand{\arraystretch}{` + m.ui.HeaderMarginNotesArrayStretch + `}` + m.months() + `\qquad{}` + m.quarters() + `%
+\renewcommand{\arraystretch}{` + r.ui.HeaderMarginNotesArrayStretch + `}` + r.months() + `\qquad{}` + r.quarters() + `%
 }}%
-{\renewcommand{\arraystretch}{` + m.ui.HeaderArrayStretch + `}\begin{tabularx}{\linewidth}{@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(m.right)), ""), "|") + `|@{}}
-\Huge ` + m.left + `{\Huge\color{white}{Q}} & & ` + strings.Join(m.right, " & ") + ` \\ \hline
+{\renewcommand{\arraystretch}{` + r.ui.HeaderArrayStretch + `}\begin{tabularx}{\linewidth}{@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(r.right)), ""), "|") + `|@{}}
+\Huge ` + r.left + `{\Huge\color{white}{Q}} & & ` + strings.Join(r.right, " & ") + ` \\ \hline
 \end{tabularx}}
 
 `,
 	}, nil
 }
 
-func (m header) months() string {
+func (r header) months() string {
 	strs := make([]string, 0, 12)
-	months := m.year.Months()
+	months := r.year.Months()
 
 	for i := len(months) - 1; i >= 0; i-- {
 		item := cell.New(months[i].Month().String()[:3])
 
-		for _, selectedMonth := range m.selectedMonths {
+		for _, selectedMonth := range r.selectedMonths {
 			if months[i].Month() == selectedMonth {
 				item = item.Ref()
 
@@ -99,39 +101,39 @@ func (m header) months() string {
 		strs = append(strs, item.Build())
 	}
 
-	return `\begin{tabularx}{` + m.ui.HeaderMarginNotesMonthsWidth + `}{*{12}{|Y}|}
-	` + m.maybeHLineLeft() + strings.Join(strs, " & ") + `\\ ` + m.maybeHLineRight() + `
+	return `\begin{tabularx}{` + r.ui.HeaderMarginNotesMonthsWidth + `}{*{12}{|Y}|}
+	` + r.maybeHLineLeft() + strings.Join(strs, " & ") + `\\ ` + r.maybeHLineRight() + `
 \end{tabularx}`
 }
 
-func (m header) quarters() string {
+func (r header) quarters() string {
 	quarters := make([]string, 0, 4)
 
 	for i := 3; i >= 0; i-- {
-		item := cell.New(m.year.Quarters[i].Name())
+		item := cell.New(r.year.Quarters[i].Name())
 
-		if m.selectedQuarter.Name() == m.year.Quarters[i].Name() {
+		if r.selectedQuarter.Name() == r.year.Quarters[i].Name() {
 			item = item.Ref()
 		}
 
 		quarters = append(quarters, item.Build())
 	}
 
-	return `\begin{tabularx}{` + m.ui.HeaderMarginNotesQuartersWidth + `}{*{4}{|Y}|}
-	` + m.maybeHLineLeft() + strings.Join(quarters, " & ") + ` \\ ` + m.maybeHLineRight() + `
+	return `\begin{tabularx}{` + r.ui.HeaderMarginNotesQuartersWidth + `}{*{4}{|Y}|}
+	` + r.maybeHLineLeft() + strings.Join(quarters, " & ") + ` \\ ` + r.maybeHLineRight() + `
 \end{tabularx}`
 }
 
-func (m header) maybeHLineLeft() string {
-	if m.layout.Hand == common.LeftHand {
+func (r header) maybeHLineLeft() string {
+	if r.layout.Hand == common.LeftHand {
 		return `\hline{}`
 	}
 
 	return ""
 }
 
-func (m header) maybeHLineRight() string {
-	if m.layout.Hand == common.RightHand {
+func (r header) maybeHLineRight() string {
+	if r.layout.Hand == common.RightHand {
 		return `\hline{}`
 	}
 
