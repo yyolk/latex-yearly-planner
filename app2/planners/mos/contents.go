@@ -23,7 +23,12 @@ type quarterlyContents struct {
 }
 
 func (r quarterlyContents) Build() ([]string, error) {
-	return []string{texcalendar.NewQuarter(r.quarter).BuildPage()}, nil
+	monthsColumn := texcalendar.NewQuarter(r.quarter).Column()
+	return []string{
+		`\begin{minipage}[t][\remainingHeight]{5cm}
+` + monthsColumn + `
+\end{minipage}`,
+	}, nil
 }
 
 type monthlyContents struct {

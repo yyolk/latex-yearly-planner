@@ -25,6 +25,12 @@ func (q Quarter) Row() string {
 	return strings.Join(monthsRow, " & ")
 }
 
-func (q Quarter) BuildPage() string {
-	return q.quarter.Name()
+func (q Quarter) Column() string {
+	months := make([]string, 0, 3)
+
+	for _, month := range q.quarter.Months {
+		months = append(months, NewMonth(month).Tabular())
+	}
+
+	return strings.Join(months, "\n\\vfill\n")
 }

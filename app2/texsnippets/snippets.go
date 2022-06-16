@@ -43,6 +43,14 @@ const document = `\documentclass[9pt]{extarticle}
 \parindent=0pt
 \fboxsep0pt
 
+\newcommand{\remainingHeight}{%
+  \ifdim\pagegoal=\maxdimen
+  \dimexpr\textheight-9.4pt\relax
+  \else
+  \dimexpr\pagegoal-\pagetotal-\lineskip-9.4pt\relax
+  \fi%
+}
+
 \begin{document}
 
 {{ .Files }}
