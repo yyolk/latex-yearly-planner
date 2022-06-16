@@ -83,13 +83,13 @@ func (r MonthsOnSides) Sections() map[string]sectionFunc {
 }
 
 func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
-	buffer := &bytes.Buffer{}
+	buffer := pages.NewBuffer()
 
 	if err := texsnippets.Execute(buffer, texsnippets.Title, map[string]string{"Title": r.yearStr}); err != nil {
 		return nil, fmt.Errorf("execute template title: %w", err)
 	}
 
-	return buffer, nil
+	return buffer.Buffer, nil
 }
 
 func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
