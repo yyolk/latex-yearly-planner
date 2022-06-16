@@ -105,19 +105,19 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 
 func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	var (
-		buffer = &bytes.Buffer{}
+		buffer = pages.NewBuffer()
 		err    error
 	)
 
 	for _, quarter := range r.calendarYear.Quarters {
 		header := r.headerWithTitle(quarter.Name()).apply(headerSelectQuarter(quarter))
 
-		if buffer, err = writeToBuffer(buffer, header, quarterlyContents{quarter: quarter}); err != nil {
+		if err = buffer.WriteBlocks(header, quarterlyContents{quarter: quarter}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
 
-	return buffer, nil
+	return buffer.Buffer, nil
 }
 
 func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {

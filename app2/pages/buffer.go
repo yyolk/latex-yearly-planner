@@ -20,7 +20,7 @@ func (r *Buffer) WriteBlocks(blocks ...Block) error {
 	}
 
 	for _, page := range compiledPages {
-		_, _ = r.WriteString(page)
+		_, _ = r.WriteString(page + "\n\n" + `\pagebreak{}` + "\n")
 	}
 
 	return nil
