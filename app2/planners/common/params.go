@@ -44,3 +44,9 @@ func ParamWithSections(sections []string) ApplyParameterOption {
 		params.Sections = sections
 	}
 }
+
+func ParamWithWeekday(weekday time.Weekday) ApplyParameterOption {
+	return func(params *Params) {
+		params.Weekday = weekday
+	}
+}

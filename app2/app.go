@@ -18,6 +18,7 @@ type App struct {
 const (
 	yearFlag     = "year"
 	sectionsFlag = "sections"
+	weekdayFlag  = "weekday"
 
 	deviceNameFlag = "device-name"
 
@@ -47,6 +48,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 							&cli.IntFlag{Name: yearFlag, Value: time.Now().Year()},
 							&cli.StringFlag{Name: deviceNameFlag, Required: true},
 							&cli.StringFlag{Name: handFlag, Value: "right"},
+							&cli.IntFlag{Name: weekdayFlag, Value: 0},
 							&cli.StringSliceFlag{
 								Name: sectionsFlag,
 								Value: cli.NewStringSlice(
@@ -76,6 +78,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								common.ParamWithYear(appContext.Int(yearFlag)),
 								common.ParamWithDevice(device),
 								common.ParamWithSections(appContext.StringSlice(sectionsFlag)),
+								common.ParamWithWeekday(time.Weekday(appContext.Int(weekdayFlag))),
 							)
 
 							planner, err := planners.New(planners.MonthsOnSidesTemplate, params)
