@@ -96,7 +96,7 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 	header := r.headerWithTitleAndSelection(r.yearStr, calendarText)
 
-	if err := buffer.WriteBlocks(header, annualContents{year: r.calendarYear}); err != nil {
+	if err := buffer.WriteBlocks(header, annualContents{hand: r.layout.Hand, year: r.calendarYear}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
@@ -111,7 +111,7 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 			headerWithTitle(quarter.Name()).
 			apply(headerSelectQuarter(quarter))
 
-		if err := buffer.WriteBlocks(header, quarterlyContents{quarter: quarter}); err != nil {
+		if err := buffer.WriteBlocks(header, quarterlyContents{hand: r.layout.Hand, quarter: quarter}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}

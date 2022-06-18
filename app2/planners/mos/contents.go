@@ -11,20 +11,22 @@ import (
 
 type annualContents struct {
 	year calendar.Year
+	hand common.MainHand
 }
 
 func (m annualContents) Build() ([]string, error) {
-	texYear := texcalendar.NewYear(m.year)
+	texYear := texcalendar.NewYear(m.hand, m.year)
 
 	return []string{texYear.BuildCalendar()}, nil
 }
 
 type quarterlyContents struct {
 	quarter calendar.Quarter
+	hand    common.MainHand
 }
 
 func (r quarterlyContents) Build() ([]string, error) {
-	monthsColumn := texcalendar.NewQuarter(r.quarter).Column()
+	monthsColumn := texcalendar.NewQuarter(r.hand, r.quarter).Column()
 	_ = monthsColumn
 
 	return []string{

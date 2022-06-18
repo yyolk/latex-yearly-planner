@@ -3,15 +3,17 @@ package texcalendar
 import (
 	"strings"
 
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
 type Year struct {
 	year calendar.Year
+	hand common.MainHand
 }
 
-func NewYear(year calendar.Year) Year {
-	return Year{year: year}
+func NewYear(hand common.MainHand, year calendar.Year) Year {
+	return Year{hand: hand, year: year}
 }
 
 func (r Year) BuildCalendar() string {
@@ -24,7 +26,7 @@ func (r Year) BuildCalendar() string {
 	}
 
 	for _, quarter := range r.year.Quarters {
-		quarterRows = append(quarterRows, tabular(NewQuarter(quarter).Row()))
+		quarterRows = append(quarterRows, tabular(NewQuarter(r.hand, quarter).Row()))
 	}
 
 	return strings.Join(quarterRows, "\n"+`\vfill`+"\n")

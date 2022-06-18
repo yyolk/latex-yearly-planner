@@ -19,11 +19,11 @@ func NewMonth(month calendar.Month, hand common.MainHand) Month {
 func (m Month) LittleCalendar() string {
 	monthName := m.month.Month().String()
 	weekdays := strings.Join(append([]string{"W"}, m.weekdaysShort()...), ` & `)
-	weeksMatrix := m.tabulate(NewWeeks(common.RightHand, m.month.Weeks, false).Matrix(), `\\`)
+	weeksMatrix := m.tabulate(NewWeeks(m.hand, m.month.Weeks, false).Matrix(), `\\`)
 
 	return `\renewcommand{\arraystretch}{1.5}%` + "\n" +
 		`%\setlength{\tabcolsep}{3.5pt}%` + "\n" +
-		`\begin{tabularx}{\linewidth}[t]{c|*{7}{Y}}` + "\n" +
+		`\begin{tabularx}{\linewidth}[t]{` + m.littleTableRule() + `}` + "\n" +
 		`\multicolumn{8}{c}{` + monthName + `} \\ \hline` + "\n" +
 		weekdays + `\\ \hline` + "\n" +
 		weeksMatrix + "\n" +
@@ -35,17 +35,28 @@ func (m Month) LargeCalendar() string {
 	weekdays := strings.Join(weeks.Weekdays(), ` & `)
 	weeksMatrix := m.tabulate(weeks.Matrix(), `\\ \hline`)
 
-	tableRule := `|@{ }c@{ }|*{7}{@{}X@{}|}`
-	if m.hand == common.LeftHand {
-		tableRule = `*{7}{|@{}X@{}}|@{ }c@{ }|`
-	}
-
 	return `\renewcommand{\arraystretch}{0}%` + "\n" +
 		`%\setlength{\tabcolsep}{0pt}%` + "\n" +
-		`\begin{tabularx}{\linewidth}[t]{` + tableRule + `}` + "\n" +
+		`\begin{tabularx}{\linewidth}[t]{` + m.largeTableRule() + `}` + "\n" +
 		weekdays + ` \raisebox{4mm}{} \\[2mm] \hline` + "\n" +
 		weeksMatrix + "\\\\ \\hline\n" +
 		`\end{tabularx}`
+}
+
+func (m Month) littleTableRule() string {
+	if m.hand == common.LeftHand {
+		return "*{7}{Y}|c"
+	}
+
+	return "c|*{7}{Y}"
+}
+
+func (m Month) largeTableRule() string {
+	if m.hand == common.LeftHand {
+		return `*{7}{|@{}X@{}}|@{ }c@{ }|`
+	}
+
+	return `|@{ }c@{ }|*{7}{@{}X@{}|}`
 }
 
 func (m Month) weekdaysShort() []string {
