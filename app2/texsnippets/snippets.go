@@ -51,17 +51,11 @@ const document = `\documentclass[9pt]{extarticle}
   \fi%
 }
 
-\newlength{\myLengthTwoColumnsSeparatorWidth}
-\setlength{\myLengthTwoColumnsSeparatorWidth}{ {{- .Layout.Sizes.TwoColumnsSeparatorSize -}} }
+\newcommand{\myLengthTwoColumnsSeparatorWidth}{ {{- .Layout.Sizes.TwoColumnsSeparatorSize -}} }
+\newcommand{\myLengthTwoColumnWidth}{\dimexpr.5\linewidth-.5\myLengthTwoColumnsSeparatorWidth}
+\newcommand{\myLengthThreeColumnsSeparatorWidth}{ {{- .Layout.Sizes.ThreeColumnsSeparatorSize -}} }
+\newcommand{\myLengthThreeColumnWidth}{\dimexpr.333\linewidth-.667\myLengthThreeColumnsSeparatorWidth}
 
-\newlength{\myLengthTwoColumnWidth}
-\setlength{\myLengthTwoColumnWidth}{\dimexpr.5\linewidth-.5\myLengthTwoColumnsSeparatorWidth}
-
-\newlength{\myLengthThreeColumnsSeparatorWidth}
-\setlength{\myLengthThreeColumnsSeparatorWidth}{ {{- .Layout.Sizes.ThreeColumnsSeparatorSize -}} }
-
-\newlength{\myLengthThreeColumnWidth}
-\setlength{\myLengthThreeColumnWidth}{\dimexpr.333\linewidth-.667\myLengthThreeColumnsSeparatorWidth}
 
 \begin{document}
 
