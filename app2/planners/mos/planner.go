@@ -127,7 +127,7 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 			headerWithTitle(month.Month().String()).
 			apply(headerSelectMonths(month.Month()))
 
-		if err := buffer.WriteBlocks(header, monthlyContents{month: month}); err != nil {
+		if err := buffer.WriteBlocks(header, monthlyContents{month: month, hand: r.layout.Hand}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}

@@ -3,15 +3,17 @@ package texcalendar
 import (
 	"strings"
 
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
 type Month struct {
 	month calendar.Month
+	hand  common.MainHand
 }
 
-func NewMonth(month calendar.Month) Month {
-	return Month{month: month}
+func NewMonth(month calendar.Month, hand common.MainHand) Month {
+	return Month{month: month, hand: hand}
 }
 
 func (m Month) Tabular() string {

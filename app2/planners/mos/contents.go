@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
@@ -39,10 +40,11 @@ func (r quarterlyContents) Build() ([]string, error) {
 
 type monthlyContents struct {
 	month calendar.Month
+	hand  common.MainHand
 }
 
 func (m monthlyContents) Build() ([]string, error) {
-	month := texcalendar.NewMonth(m.month)
+	month := texcalendar.NewMonth(m.month, m.hand)
 
 	return []string{
 		month.ForPage() +
