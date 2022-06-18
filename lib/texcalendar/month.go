@@ -16,7 +16,7 @@ func NewMonth(month calendar.Month, hand common.MainHand) Month {
 	return Month{month: month, hand: hand}
 }
 
-func (m Month) Tabular() string {
+func (m Month) LittleCalendar() string {
 	monthName := m.month.Month().String()
 	weekdays := strings.Join(append([]string{"W"}, m.weekdaysShort()...), ` & `)
 	weeksMatrix := m.tabulate(NewWeeks(common.RightHand, m.month.Weeks).Matrix(), `\\`)
@@ -30,7 +30,7 @@ func (m Month) Tabular() string {
 		`\end{tabularx}`
 }
 
-func (m Month) ForPage() string {
+func (m Month) LargeCalendar() string {
 	weekdaysSlice := m.weekdays()
 	if m.hand == common.RightHand {
 		weekdaysSlice = append([]string{"W"}, weekdaysSlice...)

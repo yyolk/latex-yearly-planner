@@ -47,7 +47,7 @@ func (m monthlyContents) Build() ([]string, error) {
 	month := texcalendar.NewMonth(m.month, m.hand)
 
 	return []string{
-		month.ForPage() +
+		month.LargeCalendar() +
 			`
 
 \vspace{3mm}
