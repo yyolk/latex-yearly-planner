@@ -9,19 +9,39 @@ import (
 )
 
 type Weeks struct {
-	weeks calendar.Weeks
-	hand  common.MainHand
+	weeks    calendar.Weeks
+	hand     common.MainHand
+	forLarge bool
 }
 
-func NewWeeks(hand common.MainHand, weeks calendar.Weeks) Weeks {
-	return Weeks{hand: hand, weeks: weeks}
+func NewWeeks(hand common.MainHand, weeks calendar.Weeks, forLarge bool) Weeks {
+	return Weeks{hand: hand, weeks: weeks, forLarge: forLarge}
+}
+
+func (r Weeks) Weekdays() []string {
+	if len(r.weeks) == 0 {
+		return nil
+	}
+
+	weekdays := make([]string, 0, 8)
+	for _, day := range r.weeks[0].Next().Days {
+		weekdays = append(weekdays, `\hfil{}`+day.Weekday().String())
+	}
+
+	if r.hand == common.RightHand {
+		weekdays = append([]string{"W"}, weekdays...)
+	} else {
+		weekdays = append(weekdays, "W")
+	}
+
+	return weekdays
 }
 
 func (r Weeks) Tabular() string {
 	out := make([]string, 0, len(r.weeks))
 
 	for _, week := range r.weeks {
-		out = append(out, NewWeek(r.hand, week).Tabular())
+		out = append(out, NewWeek(r.hand, week, r.forLarge).Tabular())
 	}
 
 	return strings.Join(out, `\\`+"\n")
@@ -31,19 +51,20 @@ func (r Weeks) Matrix() [][]string {
 	rows := make([][]string, 0, len(r.weeks))
 
 	for _, week := range r.weeks {
-		rows = append(rows, NewWeek(r.hand, week).Row())
+		rows = append(rows, NewWeek(r.hand, week, r.forLarge).Row())
 	}
 
 	return rows
 }
 
 type Week struct {
-	week calendar.Week
-	hand common.MainHand
+	week     calendar.Week
+	hand     common.MainHand
+	forLarge bool
 }
 
-func NewWeek(hand common.MainHand, week calendar.Week) Week {
-	return Week{hand: hand, week: week}
+func NewWeek(hand common.MainHand, week calendar.Week, forLarge bool) Week {
+	return Week{hand: hand, week: week, forLarge: forLarge}
 }
 
 func (r Week) Tabular() string {
@@ -60,16 +81,28 @@ func (r Week) weekDays() []string {
 			continue
 		}
 
-		names = append(names, strconv.Itoa(day.Day()))
+		name := strconv.Itoa(day.Day())
+
+		if r.forLarge {
+			name = `{\renewcommand{\arraystretch}{1.2}\begin{tabular}{@{}p{5mm}@{}|}\hfil{}` + name + `\\ \hline\end{tabular}}`
+		}
+
+		names = append(names, name)
 	}
 
 	return names
 }
 
 func (r Week) Row() []string {
-	if r.hand == common.LeftHand {
-		return append(r.weekDays(), strconv.Itoa(r.week.WeekNumber()))
+	weekName := strconv.Itoa(r.week.WeekNumber())
+
+	if r.forLarge {
+		weekName = `\rotatebox[origin=tr]{90}{\makebox[2cm][c]{` + "Week " + weekName + `}}`
 	}
 
-	return append([]string{strconv.Itoa(r.week.WeekNumber())}, r.weekDays()...)
+	if r.hand == common.LeftHand {
+		return append(r.weekDays(), weekName)
+	}
+
+	return append([]string{weekName}, r.weekDays()...)
 }

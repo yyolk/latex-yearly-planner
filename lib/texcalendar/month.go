@@ -19,7 +19,7 @@ func NewMonth(month calendar.Month, hand common.MainHand) Month {
 func (m Month) LittleCalendar() string {
 	monthName := m.month.Month().String()
 	weekdays := strings.Join(append([]string{"W"}, m.weekdaysShort()...), ` & `)
-	weeksMatrix := m.tabulate(NewWeeks(common.RightHand, m.month.Weeks).Matrix(), `\\`)
+	weeksMatrix := m.tabulate(NewWeeks(common.RightHand, m.month.Weeks, false).Matrix(), `\\`)
 
 	return `\renewcommand{\arraystretch}{1.5}%` + "\n" +
 		`%\setlength{\tabcolsep}{3.5pt}%` + "\n" +
@@ -31,15 +31,9 @@ func (m Month) LittleCalendar() string {
 }
 
 func (m Month) LargeCalendar() string {
-	weekdaysSlice := m.weekdays()
-	if m.hand == common.RightHand {
-		weekdaysSlice = append([]string{"W"}, weekdaysSlice...)
-	} else {
-		weekdaysSlice = append(weekdaysSlice, "W")
-	}
-
-	weekdays := strings.Join(weekdaysSlice, ` & `)
-	weeksMatrix := m.tabulate(m.cornerDays(m.renameRotateWeek(NewWeeks(m.hand, m.month.Weeks).Matrix())), `\\ \hline`)
+	weeks := NewWeeks(m.hand, m.month.Weeks, true)
+	weekdays := strings.Join(weeks.Weekdays(), ` & `)
+	weeksMatrix := m.tabulate(weeks.Matrix(), `\\ \hline`)
 
 	tableRule := `|@{ }c@{ }|*{7}{@{}X@{}|}`
 	if m.hand == common.LeftHand {
@@ -64,16 +58,6 @@ func (m Month) weekdaysShort() []string {
 	return weekdays
 }
 
-func (m Month) weekdays() []string {
-	weekdays := make([]string, 0, 7)
-
-	for _, weekday := range m.month.Weekdays() {
-		weekdays = append(weekdays, `\hfil{}`+weekday.String())
-	}
-
-	return weekdays
-}
-
 func (m Month) tabulate(matrix [][]string, join string) string {
 	rows := make([]string, 0, len(matrix))
 
@@ -82,40 +66,4 @@ func (m Month) tabulate(matrix [][]string, join string) string {
 	}
 
 	return strings.Join(rows, join+"\n")
-}
-
-func (m Month) Tabloid() string {
-	return m.month.Month().String()
-}
-
-func (m Month) renameRotateWeek(matrix [][]string) [][]string {
-	idx := 0
-	if m.hand == common.LeftHand {
-		idx = 7
-	}
-
-	for i := range matrix {
-		matrix[i][idx] = `\rotatebox[origin=tr]{90}{\makebox[2cm][c]{` + "Week " + matrix[i][idx] + `}}`
-	}
-
-	return matrix
-}
-
-func (m Month) cornerDays(matrix [][]string) [][]string {
-	left, right := 1, len(matrix[0])
-	if m.hand == common.LeftHand {
-		left, right = left-1, right-1
-	}
-
-	for _, week := range matrix {
-		for i := left; i < right; i++ {
-			if len(week[i]) == 0 {
-				continue
-			}
-
-			week[i] = `{\renewcommand{\arraystretch}{1.2}\begin{tabular}{@{}p{5mm}@{}|}\hfil{}` + week[i] + `\\ \hline\end{tabular}}`
-		}
-	}
-
-	return matrix
 }
