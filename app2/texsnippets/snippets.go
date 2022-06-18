@@ -51,6 +51,12 @@ const document = `\documentclass[9pt]{extarticle}
   \fi%
 }
 
+\newlength{\myLengthTwoColumnsSeparator}
+\setlength{\myLengthTwoColumnsSeparator}{ {{- .Layout.Sizes.TwoColumnsSeparatorSize -}} }
+
+\newlength{\myLengthThreeColumnsSeparator}
+\setlength{\myLengthThreeColumnsSeparator}{ {{- .Layout.Sizes.ThreeColumnsSeparatorSize -}} }
+
 \begin{document}
 
 {{ .Files }}

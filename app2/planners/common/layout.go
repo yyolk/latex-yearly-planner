@@ -19,7 +19,7 @@ const (
 func NewLayout(device devices.Device, hand MainHand) (Layout, error) {
 	switch device.(type) {
 	case *devices.SupernoteA5X:
-		layout := Layout{
+		var layout = Layout{
 			Hand: hand,
 			Margin: Margin{
 				Top:    "1cm",
@@ -32,8 +32,11 @@ func NewLayout(device devices.Device, hand MainHand) (Layout, error) {
 				Width:   "8mm",
 				Reverse: `\reversemarginpar`,
 			},
+			Sizes: Sizes{
+				TwoColumnsSeparatorSize:   "5mm",
+				ThreeColumnsSeparatorSize: "5mm",
+			},
 		}
-
 		if hand == LeftHand {
 			layout.Margin.Left, layout.Margin.Right = layout.Margin.Right, layout.Margin.Left
 			layout.MarginNotes.Reverse = ""
@@ -49,6 +52,7 @@ type Layout struct {
 	Hand        MainHand
 	Margin      Margin
 	MarginNotes MarginNotes
+	Sizes       Sizes
 }
 
 type Margin struct {
@@ -62,4 +66,9 @@ type MarginNotes struct {
 	Margin  string
 	Width   string
 	Reverse string
+}
+
+type Sizes struct {
+	TwoColumnsSeparatorSize   string
+	ThreeColumnsSeparatorSize string
 }
