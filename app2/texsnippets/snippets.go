@@ -37,6 +37,16 @@ const document = `\documentclass[9pt]{extarticle}
 
 \newcommand{\myDotGrid}[2]{\leavevmode\multido{\dC=0mm+5mm}{#1}{\multido{\dR=0mm+5mm}{#2}{\put(\dR,\dC){\circle*{0.1}}}}}
 
+\newlength{\myLenLineThicknessDefault}
+\newlength{\myLenLineThicknessThick}
+\setlength{\myLenLineThicknessDefault}{.4pt}
+\setlength{\myLenLineThicknessThick}{.4pt}
+
+\newcommand{\myLinePlain}{\hrule width \linewidth height \myLenLineThicknessDefault}
+\newcommand{\myLineThick}{\hrule width \linewidth height \myLenLineThicknessThick}
+
+\newcommand{\myUnderline}[1]{#1\vskip1mm\myLineThick\par}
+
 \begin{document}
 
 {{ .Files }}

@@ -44,7 +44,15 @@ type monthlyContents struct {
 func (m monthlyContents) Build() ([]string, error) {
 	month := texcalendar.NewMonth(m.month)
 
-	return []string{month.ForPage()}, nil
+	return []string{
+		month.ForPage() +
+			`
+
+\vspace{3mm}
+\myUnderline{Notes}
+\vspace{5mm}
+\vbox to 0mm{\myDotGrid{25}{29}}`,
+	}, nil
 }
 
 type weeklyContents struct {
