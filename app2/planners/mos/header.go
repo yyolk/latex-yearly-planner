@@ -126,7 +126,7 @@ func (r header) quarters() string {
 
 func (r header) maybeHLineLeft() string {
 	if r.layout.Hand == common.LeftHand {
-		return `\hline{}`
+		return `\hline `
 	}
 
 	return ""
@@ -134,7 +134,7 @@ func (r header) maybeHLineLeft() string {
 
 func (r header) maybeHLineRight() string {
 	if r.layout.Hand == common.RightHand {
-		return `\hline{}`
+		return `\hline`
 	}
 
 	return ""
