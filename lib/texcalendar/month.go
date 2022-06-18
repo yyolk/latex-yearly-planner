@@ -34,7 +34,7 @@ func (m Month) ForPage() string {
 
 	return `\renewcommand{\arraystretch}{0}%` + "\n" +
 		`%\setlength{\tabcolsep}{0pt}%` + "\n" +
-		`\begin{tabularx}{\linewidth}[t]{@{ }c@{ }|*{7}{X|}}` + "\n" +
+		`\begin{tabularx}{\linewidth}[t]{@{ }c@{ }|*{7}{@{}X@{}|}}` + "\n" +
 		weekdays + `\\[3mm] \hline` + "\n" +
 		weeksMatrix + "\\\\ \\hline\n" +
 		`\end{tabularx}`
@@ -43,8 +43,8 @@ func (m Month) ForPage() string {
 func (m Month) weekdaysShort() []string {
 	weekdays := make([]string, 0, 7)
 
-	for _, weekday := range m.weekdays() {
-		weekdays = append(weekdays, weekday[:1])
+	for _, weekday := range m.month.Weekdays() {
+		weekdays = append(weekdays, weekday.String()[:1])
 	}
 
 	return weekdays
@@ -54,7 +54,7 @@ func (m Month) weekdays() []string {
 	weekdays := make([]string, 0, 7)
 
 	for _, weekday := range m.month.Weekdays() {
-		weekdays = append(weekdays, weekday.String())
+		weekdays = append(weekdays, `\hfil{}`+weekday.String())
 	}
 
 	return weekdays
