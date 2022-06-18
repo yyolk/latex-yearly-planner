@@ -5,27 +5,11 @@ const document = `\documentclass[9pt]{extarticle}
 
 \usepackage[showframe]{geometry}
 \usepackage[table]{xcolor}
-\usepackage{calc}
-\usepackage{dashrule}
-\usepackage{setspace}
-\usepackage{array}
-\usepackage{tikz}
-\usepackage{varwidth}
-\usepackage{blindtext}
 \usepackage{tabularx}
-\usepackage{wrapfig}
-\usepackage{makecell}
-\usepackage{graphicx}
-\usepackage{multirow}
-\usepackage{amssymb}
-\usepackage{expl3}
-\usepackage{leading}
-\usepackage{pgffor}
 \usepackage{hyperref}
 \usepackage{marginnote}
 \usepackage{adjustbox}
 \usepackage{multido}
-\usepackage{easytable}
 
 \geometry{paperwidth={{.Device.Paper.Width}}, paperheight={{.Device.Paper.Height}}}
 \geometry{
