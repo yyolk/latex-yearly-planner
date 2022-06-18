@@ -42,7 +42,9 @@ type monthlyContents struct {
 }
 
 func (m monthlyContents) Build() ([]string, error) {
-	return []string{m.month.Month().String()}, nil
+	month := texcalendar.NewMonth(m.month)
+
+	return []string{month.ForPage()}, nil
 }
 
 type weeklyContents struct {
