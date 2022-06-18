@@ -3,7 +3,7 @@ package texsnippets
 const Document = "document"
 const document = `\documentclass[9pt]{extarticle}
 
-\usepackage[showframe]{geometry}
+\usepackage{geometry}
 \usepackage[table]{xcolor}
 \usepackage{tabularx}
 \usepackage{hyperref}

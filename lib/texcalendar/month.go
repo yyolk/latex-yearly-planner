@@ -34,7 +34,7 @@ func (m Month) ForPage() string {
 
 	return `\renewcommand{\arraystretch}{0}%` + "\n" +
 		`%\setlength{\tabcolsep}{0pt}%` + "\n" +
-		`\begin{tabularx}{\linewidth}[t]{@{ }c@{ }|*{7}{@{}X@{}|}}` + "\n" +
+		`\begin{tabularx}{\linewidth}[t]{|@{ }c@{ }|*{7}{@{}X@{}|}}` + "\n" +
 		weekdays + ` \raisebox{5mm}{} \\[2.5mm] \hline` + "\n" +
 		weeksMatrix + "\\\\ \\hline\n" +
 		`\end{tabularx}`
