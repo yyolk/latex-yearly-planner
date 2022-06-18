@@ -51,11 +51,17 @@ const document = `\documentclass[9pt]{extarticle}
   \fi%
 }
 
-\newlength{\myLengthTwoColumnsSeparator}
-\setlength{\myLengthTwoColumnsSeparator}{ {{- .Layout.Sizes.TwoColumnsSeparatorSize -}} }
+\newlength{\myLengthTwoColumnsSeparatorWidth}
+\setlength{\myLengthTwoColumnsSeparatorWidth}{ {{- .Layout.Sizes.TwoColumnsSeparatorSize -}} }
 
-\newlength{\myLengthThreeColumnsSeparator}
-\setlength{\myLengthThreeColumnsSeparator}{ {{- .Layout.Sizes.ThreeColumnsSeparatorSize -}} }
+\newlength{\myLengthTwoColumnWidth}
+\setlength{\myLengthTwoColumnWidth}{\dimexpr.5\linewidth-.5\myLengthTwoColumnsSeparatorWidth}
+
+\newlength{\myLengthThreeColumnsSeparatorWidth}
+\setlength{\myLengthThreeColumnsSeparatorWidth}{ {{- .Layout.Sizes.ThreeColumnsSeparatorSize -}} }
+
+\newlength{\myLengthThreeColumnWidth}
+\setlength{\myLengthThreeColumnWidth}{\dimexpr.333\linewidth-.667\myLengthThreeColumnsSeparatorWidth}
 
 \begin{document}
 
