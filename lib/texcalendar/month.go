@@ -29,13 +29,13 @@ func (m Month) Tabular() string {
 }
 
 func (m Month) ForPage() string {
-	weekdays := strings.Join(append([]string{"W"}, m.weekdays()...), ` & `)
+	weekdays := strings.Join(append([]string{`W`}, m.weekdays()...), ` & `)
 	weeksMatrix := m.tabulate(m.cornerDays(m.renameRotateWeek(NewWeeks(m.month.Weeks).Matrix())), `\\ \hline`)
 
 	return `\renewcommand{\arraystretch}{0}%` + "\n" +
 		`%\setlength{\tabcolsep}{0pt}%` + "\n" +
 		`\begin{tabularx}{\linewidth}[t]{@{ }c@{ }|*{7}{@{}X@{}|}}` + "\n" +
-		weekdays + `\\[3mm] \hline` + "\n" +
+		weekdays + ` \raisebox{5mm}{} \\[2.5mm] \hline` + "\n" +
 		weeksMatrix + "\\\\ \\hline\n" +
 		`\end{tabularx}`
 }
