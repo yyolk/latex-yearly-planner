@@ -22,8 +22,6 @@ type item struct {
 }
 
 var templatesToCompile = []item{
-	{MOSHeader, mosHeader},
-
 	{Document, document},
 	{Title, title},
 }

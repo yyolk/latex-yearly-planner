@@ -61,11 +61,3 @@ const Title = "title"
 const title = `\hspace{0pt}\vfil
 \hfill\resizebox{.7\linewidth}{!}{ {{- .Title -}} }%
 \pagebreak`
-
-const MOSHeader = "mos-header"
-const mosHeader = `\marginnote{\rotatebox[origin=tr]{90}{%
-{{ .MarginNotes }}%
-}}%
-{{ .Header }}
-
-`
