@@ -21,7 +21,7 @@ func (m Month) Tabular() string {
 
 	return `\renewcommand{\arraystretch}{1.5}%` + "\n" +
 		`%\setlength{\tabcolsep}{3.5pt}%` + "\n" +
-		`\begin{tabularx}{\linewidth}{c|*{7}{Y}}` + "\n" +
+		`\begin{tabularx}{\linewidth}[t]{c|*{7}{Y}}` + "\n" +
 		`\multicolumn{8}{c}{` + monthName + `} \\ \hline` + "\n" +
 		weekdays + `\\ \hline` + "\n" +
 		weeksMatrix + "\n" +

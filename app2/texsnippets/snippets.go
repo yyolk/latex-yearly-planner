@@ -3,9 +3,8 @@ package texsnippets
 const Document = "document"
 const document = `\documentclass[9pt]{extarticle}
 
-\usepackage{geometry}
+\usepackage[showframe]{geometry}
 \usepackage[table]{xcolor}
-\usepackage{showframe}
 \usepackage{calc}
 \usepackage{dashrule}
 \usepackage{setspace}
@@ -50,6 +49,8 @@ const document = `\documentclass[9pt]{extarticle}
   \dimexpr\pagegoal-\pagetotal-\lineskip\relax
   \fi%
 }
+
+\newcommand{\myDotGrid}[2]{\leavevmode\multido{\dC=0mm+5mm}{#1}{\multido{\dR=0mm+5mm}{#2}{\put(\dR,\dC){\circle*{0.1}}}}}
 
 \begin{document}
 

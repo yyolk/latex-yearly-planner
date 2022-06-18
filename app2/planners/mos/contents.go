@@ -24,13 +24,15 @@ type quarterlyContents struct {
 
 func (r quarterlyContents) Build() ([]string, error) {
 	monthsColumn := texcalendar.NewQuarter(r.quarter).Column()
+	_ = monthsColumn
 
 	return []string{
-		`\begin{minipage}[t][15cm]{5cm}
+		`\begin{minipage}[t][20.8cm]{5cm}
 ` + monthsColumn + `
 \end{minipage}%
 \hspace{5mm}%
-\begin{minipage}[t][15cm]{8cm}%
+\begin{minipage}[t][20.7cm]{8cm}%
+uhh
 \end{minipage}`,
 	}, nil
 }
