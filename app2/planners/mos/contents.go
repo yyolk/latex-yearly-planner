@@ -27,12 +27,12 @@ func (r quarterlyContents) Build() ([]string, error) {
 	_ = monthsColumn
 
 	return []string{
-		`\begin{minipage}[t][20.8cm]{5cm}
+		`\begin{minipage}[t][20cm]{5cm}
 ` + monthsColumn + `
 \end{minipage}%
-\hspace{5mm}%
-\begin{minipage}[t][20.7cm]{8cm}%
-uhh
+\hspace{6mm}%
+\begin{minipage}[t][20cm]{8cm}%
+\vbox to -1.8mm{\myDotGrid{41}{18}}
 \end{minipage}`,
 	}, nil
 }
