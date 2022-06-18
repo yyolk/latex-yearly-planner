@@ -45,10 +45,10 @@ func (m Month) LargeCalendar() string {
 
 func (m Month) littleTableRule() string {
 	if m.hand == common.LeftHand {
-		return "*{7}{Y}|c"
+		return "*{7}{@{}Y@{}}|c"
 	}
 
-	return "c|*{7}{Y}"
+	return "c|*{7}{@{}Y@{}}"
 }
 
 func (m Month) largeTableRule() string {
