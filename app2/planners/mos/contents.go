@@ -27,7 +27,7 @@ func (r quarterlyContents) Build() ([]string, error) {
 	_ = monthsColumn
 
 	return []string{
-		`\begin{minipage}[t][20.8cm]{5cm}
+		`\begin{minipage}[t][20.942cm]{5cm}
 ` + monthsColumn + `
 \end{minipage}%
 \hspace{6mm}%

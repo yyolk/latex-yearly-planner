@@ -53,7 +53,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								Name: sectionsFlag,
 								Value: cli.NewStringSlice(
 									//planners.TitleSection,
-									//common.AnnualSection,
+									common.AnnualSection,
 									common.QuarterliesSection,
 									//common.MonthliesSection,
 									//common.WeekliesSection,
