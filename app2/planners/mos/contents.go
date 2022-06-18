@@ -26,8 +26,11 @@ func (r quarterlyContents) Build() ([]string, error) {
 	monthsColumn := texcalendar.NewQuarter(r.quarter).Column()
 
 	return []string{
-		`\begin{minipage}[t][\remainingHeight]{\myLengthThreeColumnWidth}
+		`\begin{minipage}[t][15cm]{5cm}
 ` + monthsColumn + `
+\end{minipage}%
+\hspace{5mm}%
+\begin{minipage}[t][15cm]{8cm}%
 \end{minipage}`,
 	}, nil
 }

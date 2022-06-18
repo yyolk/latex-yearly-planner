@@ -45,17 +45,11 @@ const document = `\documentclass[9pt]{extarticle}
 
 \newcommand{\remainingHeight}{%
   \ifdim\pagegoal=\maxdimen
-  \dimexpr\textheight-9.4pt\relax
+  \dimexpr\textheight\relax
   \else
-  \dimexpr\pagegoal-\pagetotal-\lineskip-9.4pt\relax
+  \dimexpr\pagegoal-\pagetotal-\lineskip\relax
   \fi%
 }
-
-\newcommand{\myLengthTwoColumnsSeparatorWidth}{ {{- .Layout.Sizes.TwoColumnsSeparatorSize -}} }
-\newcommand{\myLengthTwoColumnWidth}{\dimexpr.5\linewidth-.5\myLengthTwoColumnsSeparatorWidth}
-\newcommand{\myLengthThreeColumnsSeparatorWidth}{ {{- .Layout.Sizes.ThreeColumnsSeparatorSize -}} }
-\newcommand{\myLengthThreeColumnWidth}{\dimexpr.333\linewidth-.667\myLengthThreeColumnsSeparatorWidth}
-
 
 \begin{document}
 
