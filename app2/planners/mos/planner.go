@@ -141,7 +141,7 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 	for _, week := range r.calendarYear.InWeeks() {
 		header := r.
 			headerWithTitle("Week " + strconv.Itoa(week.WeekNumber())).
-			apply(headerSelectMonths(week.HeadMonth(), week.TailMonth()))
+			apply(headerSelectMonths(r.highlightedMonths(week)...))
 
 		if err := buffer.WriteBlocks(header, weeklyContents{week: week}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
@@ -149,6 +149,17 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 	}
 
 	return buffer.Buffer, nil
+}
+
+func (r *MonthsOnSides) highlightedMonths(week calendar.Week) []time.Month {
+	switch {
+	case week.First():
+		return []time.Month{week.TailMonth()}
+	case week.Last():
+		return []time.Month{week.HeadMonth()}
+	default:
+		return []time.Month{week.HeadMonth(), week.TailMonth()}
+	}
 }
 
 func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
