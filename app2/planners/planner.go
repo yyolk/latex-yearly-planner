@@ -10,7 +10,6 @@ import (
 	"path"
 	"strings"
 
-	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/mos"
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
@@ -48,13 +47,13 @@ func New(template string, params common.Params) (*Planner, error) {
 	}, nil
 }
 
-func (r *Planner) GenerateFor(device devices.Device, hand common.MainHand) error {
-	layout, err := common.NewLayout(device, hand)
+func (r *Planner) Generate() error {
+	layout, err := common.NewLayout(r.params.Device, r.params.Hand)
 	if err != nil {
 		return fmt.Errorf("new layout: %w", err)
 	}
 
-	if err = r.builder.PrepareDetails(device, layout); err != nil {
+	if err = r.builder.PrepareDetails(r.params.Device, layout); err != nil {
 		return fmt.Errorf("prepare details: %w", err)
 	}
 

@@ -81,6 +81,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								common.ParamWithDevice(device),
 								common.ParamWithSections(appContext.StringSlice(sectionsFlag)),
 								common.ParamWithWeekday(time.Weekday(appContext.Int(weekdayFlag))),
+								common.ParamWithMainHand(hand),
 							)
 
 							planner, err := planners.New(planners.MonthsOnSidesTemplate, params)
@@ -88,7 +89,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								return fmt.Errorf("new planner: %w", err)
 							}
 
-							if err = planner.GenerateFor(device, hand); err != nil {
+							if err = planner.Generate(); err != nil {
 								return fmt.Errorf("generate: %w", err)
 							}
 

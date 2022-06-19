@@ -11,6 +11,7 @@ type Params struct {
 	Weekday  time.Weekday
 	Device   devices.Device
 	Sections []string
+	Hand     MainHand
 }
 
 type ApplyParameterOption func(*Params)
@@ -48,5 +49,11 @@ func ParamWithSections(sections []string) ApplyParameterOption {
 func ParamWithWeekday(weekday time.Weekday) ApplyParameterOption {
 	return func(params *Params) {
 		params.Weekday = weekday
+	}
+}
+
+func ParamWithMainHand(hand MainHand) ApplyParameterOption {
+	return func(params *Params) {
+		params.Hand = hand
 	}
 }
