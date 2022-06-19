@@ -68,3 +68,13 @@ func (r Year) Days() Days {
 
 	return days
 }
+
+func (r Year) InWeeks() []Week {
+	weeks := make([]Week, 0, 53)
+
+	for _, week := range r.year.InWeeks() {
+		weeks = append(weeks, NewWeek(r.hand, week, false))
+	}
+
+	return weeks
+}

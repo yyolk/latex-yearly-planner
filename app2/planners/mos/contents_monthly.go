@@ -2,20 +2,17 @@ package mos
 
 import (
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
-	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
 type monthlyContents struct {
-	month calendar.Month
+	month texcalendar.Month
 	hand  common.MainHand
 }
 
 func (m monthlyContents) Build() ([]string, error) {
-	month := texcalendar.NewMonth(m.month, m.hand)
-
 	return []string{
-		month.LargeCalendar() +
+		m.month.LargeCalendar() +
 			`
 
 \vspace{3mm}

@@ -3,6 +3,7 @@ package texcalendar
 import (
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
@@ -118,4 +119,34 @@ func (r Week) Ref() string {
 	}
 
 	return refer
+}
+
+func (r Week) Title() string {
+	return "Week " + strconv.Itoa(r.week.WeekNumber())
+}
+
+func (r Week) Days() Days {
+	days := make(Days, 0, 7)
+
+	for _, day := range r.week.Days {
+		days = append(days, NewDay(day))
+	}
+
+	return days
+}
+
+func (r Week) First() bool {
+	return r.week.First()
+}
+
+func (r Week) Last() bool {
+	return r.week.Last()
+}
+
+func (r Week) TailMonth() time.Month {
+	return r.week.TailMonth()
+}
+
+func (r Week) HeadMonth() time.Month {
+	return r.week.HeadMonth()
 }

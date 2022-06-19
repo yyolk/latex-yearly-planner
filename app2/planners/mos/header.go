@@ -6,7 +6,6 @@ import (
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
-	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
@@ -18,7 +17,7 @@ type header struct {
 	actions []string
 	ui      mosUI
 
-	selectedQuarter calendar.Quarter
+	selectedQuarter texcalendar.Quarter
 	selectedMonths  []time.Month
 	hand            common.MainHand
 }
@@ -66,7 +65,7 @@ func headerWithActions(actions []string) headerOption {
 	}
 }
 
-func headerSelectQuarter(quarter calendar.Quarter) headerOption {
+func headerSelectQuarter(quarter texcalendar.Quarter) headerOption {
 	return func(header *header) {
 		header.selectedQuarter = quarter
 	}
@@ -127,7 +126,7 @@ func (r header) quarters() string {
 	for _, quarter := range r.year.Quarters().Reverse() {
 		item := cell.New(quarter.Name())
 
-		if quarter.Matches(texcalendar.NewQuarter(r.hand, r.selectedQuarter)) {
+		if quarter.Matches(r.selectedQuarter) {
 			item = item.Ref()
 		}
 

@@ -109,7 +109,7 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	for _, quarter := range r.calendarYear.Quarters {
+	for _, quarter := range r.texYear.Quarters() {
 		header := r.
 			headerWithTitle(quarter.Name()).
 			apply(headerSelectQuarter(quarter))
@@ -125,7 +125,7 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	for _, month := range r.calendarYear.Months() {
+	for _, month := range r.texYear.Months() {
 		header := r.
 			headerWithTitle(month.Month().String()).
 			apply(headerSelectMonths(month.Month()))
@@ -141,11 +141,9 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	for _, week := range r.calendarYear.InWeeks() {
-		title := "Week " + strconv.Itoa(week.WeekNumber())
-		texWeek := texcalendar.NewWeek(r.layout.Hand, week, false)
+	for _, week := range r.texYear.InWeeks() {
 		header := r.
-			headerWithTitle(ref.NewTargetWithRef(title, texWeek.Ref()).Build()).
+			headerWithTitle(ref.NewTargetWithRef(week.Title(), week.Ref()).Build()).
 			apply(headerSelectMonths(r.highlightedMonths(week)...))
 
 		if err := buffer.WriteBlocks(header, weeklyContents{week: week}); err != nil {
@@ -156,7 +154,7 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 	return buffer.Buffer, nil
 }
 
-func (r *MonthsOnSides) highlightedMonths(week calendar.Week) []time.Month {
+func (r *MonthsOnSides) highlightedMonths(week texcalendar.Week) []time.Month {
 	switch {
 	case week.First():
 		return []time.Month{week.TailMonth()}

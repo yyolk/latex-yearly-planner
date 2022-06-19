@@ -2,12 +2,11 @@ package mos
 
 import (
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
-	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
 type quarterlyContents struct {
-	quarter calendar.Quarter
+	quarter texcalendar.Quarter
 	hand    common.MainHand
 }
 
@@ -32,6 +31,6 @@ func (r quarterlyContents) notesColumn() string {
 
 func (r quarterlyContents) calendarColumn() string {
 	return `\begin{minipage}[t][20.942cm]{\myLengthThreeColumnWidth}
-` + texcalendar.NewQuarter(r.hand, r.quarter).Column() + `
+` + r.quarter.Column() + `
 \end{minipage}`
 }
