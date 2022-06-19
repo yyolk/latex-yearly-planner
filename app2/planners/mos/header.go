@@ -13,12 +13,13 @@ type header struct {
 	year   calendar.Year
 	layout common.Layout
 
-	left  string
-	right []string
-	ui    mosUI
+	title   string
+	actions []string
+	ui      mosUI
 
 	selectedQuarter calendar.Quarter
 	selectedMonths  []time.Month
+	hand            common.MainHand
 }
 
 type headerOption func(*header)
@@ -41,20 +42,26 @@ func headerWithYear(year calendar.Year) headerOption {
 	}
 }
 
-func headerWithLeft(left string) headerOption {
+func headerWithHand(hand common.MainHand) headerOption {
 	return func(header *header) {
-		header.left = left
+		header.hand = hand
 	}
 }
 
-func headerWithRight(right []string) headerOption {
+func headerWithTitle(left string) headerOption {
 	return func(header *header) {
-		if len(right) == 0 {
+		header.title = left
+	}
+}
+
+func headerWithActions(actions []string) headerOption {
+	return func(header *header) {
+		if len(actions) == 0 {
 			return
 		}
 
-		header.right = make([]string, len(right))
-		copy(header.right, right)
+		header.actions = make([]string, len(actions))
+		copy(header.actions, actions)
 	}
 }
 
@@ -71,12 +78,23 @@ func headerSelectMonths(months ...time.Month) headerOption {
 }
 
 func (r header) Build() ([]string, error) {
+	tabularFormat := `@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(r.actions)), ""), "|") + `|@{}`
+
+	left := `\Huge ` + r.title
+	right := strings.Join(r.actions, " & ")
+
+	if r.hand == common.LeftHand {
+		tabularFormat = `@{}|` + strings.Join(strings.Split(strings.Repeat("l", len(r.actions)), ""), "|") + `Yr@{}`
+
+		left, right = right, left
+	}
+
 	return []string{
 		`\marginnote{\rotatebox[origin=tr]{90}{%
 \renewcommand{\arraystretch}{` + r.ui.HeaderMarginNotesArrayStretch + `}` + r.months() + `\qquad{}` + r.quarters() + `%
 }}%
-{\renewcommand{\arraystretch}{` + r.ui.HeaderArrayStretch + `}\begin{tabularx}{\linewidth}{@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(r.right)), ""), "|") + `|@{}}
-\Huge ` + r.left + `{\Huge\color{white}{Q}} & & ` + strings.Join(r.right, " & ") + ` \\ \hline
+{\renewcommand{\arraystretch}{` + r.ui.HeaderArrayStretch + `}\begin{tabularx}{\linewidth}{` + tabularFormat + `}
+` + left + `{\Huge\color{white}{Q}} & & ` + right + ` \\ \hline
 \end{tabularx}}
 
 `,

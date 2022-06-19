@@ -253,8 +253,8 @@ func (r *MonthsOnSides) headerWithTitle(title string) header {
 
 func (r *MonthsOnSides) headerWithTitleAndSelection(title string, selectText string) header {
 	return r.baseHeader().apply(
-		headerWithLeft(title),
-		headerWithRight(r.rightCells().Ref(selectText).Slice()),
+		headerWithTitle(title),
+		headerWithActions(r.rightCells().Ref(selectText).Slice()),
 	)
 }
 
@@ -263,6 +263,7 @@ func (r *MonthsOnSides) baseHeader() header {
 		r.layout,
 		r.ui,
 		headerWithYear(r.calendarYear),
+		headerWithHand(r.layout.Hand),
 	)
 }
 
