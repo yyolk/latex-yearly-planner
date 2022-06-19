@@ -163,7 +163,7 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 
 	for _, day := range r.year.Days() {
 		header := r.
-			headerWithTitle(day.NameAndDate()).
+			headerWithTitle(ref.NewTargetWithRef(day.NameAndDate(), day.Ref()).Build()).
 			apply(headerSelectMonths(day.Month()))
 
 		if err := buffer.WriteBlocks(header, dailyContents{day: day}); err != nil {
