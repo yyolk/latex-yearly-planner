@@ -1,6 +1,7 @@
 package texcalendar
 
 import (
+	"strconv"
 	"strings"
 	"time"
 
@@ -77,4 +78,8 @@ func (r Year) InWeeks() []Week {
 	}
 
 	return weeks
+}
+
+func (r Year) Name() string {
+	return strconv.Itoa(r.year.Year())
 }

@@ -12,7 +12,6 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
-	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
@@ -20,12 +19,9 @@ type MonthsOnSides struct {
 	device devices.Device
 	layout common.Layout
 
-	ui           mosUI
-	year         int
-	weekday      time.Weekday
-	calendarYear calendar.Year
-	yearStr      string
-	texYear      texcalendar.Year
+	ui      mosUI
+	weekday time.Weekday
+	year    texcalendar.Year
 }
 
 const (
@@ -36,12 +32,9 @@ const (
 
 func New(params common.Params) MonthsOnSides {
 	return MonthsOnSides{
-		year:    params.Year,
 		weekday: params.Weekday,
 
-		calendarYear: calendar.NewYear(params.Year, params.Weekday),
-		texYear:      texcalendar.NewYearFromInt(params.Hand, params.Year, params.Weekday),
-		yearStr:      strconv.Itoa(params.Year),
+		year: texcalendar.NewYearFromInt(params.Hand, params.Year, params.Weekday),
 	}
 }
 
@@ -88,7 +81,7 @@ func (r MonthsOnSides) Sections() map[string]sectionFunc {
 func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	if err := texsnippets.Execute(buffer, texsnippets.Title, map[string]string{"Title": r.yearStr}); err != nil {
+	if err := texsnippets.Execute(buffer, texsnippets.Title, map[string]string{"Title": r.year.Name()}); err != nil {
 		return nil, fmt.Errorf("execute template title: %w", err)
 	}
 
@@ -97,9 +90,9 @@ func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 
 func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
-	header := r.headerWithTitleAndSelection(r.yearStr, calendarText)
+	header := r.headerWithTitleAndSelection(r.year.Name(), calendarText)
 
-	if err := buffer.WriteBlocks(header, annualContents{hand: r.layout.Hand, year: r.texYear}); err != nil {
+	if err := buffer.WriteBlocks(header, annualContents{hand: r.layout.Hand, year: r.year}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
@@ -109,7 +102,7 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	for _, quarter := range r.texYear.Quarters() {
+	for _, quarter := range r.year.Quarters() {
 		header := r.
 			headerWithTitle(quarter.Name()).
 			apply(headerSelectQuarter(quarter))
@@ -125,7 +118,7 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	for _, month := range r.texYear.Months() {
+	for _, month := range r.year.Months() {
 		header := r.
 			headerWithTitle(month.Month().String()).
 			apply(headerSelectMonths(month.Month()))
@@ -141,7 +134,7 @@ func (r *MonthsOnSides) monthliesSection() (*bytes.Buffer, error) {
 func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	for _, week := range r.texYear.InWeeks() {
+	for _, week := range r.year.InWeeks() {
 		header := r.
 			headerWithTitle(ref.NewTargetWithRef(week.Title(), week.Ref()).Build()).
 			apply(headerSelectMonths(r.highlightedMonths(week)...))
@@ -168,7 +161,7 @@ func (r *MonthsOnSides) highlightedMonths(week texcalendar.Week) []time.Month {
 func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	for _, day := range r.texYear.Days() {
+	for _, day := range r.year.Days() {
 		header := r.
 			headerWithTitle(day.NameAndDate()).
 			apply(headerSelectMonths(day.Month()))
@@ -184,7 +177,7 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 func (r *MonthsOnSides) dailyNotesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	for _, day := range r.texYear.Days() {
+	for _, day := range r.year.Days() {
 		header := r.
 			headerWithTitle(day.NameAndDate()).
 			apply(headerSelectMonths(day.Month()))
@@ -200,7 +193,7 @@ func (r *MonthsOnSides) dailyNotesSection() (*bytes.Buffer, error) {
 func (r *MonthsOnSides) dailyReflectSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	for _, day := range r.texYear.Days() {
+	for _, day := range r.year.Days() {
 		header := r.
 			headerWithTitle(day.NameAndDate()).
 			apply(headerSelectMonths(day.Month()))
@@ -266,7 +259,7 @@ func (r *MonthsOnSides) baseHeader() header {
 	return newHeader(
 		r.layout,
 		r.ui,
-		headerWithTexYear(r.texYear),
+		headerWithTexYear(r.year),
 		headerWithHand(r.layout.Hand),
 	)
 }
