@@ -11,8 +11,8 @@ import (
 )
 
 type header struct {
-	texYear texcalendar.Year
-	layout  common.Layout
+	year   texcalendar.Year
+	layout common.Layout
 
 	title   string
 	actions []string
@@ -37,9 +37,9 @@ func (r header) apply(options ...headerOption) header {
 	return r
 }
 
-func headerWithTexYear(hand common.MainHand, year calendar.Year) headerOption {
+func headerWithTexYear(year texcalendar.Year) headerOption {
 	return func(header *header) {
-		header.texYear = texcalendar.NewYear(hand, year)
+		header.year = year
 	}
 }
 
@@ -104,7 +104,7 @@ func (r header) Build() ([]string, error) {
 
 func (r header) months() string {
 	strs := make([]string, 0, 12)
-	months := r.texYear.Months()
+	months := r.year.Months()
 
 	for i := len(months) - 1; i >= 0; i-- {
 		item := cell.New(months[i].ShortName())
@@ -124,7 +124,7 @@ func (r header) months() string {
 func (r header) quarters() string {
 	quarters := make([]string, 0, 4)
 
-	for _, quarter := range r.texYear.Quarters().Reverse() {
+	for _, quarter := range r.year.Quarters().Reverse() {
 		item := cell.New(quarter.Name())
 
 		if quarter.Matches(texcalendar.NewQuarter(r.hand, r.selectedQuarter)) {

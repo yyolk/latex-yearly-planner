@@ -2,6 +2,7 @@ package texcalendar
 
 import (
 	"strings"
+	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
@@ -14,6 +15,12 @@ type Year struct {
 
 func NewYear(hand common.MainHand, year calendar.Year) Year {
 	return Year{hand: hand, year: year}
+}
+
+func NewYearFromInt(hand common.MainHand, year int, weekday time.Weekday) Year {
+	calYear := calendar.NewYear(year, weekday)
+
+	return NewYear(hand, calYear)
 }
 
 func (r Year) BuildCalendar() string {

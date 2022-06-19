@@ -25,6 +25,7 @@ type MonthsOnSides struct {
 	weekday      time.Weekday
 	calendarYear calendar.Year
 	yearStr      string
+	texYear      texcalendar.Year
 }
 
 const (
@@ -39,6 +40,7 @@ func New(params common.Params) MonthsOnSides {
 		weekday: params.Weekday,
 
 		calendarYear: calendar.NewYear(params.Year, params.Weekday),
+		texYear:      texcalendar.NewYearFromInt(params.Hand, params.Year, params.Weekday),
 		yearStr:      strconv.Itoa(params.Year),
 	}
 }
@@ -97,7 +99,7 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 	header := r.headerWithTitleAndSelection(r.yearStr, calendarText)
 
-	if err := buffer.WriteBlocks(header, annualContents{hand: r.layout.Hand, year: r.calendarYear}); err != nil {
+	if err := buffer.WriteBlocks(header, annualContents{hand: r.layout.Hand, year: r.texYear}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
@@ -268,7 +270,7 @@ func (r *MonthsOnSides) baseHeader() header {
 	return newHeader(
 		r.layout,
 		r.ui,
-		headerWithTexYear(r.layout.Hand, r.calendarYear),
+		headerWithTexYear(r.texYear),
 		headerWithHand(r.layout.Hand),
 	)
 }
