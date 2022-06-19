@@ -166,7 +166,7 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 			headerWithTitle(ref.NewTargetWithRef(day.NameAndDate(), day.Ref()).Build()).
 			apply(headerSelectMonths(day.Month()))
 
-		if err := buffer.WriteBlocks(header, dailyContents{day: day}); err != nil {
+		if err := buffer.WriteBlocks(header, dailyContents{hand: r.layout.Hand, day: day}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
