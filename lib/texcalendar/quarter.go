@@ -1,12 +1,29 @@
 package texcalendar
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app/tex"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
+
+type Quarters []Quarter
+
+func (q Quarters) Reverse() Quarters {
+	if len(q) == 0 {
+		return nil
+	}
+
+	quarters := make(Quarters, 0, len(q))
+
+	for i := len(q) - 1; i >= 0; i-- {
+		quarters = append(quarters, q[i])
+	}
+
+	return quarters
+}
 
 type Quarter struct {
 	quarter calendar.Quarter
@@ -35,4 +52,12 @@ func (q Quarter) Column() string {
 	}
 
 	return strings.Join(months, "\n\\vfill\n")
+}
+
+func (q Quarter) Name() string {
+	return "Q" + strconv.Itoa(q.quarter.Number())
+}
+
+func (q Quarter) Matches(quarter Quarter) bool {
+	return q.Name() == quarter.Name()
 }

@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+type Quarters []Quarter
+
 type Quarter struct {
 	Months [3]Month
 	number int
@@ -30,4 +32,8 @@ func NewQuarter(year int, qrtr int, wd time.Weekday) Quarter {
 
 func (r Quarter) Name() string {
 	return "Q" + strconv.Itoa(r.number)
+}
+
+func (r Quarter) Number() int {
+	return r.number
 }

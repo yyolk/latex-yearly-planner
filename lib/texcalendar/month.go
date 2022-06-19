@@ -8,6 +8,8 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
+type Months []Month
+
 type Month struct {
 	month calendar.Month
 	hand  common.MainHand
@@ -84,4 +86,22 @@ func (m Month) tabulate(matrix [][]string, join string) string {
 	}
 
 	return strings.Join(rows, join+"\n")
+}
+
+func (m Month) ShortName() string {
+	return m.month.Month().String()[:3]
+}
+
+func (m Month) Month() time.Month {
+	return m.month.Month()
+}
+
+func (m Month) IntersectsWith(selectedMonths []time.Month) bool {
+	for _, selectedMonth := range selectedMonths {
+		if m.Month() == selectedMonth {
+			return true
+		}
+	}
+
+	return false
 }

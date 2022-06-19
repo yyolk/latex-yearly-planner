@@ -7,11 +7,12 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
+	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
 type header struct {
-	year   calendar.Year
-	layout common.Layout
+	texYear texcalendar.Year
+	layout  common.Layout
 
 	title   string
 	actions []string
@@ -36,9 +37,9 @@ func (r header) apply(options ...headerOption) header {
 	return r
 }
 
-func headerWithYear(year calendar.Year) headerOption {
+func headerWithTexYear(hand common.MainHand, year calendar.Year) headerOption {
 	return func(header *header) {
-		header.year = year
+		header.texYear = texcalendar.NewYear(hand, year)
 	}
 }
 
@@ -103,17 +104,13 @@ func (r header) Build() ([]string, error) {
 
 func (r header) months() string {
 	strs := make([]string, 0, 12)
-	months := r.year.Months()
+	months := r.texYear.Months()
 
 	for i := len(months) - 1; i >= 0; i-- {
-		item := cell.New(months[i].Month().String()[:3])
+		item := cell.New(months[i].ShortName())
 
-		for _, selectedMonth := range r.selectedMonths {
-			if months[i].Month() == selectedMonth {
-				item = item.Ref()
-
-				break
-			}
+		if months[i].IntersectsWith(r.selectedMonths) {
+			item = item.Ref()
 		}
 
 		strs = append(strs, item.Build())
@@ -127,10 +124,10 @@ func (r header) months() string {
 func (r header) quarters() string {
 	quarters := make([]string, 0, 4)
 
-	for i := 3; i >= 0; i-- {
-		item := cell.New(r.year.Quarters[i].Name())
+	for _, quarter := range r.texYear.Quarters().Reverse() {
+		item := cell.New(quarter.Name())
 
-		if r.selectedQuarter.Name() == r.year.Quarters[i].Name() {
+		if quarter.Matches(texcalendar.NewQuarter(r.hand, r.selectedQuarter)) {
 			item = item.Ref()
 		}
 

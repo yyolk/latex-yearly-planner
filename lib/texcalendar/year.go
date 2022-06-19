@@ -31,3 +31,23 @@ func (r Year) BuildCalendar() string {
 
 	return strings.Join(quarterRows, "\n"+`\vfill`+"\n")
 }
+
+func (r Year) Months() Months {
+	months := make(Months, 0, 12)
+
+	for _, month := range r.year.Months() {
+		months = append(months, NewMonth(month, r.hand))
+	}
+
+	return months
+}
+
+func (r Year) Quarters() Quarters {
+	quaters := make(Quarters, 0, 4)
+
+	for _, quarter := range r.year.GetQuarters() {
+		quaters = append(quaters, NewQuarter(r.hand, quarter))
+	}
+
+	return quaters
+}

@@ -268,7 +268,7 @@ func (r *MonthsOnSides) baseHeader() header {
 	return newHeader(
 		r.layout,
 		r.ui,
-		headerWithYear(r.calendarYear),
+		headerWithTexYear(r.layout.Hand, r.calendarYear),
 		headerWithHand(r.layout.Hand),
 	)
 }

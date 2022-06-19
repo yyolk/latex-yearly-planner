@@ -79,3 +79,7 @@ func (y Year) Months() []Month {
 
 	return out
 }
+
+func (y Year) GetQuarters() Quarters {
+	return y.Quarters[:]
+}
