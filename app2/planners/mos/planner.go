@@ -162,9 +162,12 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	for _, day := range r.year.Days() {
-		header := r.
-			headerWithTitle(ref.NewTargetWithRef(day.NameAndDate(), day.Ref()).Build()).
-			apply(headerSelectMonths(day.Month()))
+		header := r.baseHeader().
+			apply(
+				headerWithTitle(ref.NewTargetWithRef(day.NameAndDate(), day.Ref()).Build()),
+				headerWithActions(r.rightCells().Push(cell.New("lala")).Slice()),
+				headerSelectMonths(day.Month()),
+			)
 
 		if err := buffer.WriteBlocks(header, dailyContents{hand: r.layout.Hand, day: day}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
