@@ -54,9 +54,7 @@ func (r *Planner) GenerateFor(device devices.Device, hand common.MainHand) error
 		return fmt.Errorf("new layout: %w", err)
 	}
 
-	r.builder.SetLayout(layout)
-
-	if err = r.builder.PrepareDetails(device); err != nil {
+	if err = r.builder.PrepareDetails(device, layout); err != nil {
 		return fmt.Errorf("prepare details: %w", err)
 	}
 
@@ -99,7 +97,7 @@ func (r *Planner) WriteTeXTo(dir string) error {
 }
 
 func (r *Planner) Compile(ctx context.Context) error {
-	for i := 0; i < 2; i++ {
+	for i := 0; i < r.builder.RunTimes(); i++ {
 		cmd := exec.CommandContext(ctx, "pdflatex", "./document.tex")
 		cmd.Dir = r.dir
 

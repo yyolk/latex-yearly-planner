@@ -41,15 +41,12 @@ func New(params common.Params) MonthsOnSides {
 	}
 }
 
-func (r *MonthsOnSides) SetLayout(layout common.Layout) {
-	r.layout = layout
-}
-
 func (r MonthsOnSides) Layout() common.Layout {
 	return r.layout
 }
 
-func (r *MonthsOnSides) PrepareDetails(device devices.Device) error {
+func (r *MonthsOnSides) PrepareDetails(device devices.Device, layout common.Layout) error {
+	r.layout = layout
 	r.device = device
 
 	switch device.(type) {
@@ -271,4 +268,9 @@ func (r *MonthsOnSides) baseHeader() header {
 
 func (r *MonthsOnSides) rightCells() cell.Cells {
 	return cell.NewCells(calendarText, toDoText, notesText)
+}
+
+func (r MonthsOnSides) RunTimes() int {
+	// MoS need to be compiled two times to correctly position margin notes
+	return 2
 }
