@@ -88,7 +88,7 @@ func (r Week) weekDays() []string {
 			name = `{\renewcommand{\arraystretch}{1.2}\begin{tabular}{@{}p{5mm}@{}|}\hfil{}` + name + `\\ \hline\end{tabular}}`
 		}
 
-		names = append(names, name)
+		names = append(names, ref.NewLinkWithRef(name, NewDay(day).Ref()).Build())
 	}
 
 	return names

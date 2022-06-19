@@ -30,6 +30,17 @@ func (r Cells) Slice() []string {
 	return out
 }
 
+func (r Cells) Push(cell Cell) Cells {
+	cells := make(Cells, len(r))
+	copy(cells, r)
+
+	return append(cells, cell)
+}
+
+func (r Cells) Shift(cell Cell) Cells {
+	return append([]Cell{cell}, r...)
+}
+
 func (r Cells) Ref(text string) Cells {
 	cells := make(Cells, len(r))
 	copy(cells, r)

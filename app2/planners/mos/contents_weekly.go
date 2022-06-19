@@ -3,6 +3,7 @@ package mos
 import (
 	"time"
 
+	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
@@ -49,5 +50,5 @@ func (m weeklyContents) dayName(week calendar.Week, day texcalendar.Day) string 
 		return `\textcolor{white}{Q}`
 	}
 
-	return day.NameAndDate()
+	return ref.NewLinkWithRef(day.NameAndDate(), day.Ref()).Build()
 }

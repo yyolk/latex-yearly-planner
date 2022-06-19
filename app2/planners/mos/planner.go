@@ -169,8 +169,10 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	for _, day := range r.calendarYear.Days() {
+		texDay := texcalendar.NewDay(day)
+
 		header := r.
-			headerWithTitle(day.Format("Monday, _2")).
+			headerWithTitle(texDay.NameAndDate()).
 			apply(headerSelectMonths(day.Month()))
 
 		if err := buffer.WriteBlocks(header, dailyContents{day: day}); err != nil {
