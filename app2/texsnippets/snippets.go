@@ -10,6 +10,7 @@ const document = `\documentclass[9pt]{extarticle}
 \usepackage{marginnote}
 \usepackage{adjustbox}
 \usepackage{multido}
+\usepackage{amssymb}
 
 \geometry{paperwidth={{.Device.Paper.Width}}, paperheight={{.Device.Paper.Height}}}
 \geometry{
@@ -40,7 +41,7 @@ const document = `\documentclass[9pt]{extarticle}
 \newlength{\myLenLineThicknessDefault}
 \newlength{\myLenLineThicknessThick}
 \setlength{\myLenLineThicknessDefault}{.4pt}
-\setlength{\myLenLineThicknessThick}{.4pt}
+\setlength{\myLenLineThicknessThick}{.8pt}
 
 \newlength{\myLengthThreeColumnsSeparatorWidth}
 \setlength{\myLengthThreeColumnsSeparatorWidth}{ {{- .Layout.Sizes.ThreeColumnsSeparatorSize -}} }
@@ -50,6 +51,14 @@ const document = `\documentclass[9pt]{extarticle}
 
 \newcommand{\myLinePlain}{\hrule width \linewidth height \myLenLineThicknessDefault}
 \newcommand{\myLineThick}{\hrule width \linewidth height \myLenLineThicknessThick}
+
+\newcommand{\myLineColor}[1]{\textcolor{#1}{\myLinePlain}}
+
+\newcommand{\myColorGray}{gray}
+\newcommand{\myColorLightGray}{gray!50}
+
+\newcommand{\myLineGray}{\myLineColor{\myColorGray}}
+\newcommand{\myLineLightGray}{\myLineColor{\myColorLightGray}}
 
 \newcommand{\myUnderline}[1]{#1\vskip1mm\myLineThick\par}
 

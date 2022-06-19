@@ -77,6 +77,7 @@ func (r MonthsOnSides) Sections() map[string]sectionFunc {
 		common.MonthliesSection:   r.monthliesSection,
 		common.WeekliesSection:    r.weekliesSection,
 		common.DailiesSection:     r.dailiesSection,
+		common.DailyNotesSection:  r.dailyNotesSection,
 		common.ToDoSection:        r.toDoSection,
 		common.NotesSection:       r.notesSection,
 	}
@@ -167,10 +168,26 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 
 	for _, day := range r.calendarYear.Days() {
 		header := r.
-			headerWithTitle(day.Format("Mon Jan _2")).
+			headerWithTitle(day.Format("Monday, _2")).
 			apply(headerSelectMonths(day.Month()))
 
 		if err := buffer.WriteBlocks(header, dailyContents{day: day}); err != nil {
+			return nil, fmt.Errorf("write to buffer: %w", err)
+		}
+	}
+
+	return buffer.Buffer, nil
+}
+
+func (r *MonthsOnSides) dailyNotesSection() (*bytes.Buffer, error) {
+	buffer := pages.NewBuffer()
+
+	for _, day := range r.calendarYear.Days() {
+		header := r.
+			headerWithTitle(day.Format("Monday, _2")).
+			apply(headerSelectMonths(day.Month()))
+
+		if err := buffer.WriteBlocks(header, dailyNotesContents{day: day}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}

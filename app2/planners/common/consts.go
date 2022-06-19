@@ -7,6 +7,7 @@ const (
 	MonthliesSection   = "monthlies"
 	WeekliesSection    = "weeklies"
 	DailiesSection     = "dailies"
+	DailyNotesSection  = "daily_notes"
 	ToDoSection        = "todo"
 	NotesSection       = "notes"
 )
