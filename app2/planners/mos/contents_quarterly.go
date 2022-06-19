@@ -12,16 +12,26 @@ type quarterlyContents struct {
 }
 
 func (r quarterlyContents) Build() ([]string, error) {
-	monthsColumn := texcalendar.NewQuarter(r.hand, r.quarter).Column()
-	_ = monthsColumn
+	calendarColumn := r.calendarColumn()
+	notesColumn := r.notesColumn()
+
+	if r.hand == common.LeftHand {
+		calendarColumn, notesColumn = notesColumn, calendarColumn
+	}
 
 	return []string{
-		`\begin{minipage}[t][20.942cm]{4.5cm}
-` + monthsColumn + `
-\end{minipage}%
-\hspace{6mm}%
-\begin{minipage}[t][1cm]{1cm}%
-\vbox to -1.8mm{\myDotGrid{41}{19}}
-\end{minipage}`,
+		calendarColumn + `\hspace{\myLengthThreeColumnsSeparatorWidth}` + notesColumn,
 	}, nil
+}
+
+func (r quarterlyContents) notesColumn() string {
+	return `\begin{minipage}[t][1cm]{\myLengthTwoThirdsColumnWidth}
+\vbox to -1.8mm{\myDotGrid{41}{19}}
+\end{minipage}`
+}
+
+func (r quarterlyContents) calendarColumn() string {
+	return `\begin{minipage}[t][20.942cm]{\myLengthThreeColumnWidth}
+` + texcalendar.NewQuarter(r.hand, r.quarter).Column() + `
+\end{minipage}`
 }

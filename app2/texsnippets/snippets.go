@@ -49,6 +49,9 @@ const document = `\documentclass[9pt]{extarticle}
 \newlength{\myLengthThreeColumnWidth}
 \setlength{\myLengthThreeColumnWidth}{\dimexpr.333\textwidth-.667\myLengthThreeColumnsSeparatorWidth}
 
+\newlength{\myLengthTwoThirdsColumnWidth}
+\setlength{\myLengthTwoThirdsColumnWidth}{\dimexpr2\myLengthThreeColumnWidth+\myLengthThreeColumnsSeparatorWidth}
+
 \newcommand{\myLinePlain}{\hrule width \linewidth height \myLenLineThicknessDefault}
 \newcommand{\myLineThick}{\hrule width \linewidth height \myLenLineThicknessThick}
 
