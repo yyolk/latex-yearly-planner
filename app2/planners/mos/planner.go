@@ -71,15 +71,16 @@ type sectionFunc func() (*bytes.Buffer, error)
 
 func (r MonthsOnSides) Sections() map[string]sectionFunc {
 	return map[string]sectionFunc{
-		common.TitleSection:       r.titleSection,
-		common.AnnualSection:      r.annualSection,
-		common.QuarterliesSection: r.quarterliesSection,
-		common.MonthliesSection:   r.monthliesSection,
-		common.WeekliesSection:    r.weekliesSection,
-		common.DailiesSection:     r.dailiesSection,
-		common.DailyNotesSection:  r.dailyNotesSection,
-		common.ToDoSection:        r.toDoSection,
-		common.NotesSection:       r.notesSection,
+		common.TitleSection:        r.titleSection,
+		common.AnnualSection:       r.annualSection,
+		common.QuarterliesSection:  r.quarterliesSection,
+		common.MonthliesSection:    r.monthliesSection,
+		common.WeekliesSection:     r.weekliesSection,
+		common.DailiesSection:      r.dailiesSection,
+		common.DailyNotesSection:   r.dailyNotesSection,
+		common.DailyReflectSection: r.dailyReflectSection,
+		common.ToDoSection:         r.toDoSection,
+		common.NotesSection:        r.notesSection,
 	}
 }
 
@@ -188,6 +189,22 @@ func (r *MonthsOnSides) dailyNotesSection() (*bytes.Buffer, error) {
 			apply(headerSelectMonths(day.Month()))
 
 		if err := buffer.WriteBlocks(header, dailyNotesContents{day: day}); err != nil {
+			return nil, fmt.Errorf("write to buffer: %w", err)
+		}
+	}
+
+	return buffer.Buffer, nil
+}
+
+func (r *MonthsOnSides) dailyReflectSection() (*bytes.Buffer, error) {
+	buffer := pages.NewBuffer()
+
+	for _, day := range r.calendarYear.Days() {
+		header := r.
+			headerWithTitle(day.Format("Monday, _2")).
+			apply(headerSelectMonths(day.Month()))
+
+		if err := buffer.WriteBlocks(header, dailyReflectContents{day: day}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
