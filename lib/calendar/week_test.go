@@ -16,12 +16,12 @@ func TestNewWeek(t *testing.T) {
 		So(err, ShouldBeNil)
 
 		Convey("new from day", func() {
-			day := calendar.Day{Time: moment}
+			day := calendar.NewDay(moment)
 
 			week := calendar.NewWeek(calendar.FromDay(day))
 
 			for i := 0; i < 7; i++ {
-				So(week.Days[i].Day(), ShouldEqual, i+1)
+				So(week.Days()[i].Day(), ShouldEqual, i+1)
 			}
 		})
 
@@ -29,53 +29,50 @@ func TestNewWeek(t *testing.T) {
 			week := calendar.NewWeek(calendar.FromTime(moment))
 
 			for i := 0; i < 7; i++ {
-				So(week.Days[i].Day(), ShouldEqual, i+1)
+				So(week.Days()[i].Day(), ShouldEqual, i+1)
 			}
 		})
 
 		Convey("new from month", func() {
 			Convey("start from sunday", func() {
 				week := calendar.NewWeek(calendar.FromMonth(2022, time.February, time.Sunday))
-				expected := calendar.Week{Days: [7]calendar.Day{
-					{Time: time.Time{}},
-					{Time: time.Time{}},
-					{Time: time.Date(2022, time.February, 1, 0, 0, 0, 0, time.Local)},
-					{Time: time.Date(2022, time.February, 2, 0, 0, 0, 0, time.Local)},
-					{Time: time.Date(2022, time.February, 3, 0, 0, 0, 0, time.Local)},
-					{Time: time.Date(2022, time.February, 4, 0, 0, 0, 0, time.Local)},
-					{Time: time.Date(2022, time.February, 5, 0, 0, 0, 0, time.Local)},
-				}}
-
+				expected := calendar.NewWeek(calendar.FromWeek([7]calendar.Day{
+					{},
+					{},
+					calendar.NewDay(time.Date(2022, time.February, 1, 0, 0, 0, 0, time.Local)),
+					calendar.NewDay(time.Date(2022, time.February, 2, 0, 0, 0, 0, time.Local)),
+					calendar.NewDay(time.Date(2022, time.February, 3, 0, 0, 0, 0, time.Local)),
+					calendar.NewDay(time.Date(2022, time.February, 4, 0, 0, 0, 0, time.Local)),
+					calendar.NewDay(time.Date(2022, time.February, 5, 0, 0, 0, 0, time.Local)),
+				}))
 				So(week, ShouldResemble, expected)
 			})
 
 			Convey("start from monday", func() {
 				week := calendar.NewWeek(calendar.FromMonth(2022, time.February, time.Monday))
-				expected := calendar.Week{Days: [7]calendar.Day{
-					{Time: time.Time{}},
-					{Time: time.Date(2022, time.February, 1, 0, 0, 0, 0, time.Local)},
-					{Time: time.Date(2022, time.February, 2, 0, 0, 0, 0, time.Local)},
-					{Time: time.Date(2022, time.February, 3, 0, 0, 0, 0, time.Local)},
-					{Time: time.Date(2022, time.February, 4, 0, 0, 0, 0, time.Local)},
-					{Time: time.Date(2022, time.February, 5, 0, 0, 0, 0, time.Local)},
-					{Time: time.Date(2022, time.February, 6, 0, 0, 0, 0, time.Local)},
-				}}
-
+				expected := calendar.NewWeek(calendar.FromWeek([7]calendar.Day{
+					{},
+					calendar.NewDay(time.Date(2022, time.February, 1, 0, 0, 0, 0, time.Local)),
+					calendar.NewDay(time.Date(2022, time.February, 2, 0, 0, 0, 0, time.Local)),
+					calendar.NewDay(time.Date(2022, time.February, 3, 0, 0, 0, 0, time.Local)),
+					calendar.NewDay(time.Date(2022, time.February, 4, 0, 0, 0, 0, time.Local)),
+					calendar.NewDay(time.Date(2022, time.February, 5, 0, 0, 0, 0, time.Local)),
+					calendar.NewDay(time.Date(2022, time.February, 6, 0, 0, 0, 0, time.Local)),
+				}))
 				So(week, ShouldResemble, expected)
 			})
 
 			Convey("start from friday", func() {
 				week := calendar.NewWeek(calendar.FromMonth(2022, time.February, time.Friday))
-				expected := calendar.Week{Days: [7]calendar.Day{
-					{Time: time.Time{}},
-					{Time: time.Time{}},
-					{Time: time.Time{}},
-					{Time: time.Time{}},
-					{Time: time.Date(2022, time.February, 1, 0, 0, 0, 0, time.Local)},
-					{Time: time.Date(2022, time.February, 2, 0, 0, 0, 0, time.Local)},
-					{Time: time.Date(2022, time.February, 3, 0, 0, 0, 0, time.Local)},
-				}}
-
+				expected := calendar.NewWeek(calendar.FromWeek([7]calendar.Day{
+					{},
+					{},
+					{},
+					{},
+					calendar.NewDay(time.Date(2022, time.February, 1, 0, 0, 0, 0, time.Local)),
+					calendar.NewDay(time.Date(2022, time.February, 2, 0, 0, 0, 0, time.Local)),
+					calendar.NewDay(time.Date(2022, time.February, 3, 0, 0, 0, 0, time.Local)),
+				}))
 				So(week, ShouldResemble, expected)
 			})
 		})
@@ -133,18 +130,15 @@ func TestWeek_ZerofyMonth(t *testing.T) {
 		So(err, ShouldBeNil)
 
 		week := calendar.NewWeek(calendar.FromTime(moment)).ZerofyMonth(time.March)
-		expected := calendar.Week{
-			Days: [7]calendar.Day{
-				{Time: time.Date(2022, time.February, 24, 0, 0, 0, 0, time.UTC)},
-				{Time: time.Date(2022, time.February, 25, 0, 0, 0, 0, time.UTC)},
-				{Time: time.Date(2022, time.February, 26, 0, 0, 0, 0, time.UTC)},
-				{Time: time.Date(2022, time.February, 27, 0, 0, 0, 0, time.UTC)},
-				{Time: time.Date(2022, time.February, 28, 0, 0, 0, 0, time.UTC)},
-				{},
-				{},
-			},
-		}
-
+		expected := calendar.NewWeek(calendar.FromWeek([7]calendar.Day{
+			calendar.NewDay(time.Date(2022, time.February, 24, 0, 0, 0, 0, time.UTC)),
+			calendar.NewDay(time.Date(2022, time.February, 25, 0, 0, 0, 0, time.UTC)),
+			calendar.NewDay(time.Date(2022, time.February, 26, 0, 0, 0, 0, time.UTC)),
+			calendar.NewDay(time.Date(2022, time.February, 27, 0, 0, 0, 0, time.UTC)),
+			calendar.NewDay(time.Date(2022, time.February, 28, 0, 0, 0, 0, time.UTC)),
+			{},
+			{},
+		}))
 		So(week, ShouldResemble, expected)
 	})
 }

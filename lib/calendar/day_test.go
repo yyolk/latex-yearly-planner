@@ -14,8 +14,8 @@ func TestDay_Add(t *testing.T) {
 	Convey("Add", t, func() {
 		moment := time.Now()
 
-		today := calendar.Day{Time: moment}
-		tomorrow := calendar.Day{Time: moment.AddDate(0, 0, 1)}
+		today := calendar.NewDay(moment)
+		tomorrow := calendar.NewDay(moment.AddDate(0, 0, 1))
 
 		So(today.Add(1), ShouldResemble, tomorrow)
 	})
@@ -32,7 +32,7 @@ func TestDay_IsZero(t *testing.T) {
 		})
 
 		Convey("not zero", func() {
-			notZero := calendar.Day{Time: time.Now()}
+			notZero := calendar.NewDay(time.Now())
 
 			So(notZero.IsZero(), ShouldBeFalse)
 		})

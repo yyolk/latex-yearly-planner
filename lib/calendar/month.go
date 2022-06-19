@@ -46,7 +46,7 @@ func (m Month) Month() time.Month {
 func (m Month) Weekdays() []time.Weekday {
 	weekdays := make([]time.Weekday, 0, 7)
 
-	for _, day := range m.Weeks[1].Days {
+	for _, day := range m.Weeks[1].days {
 		weekdays = append(weekdays, day.Weekday())
 	}
 

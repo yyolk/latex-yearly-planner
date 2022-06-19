@@ -33,10 +33,10 @@ func januaryWithMondayFirst() calendar.Month {
 			calendar.NewWeek(calendar.FromTime(time.Date(2022, time.January, 10, 0, 0, 0, 0, time.Local))),
 			calendar.NewWeek(calendar.FromTime(time.Date(2022, time.January, 17, 0, 0, 0, 0, time.Local))),
 			calendar.NewWeek(calendar.FromTime(time.Date(2022, time.January, 24, 0, 0, 0, 0, time.Local))),
-			{Days: [7]calendar.Day{
-				{Time: time.Date(2022, time.January, 31, 0, 0, 0, 0, time.Local)},
+			calendar.NewWeek(calendar.FromWeek([7]calendar.Day{
+				calendar.NewDay(time.Date(2022, time.January, 31, 0, 0, 0, 0, time.Local)),
 				{}, {}, {}, {}, {}, {},
-			}},
+			})),
 		},
 	}
 }
@@ -48,13 +48,13 @@ func marchWithMondayFirst() calendar.Month {
 			calendar.NewWeek(calendar.FromTime(time.Date(2022, time.March, 7, 0, 0, 0, 0, time.Local))),
 			calendar.NewWeek(calendar.FromTime(time.Date(2022, time.March, 14, 0, 0, 0, 0, time.Local))),
 			calendar.NewWeek(calendar.FromTime(time.Date(2022, time.March, 21, 0, 0, 0, 0, time.Local))),
-			{Days: [7]calendar.Day{
-				{Time: time.Date(2022, time.March, 28, 0, 0, 0, 0, time.Local)},
-				{Time: time.Date(2022, time.March, 29, 0, 0, 0, 0, time.Local)},
-				{Time: time.Date(2022, time.March, 30, 0, 0, 0, 0, time.Local)},
-				{Time: time.Date(2022, time.March, 31, 0, 0, 0, 0, time.Local)},
+			calendar.NewWeek(calendar.FromWeek([7]calendar.Day{
+				calendar.NewDay(time.Date(2022, time.March, 28, 0, 0, 0, 0, time.Local)),
+				calendar.NewDay(time.Date(2022, time.March, 29, 0, 0, 0, 0, time.Local)),
+				calendar.NewDay(time.Date(2022, time.March, 30, 0, 0, 0, 0, time.Local)),
+				calendar.NewDay(time.Date(2022, time.March, 31, 0, 0, 0, 0, time.Local)),
 				{}, {}, {},
-			}},
+			})),
 		},
 	}
 }

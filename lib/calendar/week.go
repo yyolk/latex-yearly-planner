@@ -7,7 +7,7 @@ import (
 type Weeks []Week
 
 type Week struct {
-	Days  [daysInWeek]Day
+	days  [daysInWeek]Day
 	first bool
 	last  bool
 }
@@ -16,13 +16,19 @@ type WeekOption func() Week
 
 func FromDay(day Day) WeekOption {
 	return func() Week {
-		return Week{Days: [daysInWeek]Day{day}}.fillFromFirstDay()
+		return Week{days: [daysInWeek]Day{day}}.fillFromFirstDay()
 	}
 }
 
 func FromTime(moment time.Time) WeekOption {
 	return func() Week {
-		return Week{Days: [daysInWeek]Day{{moment: moment}}}.fillFromFirstDay()
+		return Week{days: [daysInWeek]Day{{moment: moment}}}.fillFromFirstDay()
+	}
+}
+
+func FromWeek(days [daysInWeek]Day) WeekOption {
+	return func() Week {
+		return Week{days: days}
 	}
 }
 
@@ -32,7 +38,7 @@ func FromMonth(year int, mo time.Month, wd time.Weekday) WeekOption {
 		week := Week{} //nolint:exhaustivestruct
 
 		pos := (day.Weekday() - wd + daysInWeek) % daysInWeek
-		week.Days[pos] = day
+		week.days[pos] = day
 
 		return week.fillFromDay(int(pos))
 	}
@@ -43,7 +49,7 @@ func NewWeek(wo WeekOption) Week {
 }
 
 func (h Week) Next() Week {
-	return Week{Days: [daysInWeek]Day{h.Days[6].Add(1)}}.fillFromFirstDay()
+	return Week{days: [daysInWeek]Day{h.days[6].Add(1)}}.fillFromFirstDay()
 }
 
 func (h Week) fillFromFirstDay() Week {
@@ -52,14 +58,14 @@ func (h Week) fillFromFirstDay() Week {
 
 func (h Week) fillFromDay(n int) Week {
 	for i := n + 1; i < daysInWeek; i++ {
-		h.Days[i] = h.Days[i-1].Add(1)
+		h.days[i] = h.days[i-1].Add(1)
 	}
 
 	return h
 }
 
 func (h Week) HeadMonth() time.Month {
-	for _, day := range h.Days {
+	for _, day := range h.days {
 		if day.IsZero() {
 			continue
 		}
@@ -71,13 +77,13 @@ func (h Week) HeadMonth() time.Month {
 }
 
 func (h Week) TailMonth() time.Month {
-	return h.Days[6].Month()
+	return h.days[6].Month()
 }
 
 func (h Week) ZerofyMonth(mo time.Month) Week {
-	for i, day := range h.Days {
+	for i, day := range h.days {
 		if day.Month() == mo {
-			h.Days[i] = Day{} //nolint:exhaustivestruct
+			h.days[i] = Day{} //nolint:exhaustivestruct
 		}
 	}
 
@@ -85,9 +91,9 @@ func (h Week) ZerofyMonth(mo time.Month) Week {
 }
 
 func (h Week) WeekNumber() int {
-	_, weekNumber := h.Days[0].ISOWeek()
+	_, weekNumber := h.days[0].ISOWeek()
 
-	for _, day := range h.Days {
+	for _, day := range h.days {
 		if _, currDayWeekNumber := day.ISOWeek(); !day.IsZero() && currDayWeekNumber != weekNumber {
 			return currDayWeekNumber
 		}
@@ -97,25 +103,25 @@ func (h Week) WeekNumber() int {
 }
 
 func (h Week) backfill() Week {
-	for i := range h.Days {
-		if h.Days[i].IsZero() {
+	for i := range h.days {
+		if h.days[i].IsZero() {
 			continue
 		}
 
 		for j := i - 1; j >= 0; j-- {
-			h.Days[j] = h.Days[j+1].Add(-1)
+			h.days[j] = h.days[j+1].Add(-1)
 		}
 
 		break
 	}
 
 	for i := 6; i >= 0; i-- {
-		if h.Days[i].IsZero() {
+		if h.days[i].IsZero() {
 			continue
 		}
 
 		for j := i + 1; j < 7; j++ {
-			h.Days[j] = h.Days[j-1].Add(1)
+			h.days[j] = h.days[j-1].Add(1)
 		}
 
 		break
@@ -125,11 +131,11 @@ func (h Week) backfill() Week {
 }
 
 func (h Week) TailYear() int {
-	return h.Days[6].Year()
+	return h.days[6].Year()
 }
 
 func (h Week) HeadYear() int {
-	return h.Days[0].Year()
+	return h.days[0].Year()
 }
 
 func (h Week) SetFirst() Week {
@@ -150,4 +156,8 @@ func (h Week) SetLast() Week {
 
 func (h Week) Last() bool {
 	return h.last
+}
+
+func (h Week) Days() Days {
+	return h.days[:]
 }

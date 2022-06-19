@@ -26,7 +26,7 @@ func (r Weeks) Weekdays() []string {
 	}
 
 	weekdays := make([]string, 0, 8)
-	for _, day := range r.weeks[0].Next().Days {
+	for _, day := range r.weeks[0].Next().Days() {
 		weekdays = append(weekdays, `\hfil{}`+day.Weekday().String())
 	}
 
@@ -76,7 +76,7 @@ func (r Week) Tabular() string {
 func (r Week) weekDays() []string {
 	names := make([]string, 0, 7)
 
-	for _, day := range r.week.Days {
+	for _, day := range r.week.Days() {
 		if day.IsZero() {
 			names = append(names, "")
 
@@ -128,7 +128,7 @@ func (r Week) Title() string {
 func (r Week) Days() Days {
 	days := make(Days, 0, 7)
 
-	for _, day := range r.week.Days {
+	for _, day := range r.week.Days() {
 		days = append(days, NewDay(day))
 	}
 

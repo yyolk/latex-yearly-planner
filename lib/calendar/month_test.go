@@ -27,16 +27,14 @@ func februaryWithMondayFirst() calendar.Month {
 		calendar.NewWeek(calendar.FromTime(time.Date(2022, time.February, 7, 0, 0, 0, 0, time.Local))),
 		calendar.NewWeek(calendar.FromTime(time.Date(2022, time.February, 14, 0, 0, 0, 0, time.Local))),
 		calendar.NewWeek(calendar.FromTime(time.Date(2022, time.February, 21, 0, 0, 0, 0, time.Local))),
-		{
-			Days: [7]calendar.Day{
-				{Time: time.Date(2022, time.February, 28, 0, 0, 0, 0, time.Local)},
-				{},
-				{},
-				{},
-				{},
-				{},
-				{},
-			},
-		},
+		calendar.NewWeek(calendar.FromWeek([7]calendar.Day{
+			calendar.NewDay(time.Date(2022, time.February, 28, 0, 0, 0, 0, time.Local)),
+			{},
+			{},
+			{},
+			{},
+			{},
+			{},
+		})),
 	}}
 }

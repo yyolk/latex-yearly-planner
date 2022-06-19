@@ -8,6 +8,10 @@ type Day struct {
 	moment time.Time
 }
 
+func NewDay(moment time.Time) Day {
+	return Day{moment: moment}
+}
+
 func (h Day) Add(days int) Day {
 	return Day{moment: h.moment.AddDate(0, 0, days)}
 }

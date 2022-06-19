@@ -50,7 +50,7 @@ func (y Year) Days() Days {
 	for _, quarter := range y.Quarters {
 		for _, month := range quarter.Months {
 			for _, week := range month.Weeks {
-				for _, day := range week.Days {
+				for _, day := range week.days {
 					if day.IsZero() {
 						continue
 					}
