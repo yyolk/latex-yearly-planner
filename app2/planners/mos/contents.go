@@ -55,7 +55,7 @@ func (m monthlyContents) Build() ([]string, error) {
 \vspace{3mm}
 \myUnderline{Notes}
 \vspace{5mm}
-\vbox to 0mm{\myDotGrid{25}{29}}`,
+\hspace{0.5mm}\vbox to 0mm{\myDotGrid{25}{29}}`,
 	}, nil
 }
 
