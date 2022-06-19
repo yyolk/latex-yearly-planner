@@ -42,6 +42,12 @@ const document = `\documentclass[9pt]{extarticle}
 \setlength{\myLenLineThicknessDefault}{.4pt}
 \setlength{\myLenLineThicknessThick}{.4pt}
 
+\newlength{\myLengthThreeColumnsSeparatorWidth}
+\setlength{\myLengthThreeColumnsSeparatorWidth}{ {{- .Layout.Sizes.ThreeColumnsSeparatorSize -}} }
+
+\newlength{\myLengthThreeColumnWidth}
+\setlength{\myLengthThreeColumnWidth}{\dimexpr.333\textwidth-.667\myLengthThreeColumnsSeparatorWidth}
+
 \newcommand{\myLinePlain}{\hrule width \linewidth height \myLenLineThicknessDefault}
 \newcommand{\myLineThick}{\hrule width \linewidth height \myLenLineThicknessThick}
 

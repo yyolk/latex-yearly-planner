@@ -34,9 +34,12 @@ func (y Year) InWeeks() Weeks {
 		weeks = append(weeks, week)
 	}
 
-	if week = week.Next(); week.HeadYear() == y.year {
+	if week.HeadYear() == y.year {
 		weeks = append(weeks, week)
 	}
+
+	weeks[0] = weeks[0].SetFirst()
+	weeks[len(weeks)-1] = weeks[len(weeks)-1].SetLast()
 
 	return weeks
 }

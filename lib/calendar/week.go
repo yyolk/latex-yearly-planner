@@ -7,7 +7,9 @@ import (
 type Weeks []Week
 
 type Week struct {
-	Days [daysInWeek]Day
+	Days  [daysInWeek]Day
+	first bool
+	last  bool
 }
 
 type WeekOption func() Week
@@ -128,4 +130,24 @@ func (h Week) TailYear() int {
 
 func (h Week) HeadYear() int {
 	return h.Days[0].Year()
+}
+
+func (h Week) SetFirst() Week {
+	h.first = true
+
+	return h
+}
+
+func (h Week) First() bool {
+	return h.first
+}
+
+func (h Week) SetLast() Week {
+	h.last = true
+
+	return h
+}
+
+func (h Week) Last() bool {
+	return h.last
 }
