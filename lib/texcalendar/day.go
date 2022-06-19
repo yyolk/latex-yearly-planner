@@ -37,3 +37,7 @@ func (d Day) NameAndDate() string {
 func (d Day) Ref() string {
 	return d.Day.Format(time.RFC3339)
 }
+
+func (d Day) Month() time.Month {
+	return d.Day.Month()
+}

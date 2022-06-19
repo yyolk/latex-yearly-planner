@@ -170,11 +170,9 @@ func (r *MonthsOnSides) highlightedMonths(week calendar.Week) []time.Month {
 func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	for _, day := range r.calendarYear.Days() {
-		texDay := texcalendar.NewDay(day)
-
+	for _, day := range r.texYear.Days() {
 		header := r.
-			headerWithTitle(texDay.NameAndDate()).
+			headerWithTitle(day.NameAndDate()).
 			apply(headerSelectMonths(day.Month()))
 
 		if err := buffer.WriteBlocks(header, dailyContents{day: day}); err != nil {
@@ -188,9 +186,9 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 func (r *MonthsOnSides) dailyNotesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	for _, day := range r.calendarYear.Days() {
+	for _, day := range r.texYear.Days() {
 		header := r.
-			headerWithTitle(day.Format("Monday, _2")).
+			headerWithTitle(day.NameAndDate()).
 			apply(headerSelectMonths(day.Month()))
 
 		if err := buffer.WriteBlocks(header, dailyNotesContents{day: day}); err != nil {
@@ -204,9 +202,9 @@ func (r *MonthsOnSides) dailyNotesSection() (*bytes.Buffer, error) {
 func (r *MonthsOnSides) dailyReflectSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	for _, day := range r.calendarYear.Days() {
+	for _, day := range r.texYear.Days() {
 		header := r.
-			headerWithTitle(day.Format("Monday, _2")).
+			headerWithTitle(day.NameAndDate()).
 			apply(headerSelectMonths(day.Month()))
 
 		if err := buffer.WriteBlocks(header, dailyReflectContents{day: day}); err != nil {

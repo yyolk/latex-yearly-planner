@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
+	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
 type dailyContents struct {
-	day calendar.Day
+	day texcalendar.Day
 }
 
 func (m dailyContents) Build() ([]string, error) {

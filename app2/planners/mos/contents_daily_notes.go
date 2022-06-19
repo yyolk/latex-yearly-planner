@@ -1,9 +1,11 @@
 package mos
 
-import "github.com/kudrykv/latex-yearly-planner/lib/calendar"
+import (
+	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
+)
 
 type dailyNotesContents struct {
-	day calendar.Day
+	day texcalendar.Day
 }
 
 func (d dailyNotesContents) Build() ([]string, error) {
