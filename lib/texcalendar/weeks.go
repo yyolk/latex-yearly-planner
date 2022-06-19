@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
@@ -100,9 +101,21 @@ func (r Week) Row() []string {
 		weekName = `\rotatebox[origin=tr]{90}{\makebox[2cm][c]{` + "Week " + weekName + `}}`
 	}
 
+	weekName = ref.NewLinkWithRef(weekName, r.Ref()).Build()
+
 	if r.hand == common.LeftHand {
 		return append(r.weekDays(), weekName)
 	}
 
 	return append([]string{weekName}, r.weekDays()...)
+}
+
+func (r Week) Ref() string {
+	refer := "W" + strconv.Itoa(r.week.WeekNumber())
+
+	if r.week.First() {
+		refer += "-first"
+	}
+
+	return refer
 }

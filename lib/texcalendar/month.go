@@ -2,6 +2,7 @@ package texcalendar
 
 import (
 	"strings"
+	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
@@ -13,7 +14,13 @@ type Month struct {
 }
 
 func NewMonth(month calendar.Month, hand common.MainHand) Month {
-	return Month{month: month, hand: hand}
+	mo := Month{month: month, hand: hand}
+
+	if mo.month.Month() == time.January {
+		mo.month.Weeks[0] = mo.month.Weeks[0].SetFirst()
+	}
+
+	return mo
 }
 
 func (m Month) LittleCalendar() string {

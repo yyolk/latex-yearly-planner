@@ -10,8 +10,10 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
+	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
 	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
+	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
 type MonthsOnSides struct {
@@ -138,8 +140,10 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	for _, week := range r.calendarYear.InWeeks() {
+		title := "Week " + strconv.Itoa(week.WeekNumber())
+		texWeek := texcalendar.NewWeek(r.layout.Hand, week, false)
 		header := r.
-			headerWithTitle("Week " + strconv.Itoa(week.WeekNumber())).
+			headerWithTitle(ref.NewTargetWithRef(title, texWeek.Ref()).Build()).
 			apply(headerSelectMonths(r.highlightedMonths(week)...))
 
 		if err := buffer.WriteBlocks(header, weeklyContents{week: week}); err != nil {
