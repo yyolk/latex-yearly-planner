@@ -22,13 +22,13 @@ func FromDay(day Day) WeekOption {
 
 func FromTime(moment time.Time) WeekOption {
 	return func() Week {
-		return Week{Days: [daysInWeek]Day{{Time: moment}}}.fillFromFirstDay()
+		return Week{Days: [daysInWeek]Day{{moment: moment}}}.fillFromFirstDay()
 	}
 }
 
 func FromMonth(year int, mo time.Month, wd time.Weekday) WeekOption {
 	return func() Week {
-		day := Day{Time: time.Date(year, mo, 1, 0, 0, 0, 0, time.Local)}
+		day := Day{moment: time.Date(year, mo, 1, 0, 0, 0, 0, time.Local)}
 		week := Week{} //nolint:exhaustivestruct
 
 		pos := (day.Weekday() - wd + daysInWeek) % daysInWeek
