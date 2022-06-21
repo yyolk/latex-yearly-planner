@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
@@ -36,7 +37,7 @@ func (m dailyContents) prioritiesAndNotesColumn() string {
 	return `\begin{minipage}[t]{\dimexpr2\myLengthThreeColumnWidth+\myLengthThreeColumnsSeparatorWidth}
 \myUnderline{Top Priorities}
 ` + strings.Join(priorities, "\n") + `
-\vskip7mm\myUnderline{Notes}
+\vskip7mm\myUnderline{Notes | ` + ref.NewLinkWithRef("More", m.day.Ref()+"-notes").Build() + `}
 \vspace{5mm}\hspace{.5mm}\vbox to 0mm{\myDotGrid{30}{19}}
 \end{minipage}`
 }

@@ -182,9 +182,15 @@ func (r *MonthsOnSides) dailyNotesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	for _, day := range r.year.Days() {
+		week := day.Week()
+		weekCell := cell.New(week.Title()).RefAs(week.Ref())
+
 		header := r.
-			headerWithTitle(day.NameAndDate()).
-			apply(headerSelectMonths(day.Month()))
+			headerWithTitle(ref.NewLinkWithRef(day.NameAndDate(), day.Ref()).Build()+ref.NewTargetWithRef("", day.Ref()+"-notes").Build()).
+			apply(
+				headerSelectMonths(day.Month()),
+				headerAddAction(weekCell),
+			)
 
 		if err := buffer.WriteBlocks(header, dailyNotesContents{day: day}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
