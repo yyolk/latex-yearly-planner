@@ -13,13 +13,13 @@ type header struct {
 	year   texcalendar.Year
 	layout common.Layout
 
-	title   string
-	actions []string
-	ui      mosUI
+	title string
+	ui    mosUI
 
 	selectedQuarter texcalendar.Quarter
 	selectedMonths  []time.Month
 	hand            common.MainHand
+	action          cell.Cells
 }
 
 type headerOption func(*header)
@@ -54,14 +54,21 @@ func headerWithTitle(left string) headerOption {
 	}
 }
 
-func headerWithActions(actions []string) headerOption {
+func headerWithActions(cells cell.Cells) headerOption {
 	return func(header *header) {
-		if len(actions) == 0 {
+		header.action = cells
+	}
+}
+
+func headerAddAction(cell cell.Cell) headerOption {
+	return func(header *header) {
+		if header.hand == common.LeftHand {
+			header.action = header.action.Push(cell)
+
 			return
 		}
 
-		header.actions = make([]string, len(actions))
-		copy(header.actions, actions)
+		header.action = header.action.Shift(cell)
 	}
 }
 
@@ -78,13 +85,13 @@ func headerSelectMonths(months ...time.Month) headerOption {
 }
 
 func (r header) Build() ([]string, error) {
-	tabularFormat := `@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(r.actions)), ""), "|") + `|@{}`
+	tabularFormat := `@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(r.action)), ""), "|") + `|@{}`
 
 	left := `\Huge ` + r.title
-	right := strings.Join(r.actions, " & ")
+	right := strings.Join(r.action.Slice(), " & ")
 
 	if r.hand == common.LeftHand {
-		tabularFormat = `@{}|` + strings.Join(strings.Split(strings.Repeat("l", len(r.actions)), ""), "|") + `Yr@{}`
+		tabularFormat = `@{}|` + strings.Join(strings.Split(strings.Repeat("l", len(r.action)), ""), "|") + `Yr@{}`
 
 		left, right = right, left
 	}

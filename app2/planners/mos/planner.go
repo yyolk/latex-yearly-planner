@@ -164,20 +164,11 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 	for _, day := range r.year.Days() {
 		week := day.Week()
 		weekCell := cell.New(week.Title()).RefAs(week.Ref())
-		actions := r.rightCells()
 
-		if r.layout.Hand == common.LeftHand {
-			actions = actions.Push(weekCell)
-		} else {
-			actions = actions.Shift(weekCell)
-		}
-
-		header := r.baseHeader().
-			apply(
-				headerWithTitle(ref.NewTargetWithRef(day.NameAndDate(), day.Ref()).Build()),
-				headerWithActions(actions.Slice()),
-				headerSelectMonths(day.Month()),
-			)
+		header := r.headerWithTitle(ref.NewTargetWithRef(day.NameAndDate(), day.Ref()).Build()).apply(
+			headerSelectMonths(day.Month()),
+			headerAddAction(weekCell),
+		)
 
 		if err := buffer.WriteBlocks(header, dailyContents{hand: r.layout.Hand, day: day}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
@@ -264,7 +255,7 @@ func (r *MonthsOnSides) headerWithTitle(title string) header {
 func (r *MonthsOnSides) headerWithTitleAndSelection(title string, selectText string) header {
 	return r.baseHeader().apply(
 		headerWithTitle(title),
-		headerWithActions(r.rightCells().Ref(selectText).Slice()),
+		headerWithActions(r.rightCells().Ref(selectText)),
 	)
 }
 
