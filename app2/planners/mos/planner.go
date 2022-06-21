@@ -162,10 +162,20 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	for _, day := range r.year.Days() {
+		week := day.Week()
+		weekCell := cell.New(week.Title()).RefAs(week.Ref())
+		actions := r.rightCells()
+
+		if r.layout.Hand == common.LeftHand {
+			actions = actions.Push(weekCell)
+		} else {
+			actions = actions.Shift(weekCell)
+		}
+
 		header := r.baseHeader().
 			apply(
 				headerWithTitle(ref.NewTargetWithRef(day.NameAndDate(), day.Ref()).Build()),
-				headerWithActions(r.rightCells().Push(cell.New("lala")).Slice()),
+				headerWithActions(actions.Slice()),
 				headerSelectMonths(day.Month()),
 			)
 

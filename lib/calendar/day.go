@@ -6,6 +6,10 @@ type Days []Day
 
 type Day struct {
 	moment time.Time
+
+	week    *Week
+	month   *Month
+	quarter *Quarter
 }
 
 func NewDay(moment time.Time) Day {
@@ -42,4 +46,16 @@ func (h Day) Format(format string) string {
 
 func (h Day) Day() int {
 	return h.moment.Day()
+}
+
+func (h Day) Week() *Week {
+	return h.week
+}
+
+func (h Day) enrich(week Week, month Month, quarter Quarter) Day {
+	h.week = &week
+	h.month = &month
+	h.quarter = &quarter
+
+	return h
 }

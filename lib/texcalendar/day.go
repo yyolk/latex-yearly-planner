@@ -3,24 +3,11 @@ package texcalendar
 import (
 	"time"
 
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
 type Days []Day
-
-func NewDays(days []calendar.Day) Days {
-	if len(days) == 0 {
-		return nil
-	}
-
-	out := make(Days, 0, len(days))
-
-	for _, day := range days {
-		out = append(out, NewDay(day))
-	}
-
-	return out
-}
 
 type Day struct {
 	Day calendar.Day
@@ -40,4 +27,8 @@ func (d Day) Ref() string {
 
 func (d Day) Month() time.Month {
 	return d.Day.Month()
+}
+
+func (d Day) Week() Week {
+	return NewWeek(common.RightHand, *d.Day.Week(), false)
 }
