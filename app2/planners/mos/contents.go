@@ -68,7 +68,14 @@ func (m dailyContents) height() string {
 type todoIndex struct{}
 
 func (i todoIndex) Build() ([]string, error) {
-	return []string{"index"}, nil
+	return []string{
+		`\vskip1mm\begin{minipage}[t]{\myLengthTwoColumnWidth}
+\end{minipage}%
+\hspace{\myLengthTwoColumnsSeparatorWidth}%
+\begin{minipage}[t]{\myLengthTwoColumnWidth}
+foo bar baz
+\end{minipage}`,
+	}, nil
 }
 
 type todoContents struct{}

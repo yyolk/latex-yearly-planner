@@ -43,6 +43,12 @@ const document = `\documentclass[9pt]{extarticle}
 \setlength{\myLenLineThicknessDefault}{.4pt}
 \setlength{\myLenLineThicknessThick}{.8pt}
 
+\newlength{\myLengthTwoColumnsSeparatorWidth}
+\setlength{\myLengthTwoColumnsSeparatorWidth}{ {{- .Layout.Sizes.TwoColumnsSeparatorSize -}} }
+
+\newlength{\myLengthTwoColumnWidth}
+\setlength{\myLengthTwoColumnWidth}{\dimexpr.5\textwidth-.5\myLengthTwoColumnsSeparatorWidth}
+
 \newlength{\myLengthThreeColumnsSeparatorWidth}
 \setlength{\myLengthThreeColumnsSeparatorWidth}{ {{- .Layout.Sizes.ThreeColumnsSeparatorSize -}} }
 
