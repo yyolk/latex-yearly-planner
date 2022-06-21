@@ -34,10 +34,13 @@ func (m dailyContents) prioritiesAndNotesColumn() string {
 		priorities = append(priorities, m.height()+`$\square$\myLineGray`)
 	}
 
+	moreNotes := ref.NewLinkWithRef("More", m.day.Ref()+"-notes").Build()
+	dailyReflect := ref.NewLinkWithRef("Reflect", m.day.Ref()+"-reflect").Build()
+
 	return `\begin{minipage}[t]{\dimexpr2\myLengthThreeColumnWidth+\myLengthThreeColumnsSeparatorWidth}
 \myUnderline{Top Priorities}
 ` + strings.Join(priorities, "\n") + `
-\vskip7mm\myUnderline{Notes | ` + ref.NewLinkWithRef("More", m.day.Ref()+"-notes").Build() + `}
+\vskip7mm\myUnderline{Notes | ` + moreNotes + ` \hfill{}` + dailyReflect + `}
 \vspace{5mm}\hspace{.5mm}\vbox to 0mm{\myDotGrid{30}{19}}
 \end{minipage}`
 }
