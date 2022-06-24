@@ -245,12 +245,12 @@ func (r *MonthsOnSides) notesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 	header := r.headerWithTitleAndSelection("Notes Index", notesText)
 
-	if err := buffer.WriteBlocks(header, notesIndex{}); err != nil {
+	if err := buffer.WriteBlocks(header.repeat(2), todoIndex{}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
-	for i := 1; i <= 100; i++ {
-		header := r.headerWithTitle(strconv.Itoa(i))
+	for i := 1; i <= 115; i++ {
+		header := r.headerWithTitle("Note " + strconv.Itoa(i))
 
 		if err := buffer.WriteBlocks(header, notesContents{}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)

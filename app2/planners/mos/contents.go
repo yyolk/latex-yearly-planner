@@ -65,14 +65,8 @@ func (m dailyContents) height() string {
 	return `\parbox{0pt}{\vskip5mm}`
 }
 
-type notesIndex struct{}
-
-func (r notesIndex) Build() ([]string, error) {
-	return []string{"notes index"}, nil
-}
-
 type notesContents struct{}
 
 func (r notesContents) Build() ([]string, error) {
-	return []string{"notes"}, nil
+	return []string{`\vskip5mm\hspace{0.5mm}\vbox to 0mm{\myDotGrid{41}{29}}`}, nil
 }
