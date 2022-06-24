@@ -49,7 +49,7 @@ func (m Month) LittleCalendar() string {
 func (m Month) LargeCalendar() string {
 	weeks := NewWeeks(m.month.Weeks, WithParameters(m.parameters))
 	weekdays := strings.Join(weeks.WeekdaysFullNames(), ` & `)
-	weeksMatrix := m.tabulate(weeks.Matrix(), `\\ \hline`)
+	weeksMatrix := m.tabulate(weeks.BuildLargeCalMatrix(), `\\ \hline`)
 
 	return `\renewcommand{\arraystretch}{0}%` + "\n" +
 		`%\setlength{\tabcolsep}{0pt}%` + "\n" +

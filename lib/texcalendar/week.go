@@ -26,7 +26,7 @@ func NewWeek(week calendar.Week, options ...ApplyToParameters) Week {
 }
 
 func (r Week) Tabular() string {
-	return strings.Join(r.Row(), " & ")
+	return strings.Join(r.BuildLargeCalRow(), " & ")
 }
 
 func (r Week) weekDays() []string {
@@ -49,22 +49,6 @@ func (r Week) weekDays() []string {
 	}
 
 	return names
-}
-
-func (r Week) Row() []string {
-	weekName := strconv.Itoa(r.week.WeekNumber())
-
-	if r.parameters.ForLarge {
-		weekName = `\rotatebox[origin=tr]{90}{\makebox[2cm][c]{` + "Week " + weekName + `}}`
-	}
-
-	weekName = ref.NewLinkWithRef(weekName, r.Ref()).Build()
-
-	if r.parameters.Hand == common.LeftHand {
-		return append(r.weekDays(), weekName)
-	}
-
-	return append([]string{weekName}, r.weekDays()...)
 }
 
 func (r Week) Ref() string {
@@ -105,6 +89,13 @@ func (r Week) TailMonth() time.Month {
 
 func (r Week) HeadMonth() time.Month {
 	return r.week.HeadMonth()
+}
+
+func (r Week) BuildLargeCalRow() []string {
+	weekName := `\rotatebox[origin=tr]{90}{\makebox[2cm][c]{` + "Week " + strconv.Itoa(r.week.WeekNumber()) + `}}`
+	weekName = ref.NewLinkWithRef(weekName, r.Ref()).Build()
+
+	return r.appendWeekName(weekName)
 }
 
 func (r Week) BuildLittleCalRow() []string {

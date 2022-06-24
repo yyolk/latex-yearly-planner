@@ -96,11 +96,11 @@ func (r Weeks) BuildLittleCalMatrix() [][]string {
 	return rows
 }
 
-func (r Weeks) Matrix() [][]string {
+func (r Weeks) BuildLargeCalMatrix() [][]string {
 	rows := make([][]string, 0, len(r.weeks))
 
 	for _, week := range r.weeks {
-		rows = append(rows, NewWeek(week, WithParameters(r.parameters)).Row())
+		rows = append(rows, NewWeek(week, WithParameters(r.parameters)).BuildLargeCalRow())
 	}
 
 	return rows
