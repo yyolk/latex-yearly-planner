@@ -89,20 +89,21 @@ func headerSelectMonths(months ...time.Month) headerOption {
 func (r header) Build() ([]string, error) {
 	tabularFormat := `@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(r.action)), ""), "|") + `|@{}`
 
-	left := `\Huge ` + r.title
+	left := `\Huge ` + r.title + `{\color{white}{Q}}`
 	right := strings.Join(r.action.Slice(), " & ")
 
 	if r.hand == common.LeftHand {
 		tabularFormat = `@{}|` + strings.Join(strings.Split(strings.Repeat("l", len(r.action)), ""), "|") + `Yr@{}`
 
-		left, right = right, left
+		left = right
+		right = `\Huge {\color{white}{Q}}` + r.title
 	}
 
 	s := `\marginnote{\rotatebox[origin=tr]{90}{%
 \renewcommand{\arraystretch}{` + r.ui.HeaderMarginNotesArrayStretch + `}` + r.months() + `\qquad{}` + r.quarters() + `%
 }}%
 {\renewcommand{\arraystretch}{` + r.ui.HeaderArrayStretch + `}\begin{tabularx}{\linewidth}{` + tabularFormat + `}
-` + left + `{\Huge\color{white}{Q}} & & ` + right + ` \\ \hline
+` + left + ` & & ` + right + ` \\ \hline
 \end{tabularx}}
 
 `
