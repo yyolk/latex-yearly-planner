@@ -230,8 +230,8 @@ func (r *MonthsOnSides) toDoSection() (*bytes.Buffer, error) {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
-	for i := 1; i <= 100; i++ {
-		header := r.headerWithTitle(strconv.Itoa(i))
+	for i := 1; i <= 115; i++ {
+		header := r.headerWithTitle(ref.NewTargetWithRef("To Do "+strconv.Itoa(i), "todo-"+strconv.Itoa(i)).Build())
 
 		if err := buffer.WriteBlocks(header, todoContents{}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
