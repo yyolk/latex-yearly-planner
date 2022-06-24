@@ -34,7 +34,7 @@ func NewMonth(month calendar.Month, options ...ApplyToParameters) Month {
 func (m Month) LittleCalendar() string {
 	monthName := m.month.Month().String()
 	weekdays := strings.Join(append([]string{"W"}, m.weekdaysShort()...), ` & `)
-	weeksMatrix := m.tabulate(NewWeeks(m.parameters.Hand, m.month.Weeks, false).Matrix(), `\\`)
+	weeksMatrix := m.tabulate(NewWeeks(m.month.Weeks, WithParameters(m.parameters)).Matrix(), `\\`)
 
 	return `\renewcommand{\arraystretch}{1.5}%` + "\n" +
 		`%\setlength{\tabcolsep}{3.5pt}%` + "\n" +
@@ -46,7 +46,7 @@ func (m Month) LittleCalendar() string {
 }
 
 func (m Month) LargeCalendar() string {
-	weeks := NewWeeks(m.parameters.Hand, m.month.Weeks, true)
+	weeks := NewWeeks(m.month.Weeks, WithParameters(m.parameters))
 	weekdays := strings.Join(weeks.Weekdays(), ` & `)
 	weeksMatrix := m.tabulate(weeks.Matrix(), `\\ \hline`)
 

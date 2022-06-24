@@ -3,7 +3,6 @@ package texcalendar
 import (
 	"time"
 
-	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
@@ -30,5 +29,5 @@ func (d Day) Month() time.Month {
 }
 
 func (d Day) Week() Week {
-	return NewWeek(common.RightHand, *d.Day.Week(), false)
+	return NewWeek(*d.Day.Week())
 }

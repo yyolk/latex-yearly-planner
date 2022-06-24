@@ -11,13 +11,18 @@ import (
 )
 
 type Weeks struct {
-	weeks    calendar.Weeks
-	hand     common.MainHand
-	forLarge bool
+	weeks      calendar.Weeks
+	parameters Parameters
 }
 
-func NewWeeks(hand common.MainHand, weeks calendar.Weeks, forLarge bool) Weeks {
-	return Weeks{hand: hand, weeks: weeks, forLarge: forLarge}
+func NewWeeks(weeks calendar.Weeks, options ...ApplyToParameters) Weeks {
+	parameters := Parameters{}
+
+	for _, option := range options {
+		option(&parameters)
+	}
+
+	return Weeks{weeks: weeks, parameters: parameters}
 }
 
 func (r Weeks) Weekdays() []string {
@@ -30,7 +35,7 @@ func (r Weeks) Weekdays() []string {
 		weekdays = append(weekdays, `\hfil{}`+day.Weekday().String())
 	}
 
-	if r.hand == common.RightHand {
+	if r.parameters.Hand == common.RightHand {
 		weekdays = append([]string{"W"}, weekdays...)
 	} else {
 		weekdays = append(weekdays, "W")
@@ -43,7 +48,7 @@ func (r Weeks) Tabular() string {
 	out := make([]string, 0, len(r.weeks))
 
 	for _, week := range r.weeks {
-		out = append(out, NewWeek(r.hand, week, r.forLarge).Tabular())
+		out = append(out, NewWeek(week, WithParameters(r.parameters)).Tabular())
 	}
 
 	return strings.Join(out, `\\`+"\n")
@@ -53,20 +58,25 @@ func (r Weeks) Matrix() [][]string {
 	rows := make([][]string, 0, len(r.weeks))
 
 	for _, week := range r.weeks {
-		rows = append(rows, NewWeek(r.hand, week, r.forLarge).Row())
+		rows = append(rows, NewWeek(week, WithParameters(r.parameters)).Row())
 	}
 
 	return rows
 }
 
 type Week struct {
-	week     calendar.Week
-	hand     common.MainHand
-	forLarge bool
+	week       calendar.Week
+	parameters Parameters
 }
 
-func NewWeek(hand common.MainHand, week calendar.Week, forLarge bool) Week {
-	return Week{hand: hand, week: week, forLarge: forLarge}
+func NewWeek(week calendar.Week, options ...ApplyToParameters) Week {
+	parameters := Parameters{}
+
+	for _, option := range options {
+		option(&parameters)
+	}
+
+	return Week{week: week, parameters: parameters}
 }
 
 func (r Week) Tabular() string {
@@ -85,7 +95,7 @@ func (r Week) weekDays() []string {
 
 		name := strconv.Itoa(day.Day())
 
-		if r.forLarge {
+		if r.parameters.ForLarge {
 			name = `{\renewcommand{\arraystretch}{1.2}\begin{tabular}{@{}p{5mm}@{}|}\hfil{}` + name + `\\ \hline\end{tabular}}`
 		}
 
@@ -98,13 +108,13 @@ func (r Week) weekDays() []string {
 func (r Week) Row() []string {
 	weekName := strconv.Itoa(r.week.WeekNumber())
 
-	if r.forLarge {
+	if r.parameters.ForLarge {
 		weekName = `\rotatebox[origin=tr]{90}{\makebox[2cm][c]{` + "Week " + weekName + `}}`
 	}
 
 	weekName = ref.NewLinkWithRef(weekName, r.Ref()).Build()
 
-	if r.hand == common.LeftHand {
+	if r.parameters.Hand == common.LeftHand {
 		return append(r.weekDays(), weekName)
 	}
 
