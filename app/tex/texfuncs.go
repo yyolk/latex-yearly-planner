@@ -24,6 +24,10 @@ func Tabular(format, text string) string {
 	return `\begin{tabular}{` + format + `}` + nl + text + nl + `\end{tabular}`
 }
 
+func TabularXLineWidth(format, text string) string {
+	return `\begin{tabularx}{\linewidth}{` + format + `}` + nl + text + nl + `\end{tabularx}`
+}
+
 func ResizeBoxW(width, text string) string {
 	return fmt.Sprintf(`\resizebox{!}{%s}{%s}`, width, text)
 }

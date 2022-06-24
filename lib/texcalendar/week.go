@@ -29,38 +29,6 @@ func (r Week) Tabular() string {
 	return strings.Join(r.BuildLargeCalRow(), " & ")
 }
 
-func (r Week) buildWeekdaysLittle() []string {
-	names := make([]string, 0, 7)
-
-	for _, day := range r.week.Days() {
-		if day.IsZero() {
-			names = append(names, "")
-
-			continue
-		}
-
-		name := strconv.Itoa(day.Day())
-
-		if r.parameters.ForLarge {
-			name = `{\renewcommand{\arraystretch}{1.2}\begin{tabular}{@{}p{5mm}@{}|}\hfil{}` + name + `\\ \hline\end{tabular}}`
-		}
-
-		names = append(names, ref.NewLinkWithRef(name, NewDay(day).Ref()).Build())
-	}
-
-	return names
-}
-
-func (r Week) buildWeekdays() Days {
-	weekdays := make(Days, 0, 7)
-
-	for _, day := range r.week.Days() {
-		weekdays = append(weekdays, NewDay(day, WithParameters(r.parameters)))
-	}
-
-	return weekdays
-}
-
 func (r Week) Ref() string {
 	refer := "W" + strconv.Itoa(r.week.WeekNumber())
 

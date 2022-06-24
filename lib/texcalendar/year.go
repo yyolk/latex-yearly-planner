@@ -4,6 +4,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/kudrykv/latex-yearly-planner/app/tex"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
@@ -27,14 +28,10 @@ func (r Year) BuildCalendar() string {
 
 	for _, quarter := range r.year.GetQuarters() {
 		row := NewQuarter(quarter, WithParameters(r.parameters)).Row()
-		quarterRows = append(quarterRows, r.tabulateRow(row))
+		quarterRows = append(quarterRows, tex.TabularXLineWidth("@{}*{3}{X}@{}", row))
 	}
 
 	return strings.Join(quarterRows, "\n"+`\vfill`+"\n")
-}
-
-func (r Year) tabulateRow(row string) string {
-	return `\begin{tabularx}{\linewidth}{@{}*{3}{X}@{}}` + "\n" + row + "\n" + `\end{tabularx}`
 }
 
 func (r Year) Months() Months {
