@@ -7,13 +7,14 @@ import (
 )
 
 type Parameters struct {
-	Hand    common.MainHand
-	Weekday time.Weekday
+	Hand       common.MainHand
+	Weekday    time.Weekday
+	FirstMonth time.Month
 }
 
 type ApplyToParameters func(*Parameters)
 
-func withParameters(externalParameters Parameters) ApplyToParameters {
+func WithParameters(externalParameters Parameters) ApplyToParameters {
 	return func(parameters *Parameters) {
 		*parameters = externalParameters
 	}

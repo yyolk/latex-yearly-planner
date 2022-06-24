@@ -11,14 +11,21 @@ import (
 type Months []Month
 
 type Month struct {
-	month calendar.Month
-	hand  common.MainHand
+	month      calendar.Month
+	hand       common.MainHand
+	parameters Parameters
 }
 
-func NewMonth(hand common.MainHand, month calendar.Month) Month {
-	mo := Month{month: month, hand: hand}
+func NewMonth(month calendar.Month, options ...ApplyToParameters) Month {
+	parameters := Parameters{}
 
-	if mo.month.Month() == time.January {
+	for _, option := range options {
+		option(&parameters)
+	}
+
+	mo := Month{parameters: parameters, month: month}
+
+	if mo.month.Month() == parameters.FirstMonth {
 		mo.month.Weeks[0] = mo.month.Weeks[0].SetFirst()
 	}
 

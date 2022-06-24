@@ -33,7 +33,11 @@ func New(params common.Params) MonthsOnSides {
 	return MonthsOnSides{
 		weekday: params.Weekday,
 
-		year: texcalendar.NewYear(params.Year, texcalendar.WithHand(params.Hand), texcalendar.WithWeekday(params.Weekday)),
+		year: texcalendar.NewYear(params.Year, texcalendar.WithParameters(texcalendar.Parameters{
+			Hand:       params.Hand,
+			Weekday:    params.Weekday,
+			FirstMonth: time.January,
+		})),
 	}
 }
 
