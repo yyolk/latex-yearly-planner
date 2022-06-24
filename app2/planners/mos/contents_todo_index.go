@@ -5,9 +5,11 @@ import (
 	"strings"
 )
 
-type todoIndex struct{}
+type index struct {
+	refPrefix string
+}
 
-func (i todoIndex) Build() ([]string, error) {
+func (i index) Build() ([]string, error) {
 	return []string{
 		`\vskip1mm\begin{minipage}[t]{\myLengthTwoColumnWidth}
 ` + strings.Join(i.todoCol(1, 29), "\n") + `
@@ -26,12 +28,12 @@ func (i todoIndex) Build() ([]string, error) {
 	}, nil
 }
 
-func (i todoIndex) todoCol(from, to int) []string {
+func (r index) todoCol(from, to int) []string {
 	var col []string
 
 	for i := from; i <= to; i++ {
 		itoa := strconv.Itoa(i)
-		linked := `\hyperlink{todo-` + itoa + `}{\parbox{1cm}{` + itoa + `.}}`
+		linked := `\hyperlink{` + r.refPrefix + `-` + itoa + `}{\parbox{1cm}{` + itoa + `.}}`
 		col = append(col, `\parbox{0pt}{\vskip7mm}`+linked+`\myLineGray`)
 	}
 	return col
