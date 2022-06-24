@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app/tex"
-	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
@@ -26,19 +25,25 @@ func (q Quarters) Reverse() Quarters {
 }
 
 type Quarter struct {
-	quarter calendar.Quarter
-	hand    common.MainHand
+	quarter    calendar.Quarter
+	parameters Parameters
 }
 
-func NewQuarter(hand common.MainHand, quarter calendar.Quarter) Quarter {
-	return Quarter{hand: hand, quarter: quarter}
+func NewQuarter(quarter calendar.Quarter, options ...ApplyToParameters) Quarter {
+	parameters := Parameters{}
+
+	for _, option := range options {
+		option(&parameters)
+	}
+
+	return Quarter{parameters: parameters, quarter: quarter}
 }
 
 func (q Quarter) Row() string {
 	monthsRow := make([]string, 0, len(q.quarter.Months))
 
 	for _, month := range q.quarter.Months {
-		littleCalendar := NewMonth(q.hand, month).LittleCalendar()
+		littleCalendar := NewMonth(q.parameters.Hand, month).LittleCalendar()
 		monthsRow = append(monthsRow, tex.AdjustBox(littleCalendar))
 	}
 
@@ -49,7 +54,7 @@ func (q Quarter) Column() string {
 	months := make([]string, 0, 3)
 
 	for _, month := range q.quarter.Months {
-		months = append(months, NewMonth(q.hand, month).LittleCalendar())
+		months = append(months, NewMonth(q.parameters.Hand, month).LittleCalendar())
 	}
 
 	return strings.Join(months, "\n\\vfill\n")

@@ -26,7 +26,7 @@ func (r Year) BuildCalendar() string {
 	quarterRows := make([]string, 0, len(r.year.Quarters))
 
 	for _, quarter := range r.year.GetQuarters() {
-		row := NewQuarter(r.parameters.Hand, quarter).Row()
+		row := NewQuarter(quarter, withParameters(r.parameters)).Row()
 		quarterRows = append(quarterRows, r.tabulateRow(row))
 	}
 
@@ -51,7 +51,7 @@ func (r Year) Quarters() Quarters {
 	quaters := make(Quarters, 0, 4)
 
 	for _, quarter := range r.year.GetQuarters() {
-		quaters = append(quaters, NewQuarter(r.parameters.Hand, quarter))
+		quaters = append(quaters, NewQuarter(quarter, withParameters(r.parameters)))
 	}
 
 	return quaters

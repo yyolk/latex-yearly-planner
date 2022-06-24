@@ -13,6 +13,12 @@ type Parameters struct {
 
 type ApplyToParameters func(*Parameters)
 
+func withParameters(externalParameters Parameters) ApplyToParameters {
+	return func(parameters *Parameters) {
+		*parameters = externalParameters
+	}
+}
+
 func WithHand(hand common.MainHand) ApplyToParameters {
 	return func(parameters *Parameters) {
 		parameters.Hand = hand
