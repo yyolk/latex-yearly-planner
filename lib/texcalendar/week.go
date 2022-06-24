@@ -29,7 +29,7 @@ func (r Week) Tabular() string {
 	return strings.Join(r.BuildLargeCalRow(), " & ")
 }
 
-func (r Week) weekDays() []string {
+func (r Week) buildWeekdaysLittle() []string {
 	names := make([]string, 0, 7)
 
 	for _, day := range r.week.Days() {
@@ -49,6 +49,16 @@ func (r Week) weekDays() []string {
 	}
 
 	return names
+}
+
+func (r Week) buildWeekdays() Days {
+	weekdays := make(Days, 0, 7)
+
+	for _, day := range r.week.Days() {
+		weekdays = append(weekdays, NewDay(day, WithParameters(r.parameters)))
+	}
+
+	return weekdays
 }
 
 func (r Week) Ref() string {
@@ -95,19 +105,19 @@ func (r Week) BuildLargeCalRow() []string {
 	weekName := `\rotatebox[origin=tr]{90}{\makebox[2cm][c]{` + "Week " + strconv.Itoa(r.week.WeekNumber()) + `}}`
 	weekName = ref.NewLinkWithRef(weekName, r.Ref()).Build()
 
-	return r.appendWeekName(weekName)
+	return r.appendWeekName(weekName, r.week.Days().BuildLarge())
 }
 
 func (r Week) BuildLittleCalRow() []string {
 	weekName := ref.NewLinkWithRef(strconv.Itoa(r.week.WeekNumber()), r.Ref()).Build()
 
-	return r.appendWeekName(weekName)
+	return r.appendWeekName(weekName, r.week.Days().BuildLittle())
 }
 
-func (r Week) appendWeekName(name string) []string {
+func (r Week) appendWeekName(name string, weekdays []string) []string {
 	if r.parameters.Hand == common.LeftHand {
-		return append(r.weekDays(), name)
+		return append(weekdays, name)
 	}
 
-	return append([]string{name}, r.weekDays()...)
+	return append([]string{name}, weekdays...)
 }
