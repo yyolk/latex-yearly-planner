@@ -27,24 +27,23 @@ func NewYearFromInt(hand common.MainHand, year int, weekday time.Weekday) Year {
 func (r Year) BuildCalendar() string {
 	quarterRows := make([]string, 0, len(r.year.Quarters))
 
-	tabular := func(str string) string {
-		return `\begin{tabularx}{\linewidth}{@{}*{3}{X}@{}}` + "\n" +
-			str +
-			"\n" + `\end{tabularx}`
-	}
-
-	for _, quarter := range r.year.Quarters {
-		quarterRows = append(quarterRows, tabular(NewQuarter(r.hand, quarter).Row()))
+	for _, quarter := range r.year.GetQuarters() {
+		row := NewQuarter(r.hand, quarter).Row()
+		quarterRows = append(quarterRows, r.tabulateRow(row))
 	}
 
 	return strings.Join(quarterRows, "\n"+`\vfill`+"\n")
+}
+
+func (r Year) tabulateRow(row string) string {
+	return `\begin{tabularx}{\linewidth}{@{}*{3}{X}@{}}` + "\n" + row + "\n" + `\end{tabularx}`
 }
 
 func (r Year) Months() Months {
 	months := make(Months, 0, 12)
 
 	for _, month := range r.year.Months() {
-		months = append(months, NewMonth(month, r.hand))
+		months = append(months, NewMonth(r.hand, month))
 	}
 
 	return months

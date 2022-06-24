@@ -15,7 +15,7 @@ type Month struct {
 	hand  common.MainHand
 }
 
-func NewMonth(month calendar.Month, hand common.MainHand) Month {
+func NewMonth(hand common.MainHand, month calendar.Month) Month {
 	mo := Month{month: month, hand: hand}
 
 	if mo.month.Month() == time.January {
