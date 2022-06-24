@@ -4,6 +4,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/kudrykv/latex-yearly-planner/app2/pages"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
@@ -20,6 +21,7 @@ type header struct {
 	selectedMonths  []time.Month
 	hand            common.MainHand
 	action          cell.Cells
+	rep             int
 }
 
 type headerOption func(*header)
@@ -96,16 +98,23 @@ func (r header) Build() ([]string, error) {
 		left, right = right, left
 	}
 
-	return []string{
-		`\marginnote{\rotatebox[origin=tr]{90}{%
+	s := `\marginnote{\rotatebox[origin=tr]{90}{%
 \renewcommand{\arraystretch}{` + r.ui.HeaderMarginNotesArrayStretch + `}` + r.months() + `\qquad{}` + r.quarters() + `%
 }}%
 {\renewcommand{\arraystretch}{` + r.ui.HeaderArrayStretch + `}\begin{tabularx}{\linewidth}{` + tabularFormat + `}
 ` + left + `{\Huge\color{white}{Q}} & & ` + right + ` \\ \hline
 \end{tabularx}}
 
-`,
-	}, nil
+`
+
+	var out []string
+	out = append(out, s)
+
+	for i := 1; i < r.rep; i++ {
+		out = append(out, s)
+	}
+
+	return out, nil
 }
 
 func (r header) months() string {
@@ -159,4 +168,10 @@ func (r header) maybeHLineRight() string {
 	}
 
 	return ""
+}
+
+func (r header) repeat(i int) pages.Block {
+	r.rep = i
+
+	return r
 }

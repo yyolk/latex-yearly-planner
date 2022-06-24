@@ -226,7 +226,7 @@ func (r *MonthsOnSides) toDoSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 	header := r.headerWithTitleAndSelection("To Do Index", toDoText)
 
-	if err := buffer.WriteBlocks(header, todoIndex{}); err != nil {
+	if err := buffer.WriteBlocks(header.repeat(2), todoIndex{}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
