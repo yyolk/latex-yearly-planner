@@ -23,5 +23,4 @@ type item struct {
 
 var templatesToCompile = []item{
 	{Document, document},
-	{Title, title},
 }

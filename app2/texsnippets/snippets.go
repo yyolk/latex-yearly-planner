@@ -76,8 +76,3 @@ const document = `\documentclass[9pt]{extarticle}
 {{ .Files }}
 
 \end{document}`
-
-const Title = "title"
-const title = `\hspace{0pt}\vfil
-\hfill\resizebox{.7\linewidth}{!}{ {{- .Title -}} }%
-\pagebreak`
