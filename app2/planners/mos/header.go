@@ -15,7 +15,7 @@ type header struct {
 	layout common.Layout
 
 	title string
-	ui    mosUI
+	ui    ui
 
 	selectedQuarter texcalendar.Quarter
 	selectedMonths  []time.Month
@@ -26,7 +26,7 @@ type header struct {
 
 type headerOption func(*header)
 
-func newHeader(layout common.Layout, ui mosUI, options ...headerOption) header {
+func newHeader(layout common.Layout, ui ui, options ...headerOption) header {
 	return header{layout: layout, ui: ui}.apply(options...)
 }
 

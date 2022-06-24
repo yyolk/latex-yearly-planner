@@ -11,7 +11,6 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
-	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
@@ -19,7 +18,7 @@ type MonthsOnSides struct {
 	device devices.Device
 	layout common.Layout
 
-	ui      mosUI
+	ui      ui
 	weekday time.Weekday
 	year    texcalendar.Year
 }
@@ -46,16 +45,9 @@ func (r *MonthsOnSides) PrepareDetails(device devices.Device, layout common.Layo
 	r.layout = layout
 	r.device = device
 
-	switch device.(type) {
-	case *devices.SupernoteA5X:
-		r.ui = mosUI{
-			HeaderMarginNotesArrayStretch:  "2.042",
-			HeaderMarginNotesMonthsWidth:   "15.7cm",
-			HeaderMarginNotesQuartersWidth: "5cm",
-			HeaderArrayStretch:             "1.8185",
-		}
-	default:
-		return fmt.Errorf("%T: %w", device, common.UnknownDeviceTypeErr)
+	var err error
+	if r.ui, err = newUI(device); err != nil {
+		return fmt.Errorf("new ui: %w", err)
 	}
 
 	return nil
@@ -81,8 +73,8 @@ func (r MonthsOnSides) Sections() map[string]sectionFunc {
 func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	if err := texsnippets.Execute(buffer, texsnippets.Title, map[string]string{"Title": r.year.Name()}); err != nil {
-		return nil, fmt.Errorf("execute template title: %w", err)
+	if err := buffer.WriteBlocks(&titleContents{title: r.year.Name()}); err != nil {
+		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
 	return buffer.Buffer, nil
