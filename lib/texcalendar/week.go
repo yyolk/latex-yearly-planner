@@ -73,13 +73,13 @@ func (r Week) BuildLargeCalRow() []string {
 	weekName := `\rotatebox[origin=tr]{90}{\makebox[2cm][c]{` + "Week " + strconv.Itoa(r.week.WeekNumber()) + `}}`
 	weekName = ref.NewLinkWithRef(weekName, r.Ref()).Build()
 
-	return r.appendWeekName(weekName, r.week.Days().BuildLarge())
+	return r.appendWeekName(weekName, r.Days().BuildLarge())
 }
 
 func (r Week) BuildLittleCalRow() []string {
 	weekName := ref.NewLinkWithRef(strconv.Itoa(r.week.WeekNumber()), r.Ref()).Build()
 
-	return r.appendWeekName(weekName, r.week.Days().BuildLittle())
+	return r.appendWeekName(weekName, r.Days().BuildLittle())
 }
 
 func (r Week) appendWeekName(name string, weekdays []string) []string {

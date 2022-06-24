@@ -3,10 +3,45 @@ package texcalendar
 import (
 	"time"
 
+	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
 type Days []Day
+
+func (d Days) BuildLittle() []string {
+	out := make([]string, 0, len(d))
+
+	for _, day := range d {
+		if day.Day.IsZero() {
+			out = append(out, "")
+
+			continue
+		}
+
+		name := day.Day.Format("_2")
+		out = append(out, ref.NewLinkWithRef(name, day.Ref()).Build())
+	}
+
+	return out
+}
+
+func (d Days) BuildLarge() []string {
+	out := make([]string, 0, len(d))
+
+	for _, day := range d {
+		if day.Day.IsZero() {
+			out = append(out, "")
+
+			continue
+		}
+
+		name := `{\renewcommand{\arraystretch}{1.2}\begin{tabular}{@{}p{5mm}@{}|}\hfil{}` + day.Day.Format("_2") + `\\ \hline\end{tabular}}`
+		out = append(out, ref.NewLinkWithRef(name, day.Ref()).Build())
+	}
+
+	return out
+}
 
 type Day struct {
 	Day        calendar.Day

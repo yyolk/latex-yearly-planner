@@ -4,39 +4,6 @@ import "time"
 
 type Days []Day
 
-func (d Days) BuildLittle() []string {
-	out := make([]string, 0, len(d))
-
-	for _, day := range d {
-		if day.IsZero() {
-			out = append(out, "")
-
-			continue
-		}
-
-		out = append(out, day.Format("_2"))
-	}
-
-	return out
-}
-
-func (d Days) BuildLarge() []string {
-	out := make([]string, 0, len(d))
-
-	for _, day := range d {
-		if day.IsZero() {
-			out = append(out, "")
-
-			continue
-		}
-
-		name := `{\renewcommand{\arraystretch}{1.2}\begin{tabular}{@{}p{5mm}@{}|}\hfil{}` + day.Format("_2") + `\\ \hline\end{tabular}}`
-		out = append(out, name)
-	}
-
-	return out
-}
-
 type Day struct {
 	moment time.Time
 
