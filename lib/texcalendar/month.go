@@ -12,7 +12,6 @@ type Months []Month
 
 type Month struct {
 	month      calendar.Month
-	hand       common.MainHand
 	parameters Parameters
 }
 
@@ -35,7 +34,7 @@ func NewMonth(month calendar.Month, options ...ApplyToParameters) Month {
 func (m Month) LittleCalendar() string {
 	monthName := m.month.Month().String()
 	weekdays := strings.Join(append([]string{"W"}, m.weekdaysShort()...), ` & `)
-	weeksMatrix := m.tabulate(NewWeeks(m.hand, m.month.Weeks, false).Matrix(), `\\`)
+	weeksMatrix := m.tabulate(NewWeeks(m.parameters.Hand, m.month.Weeks, false).Matrix(), `\\`)
 
 	return `\renewcommand{\arraystretch}{1.5}%` + "\n" +
 		`%\setlength{\tabcolsep}{3.5pt}%` + "\n" +
@@ -47,7 +46,7 @@ func (m Month) LittleCalendar() string {
 }
 
 func (m Month) LargeCalendar() string {
-	weeks := NewWeeks(m.hand, m.month.Weeks, true)
+	weeks := NewWeeks(m.parameters.Hand, m.month.Weeks, true)
 	weekdays := strings.Join(weeks.Weekdays(), ` & `)
 	weeksMatrix := m.tabulate(weeks.Matrix(), `\\ \hline`)
 
@@ -60,7 +59,7 @@ func (m Month) LargeCalendar() string {
 }
 
 func (m Month) littleTableRule() string {
-	if m.hand == common.LeftHand {
+	if m.parameters.Hand == common.LeftHand {
 		return "*{7}{@{}Y@{}}|c"
 	}
 
@@ -68,7 +67,7 @@ func (m Month) littleTableRule() string {
 }
 
 func (m Month) largeTableRule() string {
-	if m.hand == common.LeftHand {
+	if m.parameters.Hand == common.LeftHand {
 		return `*{7}{|@{}X@{}}|@{ }c@{ }|`
 	}
 
