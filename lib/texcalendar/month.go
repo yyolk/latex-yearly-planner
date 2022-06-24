@@ -35,7 +35,7 @@ func (m Month) LittleCalendar() string {
 	monthName := m.month.Month().String()
 	weeks := NewWeeks(m.month.Weeks, WithParameters(m.parameters))
 	weekdays := strings.Join(weeks.WeekdaysShortNames(), " & ")
-	weeksMatrix := m.tabulate(weeks.Matrix(), `\\`)
+	weeksMatrix := m.tabulate(weeks.BuildLittleCalMatrix(), `\\`)
 
 	return `\renewcommand{\arraystretch}{1.5}%` + "\n" +
 		`%\setlength{\tabcolsep}{3.5pt}%` + "\n" +

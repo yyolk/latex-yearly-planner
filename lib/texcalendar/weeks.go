@@ -86,6 +86,16 @@ func (r Weeks) Tabular() string {
 	return strings.Join(out, `\\`+"\n")
 }
 
+func (r Weeks) BuildLittleCalMatrix() [][]string {
+	rows := make([][]string, 0, len(r.weeks))
+
+	for _, week := range r.weeks {
+		rows = append(rows, NewWeek(week, WithParameters(r.parameters)).BuildLittleCalRow())
+	}
+
+	return rows
+}
+
 func (r Weeks) Matrix() [][]string {
 	rows := make([][]string, 0, len(r.weeks))
 

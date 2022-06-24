@@ -106,3 +106,17 @@ func (r Week) TailMonth() time.Month {
 func (r Week) HeadMonth() time.Month {
 	return r.week.HeadMonth()
 }
+
+func (r Week) BuildLittleCalRow() []string {
+	weekName := ref.NewLinkWithRef(strconv.Itoa(r.week.WeekNumber()), r.Ref()).Build()
+
+	return r.appendWeekName(weekName)
+}
+
+func (r Week) appendWeekName(name string) []string {
+	if r.parameters.Hand == common.LeftHand {
+		return append(r.weekDays(), name)
+	}
+
+	return append([]string{name}, r.weekDays()...)
+}
