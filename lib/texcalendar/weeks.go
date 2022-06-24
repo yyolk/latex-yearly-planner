@@ -25,20 +25,55 @@ func NewWeeks(weeks calendar.Weeks, options ...ApplyToParameters) Weeks {
 	return Weeks{weeks: weeks, parameters: parameters}
 }
 
-func (r Weeks) Weekdays() []string {
+func (r Weeks) WeekdaysFullNames() []string {
 	if len(r.weeks) == 0 {
 		return nil
 	}
 
-	weekdays := make([]string, 0, 8)
-	for _, day := range r.weeks[0].Next().Days() {
-		weekdays = append(weekdays, `\hfil{}`+day.Weekday().String())
+	return r.centerline(r.extendWithW(r.buildWeekdays()))
+}
+
+func (r Weeks) WeekdaysShortNames() []string {
+	if len(r.weeks) == 0 {
+		return nil
 	}
 
+	return r.centerline(r.extendWithW(r.buildWeekdaysWithShortNames()))
+}
+
+func (r Weeks) centerline(row []string) []string {
+	for i, item := range row {
+		row[i] = `\hfil{}` + item
+	}
+
+	return row
+}
+
+func (r Weeks) extendWithW(row []string) []string {
 	if r.parameters.Hand == common.RightHand {
-		weekdays = append([]string{"W"}, weekdays...)
+		row = append([]string{"W"}, row...)
 	} else {
-		weekdays = append(weekdays, "W")
+		row = append(row, "W")
+	}
+
+	return row
+}
+
+func (r Weeks) buildWeekdaysWithShortNames() []string {
+	weekdays := make([]string, 0, 8)
+
+	for _, weekday := range r.buildWeekdays() {
+		weekdays = append(weekdays, weekday[:1])
+	}
+
+	return weekdays
+}
+
+func (r Weeks) buildWeekdays() []string {
+	weekdays := make([]string, 0, 8)
+
+	for _, day := range r.weeks[0].Next().Days() {
+		weekdays = append(weekdays, day.Weekday().String())
 	}
 
 	return weekdays
