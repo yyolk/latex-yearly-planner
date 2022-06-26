@@ -35,7 +35,7 @@ func (m dailyContents) prioritiesAndNotesColumn() string {
 	}
 
 	moreNotes := ref.NewNote("More", m.day.Ref()).Build()
-	dailyReflect := ref.NewLinkWithRef("Reflect", m.day.Ref()+"-reflect").Build()
+	dailyReflect := ref.NewReflect("Reflect", m.day.Ref()).Build()
 
 	return `\begin{minipage}[t]{\dimexpr2\myLengthThreeColumnWidth+\myLengthThreeColumnsSeparatorWidth}
 \myUnderline{Top Priorities}

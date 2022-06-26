@@ -211,8 +211,11 @@ func (r *MonthsOnSides) dailyReflectSection() (*bytes.Buffer, error) {
 		week := day.Week()
 		weekCell := cell.New(week.Title()).RefAs(week.Ref())
 
+		text := ref.NewText(day.NameAndDate(), day.Ref()).Build()
+		reflectTarget := ref.NewReflect("", day.Ref()).Ref().Build()
+
 		header := r.
-			headerWithTitle(ref.NewLinkWithRef(day.NameAndDate(), day.Ref()).Build()+ref.NewTargetWithRef("", day.Ref()+"-reflect").Build()).
+			headerWithTitle(text+reflectTarget).
 			apply(
 				headerSelectMonths(day.Month()),
 				headerAddAction(weekCell),

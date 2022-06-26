@@ -9,10 +9,6 @@ type Link struct {
 	ref  string
 }
 
-func NewLink(text string) Link {
-	return Link{text: text}
-}
-
 func NewLinkWithRef(text, ref string) Link {
 	return Link{text: text, ref: ref}
 }
