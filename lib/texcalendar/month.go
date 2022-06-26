@@ -31,61 +31,68 @@ func NewMonth(month calendar.Month, options ...ApplyToParameters) Month {
 	return mo
 }
 
-func (m Month) LittleCalendar() string {
-	monthName := m.month.Month().String()
-	weeks := NewWeeks(m.month.Weeks, WithParameters(m.parameters))
+func (r Month) LittleCalendar() string {
+	weeks := r.weeks()
 	weekdays := strings.Join(weeks.WeekdaysShortNames(), " & ")
-	weeksMatrix := m.tabulate(weeks.BuildLittleCalMatrix(), `\\`)
+	weeksMatrix := r.tabulate(weeks.BuildLittleCalMatrix(), `\\`)
 
 	return `\renewcommand{\arraystretch}{1.5}%` + "\n" +
 		`%\setlength{\tabcolsep}{3.5pt}%` + "\n" +
-		`\begin{tabularx}{\linewidth}[t]{` + m.littleTableRule() + `}` + "\n" +
-		`\multicolumn{8}{c}{` + monthName + `} \\ \hline` + "\n" +
+		`\begin{tabularx}{\linewidth}[t]{` + r.littleTableRule() + `}` + "\n" +
+		`\multicolumn{8}{c}{` + r.name() + `} \\ \hline` + "\n" +
 		weekdays + `\\ \hline` + "\n" +
 		weeksMatrix + "\n" +
 		`\end{tabularx}`
 }
 
-func (m Month) LargeCalendar() string {
-	weeks := NewWeeks(m.month.Weeks, WithParameters(m.parameters))
+func (r Month) LargeCalendar() string {
+	weeks := NewWeeks(r.month.Weeks, WithParameters(r.parameters))
 	weekdays := strings.Join(weeks.WeekdaysFullNames(), ` & `)
-	weeksMatrix := m.tabulate(weeks.BuildLargeCalMatrix(), `\\ \hline`)
+	weeksMatrix := r.tabulate(weeks.BuildLargeCalMatrix(), `\\ \hline`)
 
 	return `\renewcommand{\arraystretch}{0}%` + "\n" +
 		`%\setlength{\tabcolsep}{0pt}%` + "\n" +
-		`\begin{tabularx}{\linewidth}[t]{` + m.largeTableRule() + `}` + "\n" +
+		`\begin{tabularx}{\linewidth}[t]{` + r.largeTableRule() + `}` + "\n" +
 		weekdays + ` \raisebox{4mm}{} \\[2mm] \hline` + "\n" +
 		weeksMatrix + "\\\\ \\hline\n" +
 		`\end{tabularx}`
 }
 
-func (m Month) littleTableRule() string {
-	if m.parameters.Hand == common.LeftHand {
+func (r Month) name() string {
+	return r.month.Month().String()
+}
+
+func (r Month) weeks() Weeks {
+	return NewWeeks(r.month.Weeks, WithParameters(r.parameters))
+}
+
+func (r Month) littleTableRule() string {
+	if r.parameters.Hand == common.LeftHand {
 		return "*{7}{@{}Y@{}}|c"
 	}
 
 	return "c|*{7}{@{}Y@{}}"
 }
 
-func (m Month) largeTableRule() string {
-	if m.parameters.Hand == common.LeftHand {
+func (r Month) largeTableRule() string {
+	if r.parameters.Hand == common.LeftHand {
 		return `*{7}{|@{}X@{}}|@{ }c@{ }|`
 	}
 
 	return `|@{ }c@{ }|*{7}{@{}X@{}|}`
 }
 
-func (m Month) weekdaysShort() []string {
+func (r Month) weekdaysShort() []string {
 	weekdays := make([]string, 0, 7)
 
-	for _, weekday := range m.month.Weekdays() {
+	for _, weekday := range r.month.Weekdays() {
 		weekdays = append(weekdays, weekday.String()[:1])
 	}
 
 	return weekdays
 }
 
-func (m Month) tabulate(matrix [][]string, join string) string {
+func (r Month) tabulate(matrix [][]string, join string) string {
 	rows := make([]string, 0, len(matrix))
 
 	for _, row := range matrix {
@@ -95,17 +102,17 @@ func (m Month) tabulate(matrix [][]string, join string) string {
 	return strings.Join(rows, join+"\n")
 }
 
-func (m Month) ShortName() string {
-	return m.month.Month().String()[:3]
+func (r Month) ShortName() string {
+	return r.month.Month().String()[:3]
 }
 
-func (m Month) Month() time.Month {
-	return m.month.Month()
+func (r Month) Month() time.Month {
+	return r.month.Month()
 }
 
-func (m Month) IntersectsWith(selectedMonths []time.Month) bool {
+func (r Month) IntersectsWith(selectedMonths []time.Month) bool {
 	for _, selectedMonth := range selectedMonths {
-		if m.Month() == selectedMonth {
+		if r.Month() == selectedMonth {
 			return true
 		}
 	}
