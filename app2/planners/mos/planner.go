@@ -168,7 +168,7 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 		week := day.Week()
 		weekCell := cell.New(week.Title()).RefAs(week.Ref())
 
-		title := ref.NewText(day.NameAndDate(), day.Ref()).Build()
+		title := ref.NewText(day.NameAndDate(), day.Ref()).Ref().Build()
 
 		header := r.headerWithTitle(title).apply(
 			headerSelectMonths(day.Month()),
