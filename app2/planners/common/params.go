@@ -13,7 +13,10 @@ type Params struct {
 	Sections []string
 	Hand     MainHand
 
+	ShowFrames bool
+
 	ArrayStretch string
+	ShowLinks    bool
 }
 
 type ApplyParameterOption func(*Params)
@@ -57,5 +60,17 @@ func ParamWithWeekday(weekday time.Weekday) ApplyParameterOption {
 func ParamWithMainHand(hand MainHand) ApplyParameterOption {
 	return func(params *Params) {
 		params.Hand = hand
+	}
+}
+
+func ParamWithFrames(showFrames bool) ApplyParameterOption {
+	return func(params *Params) {
+		params.ShowFrames = showFrames
+	}
+}
+
+func ParamWithLinks(showLinks bool) ApplyParameterOption {
+	return func(params *Params) {
+		params.ShowLinks = showLinks
 	}
 }

@@ -117,9 +117,11 @@ func (r *Planner) createRootDocument() error {
 
 	buffer := &bytes.Buffer{}
 	if err := texsnippets.Execute(buffer, texsnippets.Document, map[string]interface{}{
-		"Device": r.params.Device,
-		"Layout": r.builder.Layout(),
-		"Files":  strings.Join(futureFiles, "\n"),
+		"Device":     r.params.Device,
+		"Layout":     r.builder.Layout(),
+		"Files":      strings.Join(futureFiles, "\n"),
+		"ShowFrames": r.params.ShowFrames,
+		"ShowLinks":  r.params.ShowLinks,
 	}); err != nil {
 		return fmt.Errorf("execute template root-document: %w", err)
 	}

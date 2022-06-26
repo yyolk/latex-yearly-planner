@@ -14,7 +14,14 @@ func TestDefault(t *testing.T) {
 		out := &strings.Builder{}
 		errOut := &strings.Builder{}
 
-		args := []string{"./app", "template", "mos", "--hand", "left", "--weekday", "1", "--device-name", "supernote_a5x"}
+		args := []string{
+			"./app", "template", "mos",
+			"--hand", "left",
+			"--weekday", "1",
+			"--show-frames",
+			"--show-links",
+			"--device-name", "supernote_a5x",
+		}
 
 		err := app2.New(in, out, errOut).Run(args)
 

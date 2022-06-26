@@ -3,7 +3,7 @@ package texsnippets
 const Document = "document"
 const document = `\documentclass[9pt]{extarticle}
 
-\usepackage[showframe]{geometry}
+\usepackage{{ if .ShowFrames }}[showframe]{{end}}{geometry}
 \usepackage[table]{xcolor}
 \usepackage{tabularx}
 \usepackage{hyperref}
@@ -11,6 +11,10 @@ const document = `\documentclass[9pt]{extarticle}
 \usepackage{adjustbox}
 \usepackage{multido}
 \usepackage{amssymb}
+
+\hypersetup{
+    {{- if not .ShowLinks}}hidelinks=true{{end -}}
+}
 
 \geometry{paperwidth={{.Device.Paper.Width}}, paperheight={{.Device.Paper.Height}}}
 \geometry{
