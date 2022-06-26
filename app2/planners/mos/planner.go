@@ -136,7 +136,7 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	for _, week := range r.year.InWeeks() {
-		title := ref.NewText(week.Title(), week.Ref()).Build()
+		title := ref.NewText(week.Title(), week.Ref()).Ref().Build()
 
 		header := r.
 			headerWithTitle(title).
