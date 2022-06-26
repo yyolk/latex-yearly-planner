@@ -32,7 +32,7 @@ func newUI(device devices.Device) (ui, error) {
 		return ui{
 			HeaderMarginNotesArrayStretch:  "2.042",
 			HeaderMarginNotesMonthsWidth:   "15.7cm",
-			HeaderMarginNotesQuartersWidth: "5cm",
+			HeaderMarginNotesQuartersWidth: "5.605cm",
 			HeaderArrayStretch:             "1.8185",
 
 			LittleCalArrayStretch: "1.6",
