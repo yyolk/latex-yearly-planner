@@ -186,8 +186,11 @@ func (r *MonthsOnSides) dailyNotesSection() (*bytes.Buffer, error) {
 		week := day.Week()
 		weekCell := cell.New(week.Title()).RefAs(week.Ref())
 
+		text := ref.NewText(day.NameAndDate(), day.Ref()).Build()
+		note := ref.NewNote("", day.Ref()).Ref().Build()
+
 		header := r.
-			headerWithTitle(ref.NewLinkWithRef(day.NameAndDate(), day.Ref()).Build()+ref.NewTargetWithRef("", day.Ref()+"-notes").Build()).
+			headerWithTitle(text+note).
 			apply(
 				headerSelectMonths(day.Month()),
 				headerAddAction(weekCell),
