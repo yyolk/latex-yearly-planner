@@ -10,7 +10,6 @@ type Parameters struct {
 	Hand       common.MainHand
 	Weekday    time.Weekday
 	FirstMonth time.Month
-	ForLarge   bool
 }
 
 type ApplyToParameters func(*Parameters)
