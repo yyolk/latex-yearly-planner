@@ -24,8 +24,16 @@ func Tabular(format, text string) string {
 	return `\begin{tabular}{` + format + `}` + nl + text + nl + `\end{tabular}`
 }
 
-func TabularXLineWidth(format, text string) string {
-	return `\begin{tabularx}{\linewidth}{` + format + `}` + nl + text + nl + `\end{tabularx}`
+func TabularXAlignTopLineWidth(format, text string) string {
+	return TabularXLineWidth(`t`, format, text)
+}
+
+func TabularXLineWidth(align, format, text string) string {
+	return TabularX(`\linewidth`, align, format, text)
+}
+
+func TabularX(width, align, format, text string) string {
+	return `\begin{tabularx}{` + width + `}[` + align + `]{` + format + `}` + nl + text + nl + `\end{tabularx}`
 }
 
 func ResizeBoxW(width, text string) string {

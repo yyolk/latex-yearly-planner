@@ -28,7 +28,7 @@ func (r Year) BuildCalendar() string {
 
 	for _, quarter := range r.year.GetQuarters() {
 		row := NewQuarter(quarter, WithParameters(r.parameters)).Row()
-		quarterRows = append(quarterRows, tex.TabularXLineWidth("@{}*{3}{X}@{}", row))
+		quarterRows = append(quarterRows, tex.TabularXAlignTopLineWidth("@{}*{3}{X}@{}", row))
 	}
 
 	return strings.Join(quarterRows, "\n"+`\vfill`+"\n")
