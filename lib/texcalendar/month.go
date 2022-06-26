@@ -117,3 +117,7 @@ func (r Month) IntersectsWith(selectedMonths []time.Month) bool {
 
 	return false
 }
+
+func (r Month) Name() string {
+	return r.month.Month().String()
+}
