@@ -59,3 +59,11 @@ func RenewArrayStretch(value string) string {
 func RenewCommand(command, value string) string {
 	return fmt.Sprintf(`\renewcommand{%s}{%s}`, command, value)
 }
+
+func LineHeight(value string) string {
+	return Parbox(`0pt`, `\vskip`+value)
+}
+
+func Parbox(width, text string) string {
+	return fmt.Sprintf(`\parbox{%s}{%s}`, width, text)
+}

@@ -41,7 +41,7 @@ func (r Month) LittleCalendar() string {
 		weekdays + `\\ \hline` + "\n" +
 		littleCalMatrix
 
-	return tex.RenewArrayStretch(r.parameters.ArrayStretch) + `%` + "\n" +
+	return tex.RenewArrayStretch(r.parameters.LittleCalArrayStretch) + `%` + "\n" +
 		tex.TabularXAlignTopLineWidth(r.littleTableRule(), tabularContents)
 }
 
@@ -49,12 +49,11 @@ func (r Month) LargeCalendar() string {
 	weeks := NewWeeks(r.month.Weeks, WithParameters(r.parameters))
 	weekdays := strings.Join(weeks.WeekdaysFullNames(), ` & `)
 	weeksMatrix := r.tabulate(weeks.BuildLargeCalMatrix(), `\\ \hline`)
+	lineHeight := tex.LineHeight(r.parameters.LargeCalHeaderHeight)
+	tabularContents := weekdays + lineHeight + ` \\ \hline` + "\n" +
+		weeksMatrix + "\\\\ \\hline\n"
 
-	return `\renewcommand{\arraystretch}{0}%` + "\n" +
-		`\begin{tabularx}{\linewidth}[t]{` + r.largeTableRule() + `}` + "\n" +
-		weekdays + ` \raisebox{4mm}{} \\[2mm] \hline` + "\n" +
-		weeksMatrix + "\\\\ \\hline\n" +
-		`\end{tabularx}`
+	return tex.TabularXAlignTopLineWidth(r.largeTableRule(), tabularContents)
 }
 
 func (r Month) name() string {

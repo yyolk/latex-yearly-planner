@@ -7,10 +7,13 @@ import (
 )
 
 type Parameters struct {
-	Hand         common.MainHand
-	Weekday      time.Weekday
-	FirstMonth   time.Month
-	ArrayStretch string
+	Hand       common.MainHand
+	Weekday    time.Weekday
+	FirstMonth time.Month
+
+	LittleCalArrayStretch string
+
+	LargeCalHeaderHeight string
 }
 
 type ApplyToParameters func(*Parameters)
@@ -21,8 +24,14 @@ func WithParameters(externalParameters Parameters) ApplyToParameters {
 	}
 }
 
-func WithArrayStretchLittleCal(arrayStretch string) ApplyToParameters {
+func WithLittleCalArrayStretch(arrayStretch string) ApplyToParameters {
 	return func(parameters *Parameters) {
-		parameters.ArrayStretch = arrayStretch
+		parameters.LittleCalArrayStretch = arrayStretch
+	}
+}
+
+func WithLargeCalHeaderHeight(largeCalHeaderHeight string) ApplyToParameters {
+	return func(parameters *Parameters) {
+		parameters.LargeCalHeaderHeight = largeCalHeaderHeight
 	}
 }

@@ -54,7 +54,10 @@ func (r *MonthsOnSides) PrepareDetails(device devices.Device, layout common.Layo
 		return fmt.Errorf("new ui: %w", err)
 	}
 
-	r.year.Apply(texcalendar.WithArrayStretchLittleCal(r.ui.LittleCalArrayStretch))
+	r.year.Apply(
+		texcalendar.WithLittleCalArrayStretch(r.ui.LittleCalArrayStretch),
+		texcalendar.WithLargeCalHeaderHeight(r.ui.LargeCalHeaderHeight),
+	)
 
 	return nil
 }
