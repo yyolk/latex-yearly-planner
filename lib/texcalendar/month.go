@@ -6,6 +6,7 @@ import (
 
 	"github.com/kudrykv/latex-yearly-planner/app/tex"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
@@ -37,7 +38,9 @@ func (r Month) LittleCalendar() string {
 	weekdays := strings.Join(weeks.WeekdaysShortNames(), " & ")
 	littleCalMatrix := r.tabulate(weeks.BuildLittleCalMatrix(), `\\`)
 
-	tabularContents := `\multicolumn{8}{c}{` + r.name() + `} \\ \hline` + "\n" +
+	name := ref.NewText(r.Name(), "").Build()
+
+	tabularContents := `\multicolumn{8}{c}{` + name + `} \\ \hline` + "\n" +
 		weekdays + `\\ \hline` + "\n" +
 		littleCalMatrix
 
