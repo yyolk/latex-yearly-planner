@@ -38,7 +38,6 @@ func (r Month) LittleCalendar() string {
 	weeksMatrix := r.tabulate(weeks.BuildLittleCalMatrix(), `\\`)
 
 	return tex.RenewArrayStretch(r.parameters.ArrayStretch) + `%` + "\n" +
-		`%\setlength{\tabcolsep}{3.5pt}%` + "\n" +
 		`\begin{tabularx}{\linewidth}[t]{` + r.littleTableRule() + `}` + "\n" +
 		`\multicolumn{8}{c}{` + r.name() + `} \\ \hline` + "\n" +
 		weekdays + `\\ \hline` + "\n" +
