@@ -136,8 +136,10 @@ func (r *MonthsOnSides) weekliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	for _, week := range r.year.InWeeks() {
+		title := ref.NewText(week.Title(), week.Ref()).Build()
+
 		header := r.
-			headerWithTitle(ref.NewTargetWithRef(week.Title(), week.Ref()).Build()).
+			headerWithTitle(title).
 			apply(headerSelectMonths(r.highlightedMonths(week)...))
 
 		if err := buffer.WriteBlocks(header, weeklyContents{week: week}); err != nil {
@@ -166,7 +168,9 @@ func (r *MonthsOnSides) dailiesSection() (*bytes.Buffer, error) {
 		week := day.Week()
 		weekCell := cell.New(week.Title()).RefAs(week.Ref())
 
-		header := r.headerWithTitle(ref.NewTargetWithRef(day.NameAndDate(), day.Ref()).Build()).apply(
+		title := ref.NewText(day.NameAndDate(), day.Ref()).Build()
+
+		header := r.headerWithTitle(title).apply(
 			headerSelectMonths(day.Month()),
 			headerAddAction(weekCell),
 		)
