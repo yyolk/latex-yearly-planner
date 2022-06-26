@@ -237,12 +237,13 @@ func (r *MonthsOnSides) toDoSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 	header := r.headerWithTitleAndSelection("To Do Index", toDoText)
 
-	if err := buffer.WriteBlocks(header.repeat(2), index{refPrefix: "todo"}); err != nil {
+	if err := buffer.WriteBlocks(header.repeat(2), index{typ: ref.ToDo}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
 	for i := 1; i <= 115; i++ {
-		header := r.headerWithTitle(ref.NewTargetWithRef("To Do "+strconv.Itoa(i), "todo-"+strconv.Itoa(i)).Build())
+		title := ref.NewToDo(fmt.Sprintf("To Do %d", i), strconv.Itoa(i)).Ref().Build()
+		header := r.headerWithTitle(title)
 
 		if err := buffer.WriteBlocks(header, todoContents{}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
@@ -256,12 +257,13 @@ func (r *MonthsOnSides) notesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 	header := r.headerWithTitleAndSelection("Notes Index", notesText)
 
-	if err := buffer.WriteBlocks(header.repeat(2), index{refPrefix: "notes"}); err != nil {
+	if err := buffer.WriteBlocks(header.repeat(2), index{typ: ref.Note}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
 	for i := 1; i <= 115; i++ {
-		header := r.headerWithTitle(ref.NewTargetWithRef("Notes "+strconv.Itoa(i), "notes-"+strconv.Itoa(i)).Build())
+		title := ref.NewNote(fmt.Sprintf("Note %d", i), strconv.Itoa(i)).Ref().Build()
+		header := r.headerWithTitle(title)
 
 		if err := buffer.WriteBlocks(header, notesContents{}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)

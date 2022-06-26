@@ -3,10 +3,12 @@ package mos
 import (
 	"strconv"
 	"strings"
+
+	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
 )
 
 type index struct {
-	refPrefix string
+	typ int
 }
 
 func (i index) Build() ([]string, error) {
@@ -33,7 +35,7 @@ func (r index) todoCol(from, to int) []string {
 
 	for i := from; i <= to; i++ {
 		itoa := strconv.Itoa(i)
-		linked := `\hyperlink{` + r.refPrefix + `-` + itoa + `}{\parbox{1cm}{` + itoa + `.}}`
+		linked := ref.NewItem(r.typ, `\parbox{1cm}{`+itoa+`.}`, itoa).Build()
 		col = append(col, `\parbox{0pt}{\vskip7mm}`+linked+`\myLineGray`)
 	}
 	return col

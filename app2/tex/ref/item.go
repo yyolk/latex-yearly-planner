@@ -8,21 +8,30 @@ type Item struct {
 }
 
 const (
-	text = iota
-	reflect
-	note
+	Text = iota
+	Reflect
+	Note
+	ToDo
 )
 
 func NewText(name, refer string) Item {
-	return Item{typ: text, name: name, refer: refer}
+	return Item{typ: Text, name: name, refer: refer}
 }
 
 func NewNote(text, refer string) Item {
-	return Item{typ: note, name: text, refer: refer}
+	return Item{typ: Note, name: text, refer: refer}
 }
 
 func NewReflect(text, refer string) Item {
-	return Item{typ: reflect, name: text, refer: refer}
+	return Item{typ: Reflect, name: text, refer: refer}
+}
+
+func NewToDo(text, refer string) Item {
+	return Item{typ: ToDo, name: text, refer: refer}
+}
+
+func NewItem(typ int, name, refer string) Item {
+	return Item{typ: typ, name: name, refer: refer}
 }
 
 func (r Item) Build() string {
@@ -44,12 +53,14 @@ func (r Item) ref() string {
 
 func (r Item) prefix() string {
 	switch r.typ {
-	case text:
+	case Text:
 		return ""
-	case note:
+	case Note:
 		return "note"
-	case reflect:
+	case Reflect:
 		return "reflect"
+	case ToDo:
+		return "todo"
 	default:
 		return "unknown"
 	}
