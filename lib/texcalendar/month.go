@@ -4,6 +4,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/kudrykv/latex-yearly-planner/app/tex"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
@@ -36,7 +37,7 @@ func (r Month) LittleCalendar() string {
 	weekdays := strings.Join(weeks.WeekdaysShortNames(), " & ")
 	weeksMatrix := r.tabulate(weeks.BuildLittleCalMatrix(), `\\`)
 
-	return `\renewcommand{\arraystretch}{` + r.parameters.ArrayStretch + `}%` + "\n" +
+	return tex.RenewArrayStretch(r.parameters.ArrayStretch) + `%` + "\n" +
 		`%\setlength{\tabcolsep}{3.5pt}%` + "\n" +
 		`\begin{tabularx}{\linewidth}[t]{` + r.littleTableRule() + `}` + "\n" +
 		`\multicolumn{8}{c}{` + r.name() + `} \\ \hline` + "\n" +

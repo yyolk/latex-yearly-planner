@@ -43,3 +43,11 @@ func Bold(text string) string {
 func AdjustBox(text string) string {
 	return `\adjustbox{valign=t}{` + text + `}`
 }
+
+func RenewArrayStretch(value string) string {
+	return RenewCommand(`\arraystretch`, value)
+}
+
+func RenewCommand(command, value string) string {
+	return fmt.Sprintf(`\renewcommand{%s}{%s}`, command, value)
+}
