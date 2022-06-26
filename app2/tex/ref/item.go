@@ -2,36 +2,41 @@ package ref
 
 type Item struct {
 	typ      int
-	text     string
+	name     string
 	refer    string
 	referred bool
 }
 
 const (
-	Text = iota
-	Note
+	text = iota
+	reflect
+	note
 )
 
-func NewText(text, refer string) Item {
-	return Item{typ: Text, text: text, refer: refer}
+func NewText(name, refer string) Item {
+	return Item{typ: text, name: name, refer: refer}
 }
 
 func NewNote(text, refer string) Item {
-	return Item{typ: Note, text: text, refer: refer}
+	return Item{typ: note, name: text, refer: refer}
+}
+
+func NewReflect(text, refer string) Item {
+	return Item{typ: reflect, name: text, refer: refer}
 }
 
 func (r Item) Build() string {
 	if r.referred {
-		return NewTargetWithRef(r.text, r.ref()).Build()
+		return NewTargetWithRef(r.name, r.ref()).Build()
 	}
 
-	return NewLinkWithRef(r.text, r.ref()).Build()
+	return NewLinkWithRef(r.name, r.ref()).Build()
 }
 
 func (r Item) ref() string {
 	refer := r.refer
 	if refer == "" {
-		refer = r.text
+		refer = r.name
 	}
 
 	return r.prefix() + refer
@@ -39,10 +44,12 @@ func (r Item) ref() string {
 
 func (r Item) prefix() string {
 	switch r.typ {
-	case Text:
+	case text:
 		return ""
-	case Note:
+	case note:
 		return "note"
+	case reflect:
+		return "reflect"
 	default:
 		return "unknown"
 	}
