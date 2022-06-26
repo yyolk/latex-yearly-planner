@@ -35,14 +35,14 @@ func NewMonth(month calendar.Month, options ...ApplyToParameters) Month {
 func (r Month) LittleCalendar() string {
 	weeks := r.weeks()
 	weekdays := strings.Join(weeks.WeekdaysShortNames(), " & ")
-	weeksMatrix := r.tabulate(weeks.BuildLittleCalMatrix(), `\\`)
+	littleCalMatrix := r.tabulate(weeks.BuildLittleCalMatrix(), `\\`)
+
+	tabularContents := `\multicolumn{8}{c}{` + r.name() + `} \\ \hline` + "\n" +
+		weekdays + `\\ \hline` + "\n" +
+		littleCalMatrix
 
 	return tex.RenewArrayStretch(r.parameters.ArrayStretch) + `%` + "\n" +
-		`\begin{tabularx}{\linewidth}[t]{` + r.littleTableRule() + `}` + "\n" +
-		`\multicolumn{8}{c}{` + r.name() + `} \\ \hline` + "\n" +
-		weekdays + `\\ \hline` + "\n" +
-		weeksMatrix + "\n" +
-		`\end{tabularx}`
+		tex.TabularXAlignTopLineWidth(r.littleTableRule(), tabularContents)
 }
 
 func (r Month) LargeCalendar() string {
