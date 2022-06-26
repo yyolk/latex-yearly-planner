@@ -7,9 +7,10 @@ import (
 )
 
 type Parameters struct {
-	Hand       common.MainHand
-	Weekday    time.Weekday
-	FirstMonth time.Month
+	Hand         common.MainHand
+	Weekday      time.Weekday
+	FirstMonth   time.Month
+	ArrayStretch string
 }
 
 type ApplyToParameters func(*Parameters)
@@ -17,5 +18,11 @@ type ApplyToParameters func(*Parameters)
 func WithParameters(externalParameters Parameters) ApplyToParameters {
 	return func(parameters *Parameters) {
 		*parameters = externalParameters
+	}
+}
+
+func WithArrayStretch(arrayStretch string) ApplyToParameters {
+	return func(parameters *Parameters) {
+		parameters.ArrayStretch = arrayStretch
 	}
 }

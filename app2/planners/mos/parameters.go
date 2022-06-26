@@ -20,6 +20,8 @@ type ui struct {
 	HeaderArrayStretch             string
 	HeaderMarginNotesMonthsWidth   string
 	HeaderMarginNotesQuartersWidth string
+
+	ArrayStretch string
 }
 
 func newUI(device devices.Device) (ui, error) {
@@ -30,6 +32,8 @@ func newUI(device devices.Device) (ui, error) {
 			HeaderMarginNotesMonthsWidth:   "15.7cm",
 			HeaderMarginNotesQuartersWidth: "5cm",
 			HeaderArrayStretch:             "1.8185",
+
+			ArrayStretch: "1.6",
 		}, nil
 	default:
 		return ui{}, fmt.Errorf("%T: %w", device, common.UnknownDeviceTypeErr)

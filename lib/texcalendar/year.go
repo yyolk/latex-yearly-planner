@@ -77,3 +77,9 @@ func (r Year) InWeeks() []Week {
 func (r Year) Name() string {
 	return strconv.Itoa(r.year.Year())
 }
+
+func (r *Year) Apply(options ...ApplyToParameters) {
+	for _, option := range options {
+		option(&r.parameters)
+	}
+}

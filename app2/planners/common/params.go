@@ -12,6 +12,8 @@ type Params struct {
 	Device   devices.Device
 	Sections []string
 	Hand     MainHand
+
+	ArrayStretch string
 }
 
 type ApplyParameterOption func(*Params)
