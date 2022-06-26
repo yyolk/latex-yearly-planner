@@ -51,7 +51,6 @@ func (r Month) LargeCalendar() string {
 	weeksMatrix := r.tabulate(weeks.BuildLargeCalMatrix(), `\\ \hline`)
 
 	return `\renewcommand{\arraystretch}{0}%` + "\n" +
-		`%\setlength{\tabcolsep}{0pt}%` + "\n" +
 		`\begin{tabularx}{\linewidth}[t]{` + r.largeTableRule() + `}` + "\n" +
 		weekdays + ` \raisebox{4mm}{} \\[2mm] \hline` + "\n" +
 		weeksMatrix + "\\\\ \\hline\n" +
