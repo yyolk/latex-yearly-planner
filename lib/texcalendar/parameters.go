@@ -21,7 +21,7 @@ func WithParameters(externalParameters Parameters) ApplyToParameters {
 	}
 }
 
-func WithArrayStretch(arrayStretch string) ApplyToParameters {
+func WithArrayStretchLittleCal(arrayStretch string) ApplyToParameters {
 	return func(parameters *Parameters) {
 		parameters.ArrayStretch = arrayStretch
 	}
