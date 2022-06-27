@@ -8,8 +8,9 @@ import (
 )
 
 type Weeks struct {
-	weeks      calendar.Weeks
-	parameters Parameters
+	weeks       calendar.Weeks
+	parameters  Parameters
+	selectedDay Day
 }
 
 func NewWeeks(weeks calendar.Weeks, options ...ApplyToParameters) Weeks {
@@ -90,7 +91,7 @@ func (r Weeks) BuildLittleCalMatrix() [][]string {
 	rows := make([][]string, 0, len(r.weeks))
 
 	for _, week := range r.weeks {
-		rows = append(rows, NewWeek(week, WithParameters(r.parameters)).BuildLittleCalRow())
+		rows = append(rows, NewWeek(week, WithParameters(r.parameters)).Selected(r.selectedDay).BuildLittleCalRow())
 	}
 
 	return rows
@@ -104,4 +105,10 @@ func (r Weeks) BuildLargeCalMatrix() [][]string {
 	}
 
 	return rows
+}
+
+func (r Weeks) Select(day Day) Weeks {
+	r.selectedDay = day
+
+	return r
 }

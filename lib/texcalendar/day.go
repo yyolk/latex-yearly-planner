@@ -3,13 +3,14 @@ package texcalendar
 import (
 	"time"
 
+	"github.com/kudrykv/latex-yearly-planner/app/texx"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
 type Days []Day
 
-func (d Days) BuildLittle() []string {
+func (d Days) BuildLittle(selectedDay Day) []string {
 	out := make([]string, 0, len(d))
 
 	for _, day := range d {
@@ -20,6 +21,10 @@ func (d Days) BuildLittle() []string {
 		}
 
 		name := day.Day.Format("_2")
+		if day.Day.Moment() == selectedDay.Day.Moment() {
+			name = texx.EmphCell(name)
+		}
+
 		out = append(out, ref.NewLinkWithRef(name, day.Ref()).Build())
 	}
 

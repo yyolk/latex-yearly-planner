@@ -37,7 +37,7 @@ func NewMonth(month calendar.Month, options ...ApplyToParameters) Month {
 func (r Month) LittleCalendar() string {
 	weeks := r.weeks()
 	weekdays := strings.Join(weeks.WeekdaysShortNames(), " & ")
-	littleCalMatrix := r.tabulate(weeks.BuildLittleCalMatrix(), `\\`)
+	littleCalMatrix := r.tabulate(weeks.Select(r.selectedDay).BuildLittleCalMatrix(), `\\`)
 
 	name := ref.NewText(r.Name(), "").Build()
 
@@ -45,7 +45,7 @@ func (r Month) LittleCalendar() string {
 		weekdays + `\\ \hline` + "\n" +
 		littleCalMatrix
 
-	return tex.RenewArrayStretch(r.parameters.LittleCalArrayStretch) + `%` + "\n" +
+	return tex.RenewArrayStretch(r.parameters.LittleCalArrayStretch) + `\setlength{\tabcolsep}{0pt}` + "\n" +
 		tex.TabularXAlignTopLineWidth(r.littleTableRule(), tabularContents)
 }
 
@@ -70,10 +70,10 @@ func (r Month) weeks() Weeks {
 
 func (r Month) littleTableRule() string {
 	if r.parameters.Hand == common.LeftHand {
-		return "*{7}{@{}Y@{}}|c"
+		return `*{7}{@{}Y@{}}|Y`
 	}
 
-	return "c|*{7}{@{}Y@{}}"
+	return "Y|*{7}{@{}Y@{}}"
 }
 
 func (r Month) largeTableRule() string {

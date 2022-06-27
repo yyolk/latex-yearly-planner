@@ -63,3 +63,7 @@ func (r Day) enrich(week Week, month Month, quarter Quarter) Day {
 
 	return r
 }
+
+func (r Day) Moment() time.Time {
+	return r.moment
+}

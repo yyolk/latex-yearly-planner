@@ -11,8 +11,9 @@ import (
 )
 
 type Week struct {
-	week       calendar.Week
-	parameters Parameters
+	week        calendar.Week
+	parameters  Parameters
+	selectedDay Day
 }
 
 func NewWeek(week calendar.Week, options ...ApplyToParameters) Week {
@@ -79,7 +80,7 @@ func (r Week) BuildLargeCalRow() []string {
 func (r Week) BuildLittleCalRow() []string {
 	weekName := ref.NewLinkWithRef(strconv.Itoa(r.week.WeekNumber()), r.Ref()).Build()
 
-	return r.appendWeekName(weekName, r.Days().BuildLittle())
+	return r.appendWeekName(weekName, r.Days().BuildLittle(r.selectedDay))
 }
 
 func (r Week) appendWeekName(name string, weekdays []string) []string {
@@ -88,4 +89,10 @@ func (r Week) appendWeekName(name string, weekdays []string) []string {
 	}
 
 	return append([]string{name}, weekdays...)
+}
+
+func (r Week) Selected(day Day) Week {
+	r.selectedDay = day
+
+	return r
 }
