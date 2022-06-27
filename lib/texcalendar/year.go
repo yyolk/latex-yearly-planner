@@ -58,7 +58,7 @@ func (r Year) Days() Days {
 	days := make(Days, 0, 366)
 
 	for _, day := range r.year.Days() {
-		days = append(days, NewDay(day))
+		days = append(days, NewDay(day, WithParameters(r.parameters)))
 	}
 
 	return days

@@ -48,7 +48,7 @@ func (r dailyContents) prioritiesAndNotesColumn() string {
 func (r dailyContents) scheduleColumn() string {
 	var hours []string
 
-	for i := 5; i <= 23; i++ {
+	for i := 8; i <= 21; i++ {
 		strHour := fmt.Sprintf("%0d", i)
 		hours = append(hours, r.height()+strHour+`\myLineLightGray
 \vskip5mm\myLineGray`)
@@ -57,7 +57,7 @@ func (r dailyContents) scheduleColumn() string {
 	return `\begin{minipage}[t]{\myLengthThreeColumnWidth}
 \myUnderline{Schedule\textcolor{white}{g}}
 ` + strings.Join(hours, "\n") + `
-\vskip5mm\myLineLightGray
+\vskip5mm` + r.day.CalendarMonth().Selected(r.day).LittleCalendar() + `
 \end{minipage}`
 }
 

@@ -13,8 +13,9 @@ import (
 type Months []Month
 
 type Month struct {
-	month      calendar.Month
-	parameters Parameters
+	month       calendar.Month
+	selectedDay Day
+	parameters  Parameters
 }
 
 func NewMonth(month calendar.Month, options ...ApplyToParameters) Month {
@@ -123,4 +124,10 @@ func (r Month) IntersectsWith(selectedMonths []time.Month) bool {
 
 func (r Month) Name() string {
 	return r.month.Month().String()
+}
+
+func (r Month) Selected(selectedDay Day) Month {
+	r.selectedDay = selectedDay
+
+	return r
 }

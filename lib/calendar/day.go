@@ -16,46 +16,50 @@ func NewDay(moment time.Time) Day {
 	return Day{moment: moment}
 }
 
-func (h Day) Add(days int) Day {
-	return Day{moment: h.moment.AddDate(0, 0, days)}
+func (r Day) Add(days int) Day {
+	return Day{moment: r.moment.AddDate(0, 0, days)}
 }
 
-func (h Day) IsZero() bool {
-	return h.moment.IsZero()
+func (r Day) IsZero() bool {
+	return r.moment.IsZero()
 }
 
-func (h Day) Weekday() time.Weekday {
-	return h.moment.Weekday()
+func (r Day) Weekday() time.Weekday {
+	return r.moment.Weekday()
 }
 
-func (h Day) Month() time.Month {
-	return h.moment.Month()
+func (r Day) Month() time.Month {
+	return r.moment.Month()
 }
 
-func (h Day) ISOWeek() (year, week int) {
-	return h.moment.ISOWeek()
+func (r Day) ISOWeek() (year, week int) {
+	return r.moment.ISOWeek()
 }
 
-func (h Day) Year() int {
-	return h.moment.Year()
+func (r Day) Year() int {
+	return r.moment.Year()
 }
 
-func (h Day) Format(format string) string {
-	return h.moment.Format(format)
+func (r Day) Format(format string) string {
+	return r.moment.Format(format)
 }
 
-func (h Day) Day() int {
-	return h.moment.Day()
+func (r Day) Day() int {
+	return r.moment.Day()
 }
 
-func (h Day) Week() *Week {
-	return h.week
+func (r Day) Week() *Week {
+	return r.week
 }
 
-func (h Day) enrich(week Week, month Month, quarter Quarter) Day {
-	h.week = &week
-	h.month = &month
-	h.quarter = &quarter
+func (r Day) CalendarMonth() *Month {
+	return r.month
+}
 
-	return h
+func (r Day) enrich(week Week, month Month, quarter Quarter) Day {
+	r.week = &week
+	r.month = &month
+	r.quarter = &quarter
+
+	return r
 }

@@ -73,3 +73,7 @@ func (d Day) Month() time.Month {
 func (d Day) Week() Week {
 	return NewWeek(*d.Day.Week())
 }
+
+func (d Day) CalendarMonth() Month {
+	return NewMonth(*d.Day.CalendarMonth(), WithParameters(d.parameters))
+}
