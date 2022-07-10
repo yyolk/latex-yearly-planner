@@ -1,7 +1,6 @@
 package planners
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
@@ -12,7 +11,6 @@ import (
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/mos"
-	"github.com/kudrykv/latex-yearly-planner/app2/texsnippets"
 )
 
 const (
@@ -115,15 +113,16 @@ func (r *Planner) createRootDocument() error {
 		futureFiles = append(futureFiles, `\include{`+file.name+`}`)
 	}
 
-	buffer := &bytes.Buffer{}
-	if err := texsnippets.Execute(buffer, texsnippets.Document, map[string]interface{}{
-		"Device":     r.params.Device,
-		"Layout":     r.builder.Layout(),
-		"Files":      strings.Join(futureFiles, "\n"),
-		"ShowFrames": r.params.ShowFrames,
-		"ShowLinks":  r.params.ShowLinks,
-	}); err != nil {
-		return fmt.Errorf("execute template root-document: %w", err)
+	buffer, err := document{
+		Device:     r.params.Device,
+		Layout:     r.builder.Layout(),
+		Files:      strings.Join(futureFiles, "\n"),
+		ShowFrames: r.params.ShowFrames,
+		ShowLinks:  r.params.ShowLinks,
+	}.CreateBuffer()
+
+	if err != nil {
+		return fmt.Errorf("create buffer: %w", err)
 	}
 
 	r.futureFiles = append(r.futureFiles, futureFile{name: "document", buffer: buffer})

@@ -1,7 +1,37 @@
-package texsnippets
+package planners
 
-const Document = "document"
-const document = `\documentclass[9pt]{extarticle}
+import (
+	"bytes"
+	"text/template"
+
+	"github.com/kudrykv/latex-yearly-planner/app2/devices"
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+)
+
+type document struct {
+	Device devices.Device
+	Layout common.Layout
+	Files  string
+
+	ShowFrames bool
+	ShowLinks  bool
+}
+
+func (d document) CreateBuffer() (*bytes.Buffer, error) {
+	buffer := bytes.NewBuffer(nil)
+
+	err := template.
+		Must(template.New("document").Parse(documentTex)).
+		ExecuteTemplate(buffer, "document", d)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return buffer, nil
+}
+
+const documentTex = `\documentclass[9pt]{extarticle}
 
 \usepackage{{ if .ShowFrames }}[showframe]{{end}}{geometry}
 \usepackage[table]{xcolor}
