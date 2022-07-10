@@ -19,6 +19,8 @@ const (
 	yearFlag     = "year"
 	sectionsFlag = "sections"
 	weekdayFlag  = "weekday"
+	framesFlag   = "show-frames"
+	linksFlag    = "show-links"
 
 	deviceNameFlag = "device-name"
 
@@ -49,19 +51,21 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 							&cli.StringFlag{Name: deviceNameFlag, Required: true},
 							&cli.StringFlag{Name: handFlag, Value: "right"},
 							&cli.IntFlag{Name: weekdayFlag, Value: 0},
+							&cli.BoolFlag{Name: framesFlag, Value: false},
+							&cli.BoolFlag{Name: linksFlag, Value: false},
 							&cli.StringSliceFlag{
 								Name: sectionsFlag,
 								Value: cli.NewStringSlice(
-									common.TitleSection,
-									//common.AnnualSection,
-									//common.QuarterliesSection,
-									//common.MonthliesSection,
+									//common.TitleSection,
+									common.AnnualSection,
+									common.QuarterliesSection,
+									common.MonthliesSection,
 									//common.WeekliesSection,
 									common.DailiesSection,
-									common.DailyNotesSection,
+									//common.DailyNotesSection,
 									//common.DailyReflectSection,
 									//common.ToDoSection,
-									common.NotesSection,
+									//common.NotesSection,
 								),
 							},
 						},
@@ -82,6 +86,8 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								common.ParamWithSections(appContext.StringSlice(sectionsFlag)),
 								common.ParamWithWeekday(time.Weekday(appContext.Int(weekdayFlag))),
 								common.ParamWithMainHand(hand),
+								common.ParamWithFrames(appContext.Bool(framesFlag)),
+								common.ParamWithLinks(appContext.Bool(linksFlag)),
 							)
 
 							planner, err := planners.New(planners.MonthsOnSidesTemplate, params)

@@ -19,7 +19,7 @@ func TestDefault(t *testing.T) {
 			"--hand", "left",
 			"--weekday", "1",
 			"--show-frames",
-			"--show-links",
+			//"--show-links",
 			"--device-name", "supernote_a5x",
 		}
 
