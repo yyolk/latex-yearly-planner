@@ -5,7 +5,6 @@ import (
 	"io"
 	"time"
 
-	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/urfave/cli/v2"
@@ -70,11 +69,6 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 							},
 						},
 						Action: func(appContext *cli.Context) error {
-							device, err := devices.New(appContext.String(deviceNameFlag))
-							if err != nil {
-								return fmt.Errorf("new device: %w", err)
-							}
-
 							hand := common.RightHand
 							if appContext.String(handFlag) == "left" {
 								hand = common.LeftHand
@@ -82,7 +76,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 
 							params := common.NewParams(
 								common.ParamWithYear(appContext.Int(yearFlag)),
-								common.ParamWithDevice(device),
+								common.ParamWithDeviceName(appContext.String(deviceNameFlag)),
 								common.ParamWithSections(appContext.StringSlice(sectionsFlag)),
 								common.ParamWithWeekday(time.Weekday(appContext.Int(weekdayFlag))),
 								common.ParamWithMainHand(hand),

@@ -4,12 +4,10 @@ import (
 	"bytes"
 	"text/template"
 
-	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 )
 
 type document struct {
-	Device devices.Device
 	Layout common.Layout
 	Files  string
 
@@ -46,7 +44,7 @@ const documentTex = `\documentclass[9pt]{extarticle}
     {{- if not .ShowLinks}}hidelinks=true{{end -}}
 }
 
-\geometry{paperwidth={{.Device.Paper.Width}}, paperheight={{.Device.Paper.Height}}}
+\geometry{paperwidth={{.Layout.Paper.Width}}, paperheight={{.Layout.Paper.Height}}}
 \geometry{
              top={{ .Layout.Margin.Top }},
           bottom={{ .Layout.Margin.Bottom }},

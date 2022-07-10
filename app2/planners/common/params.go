@@ -2,16 +2,14 @@ package common
 
 import (
 	"time"
-
-	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 )
 
 type Params struct {
-	Year     int
-	Weekday  time.Weekday
-	Device   devices.Device
-	Sections []string
-	Hand     MainHand
+	Year       int
+	Weekday    time.Weekday
+	DeviceName string
+	Sections   []string
+	Hand       MainHand
 
 	ShowFrames bool
 
@@ -36,12 +34,6 @@ func NewParams(options ...ApplyParameterOption) Params {
 func ParamWithYear(year int) ApplyParameterOption {
 	return func(params *Params) {
 		params.Year = year
-	}
-}
-
-func ParamWithDevice(device devices.Device) ApplyParameterOption {
-	return func(params *Params) {
-		params.Device = device
 	}
 }
 
@@ -72,5 +64,11 @@ func ParamWithFrames(showFrames bool) ApplyParameterOption {
 func ParamWithLinks(showLinks bool) ApplyParameterOption {
 	return func(params *Params) {
 		params.ShowLinks = showLinks
+	}
+}
+
+func ParamWithDeviceName(deviceName string) ApplyParameterOption {
+	return func(params *Params) {
+		params.DeviceName = deviceName
 	}
 }

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 )
 
@@ -26,9 +25,9 @@ type ui struct {
 	LargeCalHeaderHeight string
 }
 
-func newUI(device devices.Device) (ui, error) {
-	switch device.(type) {
-	case *devices.SupernoteA5X:
+func newUI(layout common.Layout) (ui, error) {
+	switch layout.Name {
+	case "supernote_a5x":
 		return ui{
 			HeaderMarginNotesArrayStretch:  "2.042",
 			HeaderMarginNotesMonthsWidth:   "15.7cm",
@@ -40,6 +39,6 @@ func newUI(device devices.Device) (ui, error) {
 			LargeCalHeaderHeight: "5mm",
 		}, nil
 	default:
-		return ui{}, fmt.Errorf("%T: %w", device, common.UnknownDeviceTypeErr)
+		return ui{}, fmt.Errorf("%s: %w", layout.Name, common.UnknownDeviceErr)
 	}
 }

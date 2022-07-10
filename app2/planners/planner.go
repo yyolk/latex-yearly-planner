@@ -46,12 +46,12 @@ func New(template string, params common.Params) (*Planner, error) {
 }
 
 func (r *Planner) Generate() error {
-	layout, err := common.NewLayout(r.params.Device, r.params.Hand)
+	layout, err := common.NewLayout(r.params.DeviceName, r.params.Hand)
 	if err != nil {
 		return fmt.Errorf("new layout: %w", err)
 	}
 
-	if err = r.builder.PrepareDetails(r.params.Device, layout); err != nil {
+	if err = r.builder.PrepareDetails(layout); err != nil {
 		return fmt.Errorf("prepare details: %w", err)
 	}
 
@@ -114,7 +114,6 @@ func (r *Planner) createRootDocument() error {
 	}
 
 	buffer, err := document{
-		Device:     r.params.Device,
 		Layout:     r.builder.Layout(),
 		Files:      strings.Join(futureFiles, "\n"),
 		ShowFrames: r.params.ShowFrames,

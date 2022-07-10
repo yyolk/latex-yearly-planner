@@ -6,7 +6,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
@@ -15,7 +14,6 @@ import (
 )
 
 type MonthsOnSides struct {
-	device devices.Device
 	layout common.Layout
 
 	ui      ui
@@ -45,12 +43,11 @@ func (r MonthsOnSides) Layout() common.Layout {
 	return r.layout
 }
 
-func (r *MonthsOnSides) PrepareDetails(device devices.Device, layout common.Layout) error {
+func (r *MonthsOnSides) PrepareDetails(layout common.Layout) error {
 	r.layout = layout
-	r.device = device
 
 	var err error
-	if r.ui, err = newUI(device); err != nil {
+	if r.ui, err = newUI(r.layout); err != nil {
 		return fmt.Errorf("new ui: %w", err)
 	}
 

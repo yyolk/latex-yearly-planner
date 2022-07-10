@@ -3,24 +3,27 @@ package common
 import (
 	"errors"
 	"fmt"
-
-	"github.com/kudrykv/latex-yearly-planner/app2/devices"
 )
 
 type MainHand int
 
-var UnknownDeviceTypeErr = errors.New("unknown device type")
+var UnknownDeviceErr = errors.New("unknown device")
 
 const (
 	LeftHand MainHand = iota + 1
 	RightHand
 )
 
-func NewLayout(device devices.Device, hand MainHand) (Layout, error) {
-	switch device.(type) {
-	case *devices.SupernoteA5X:
+func NewLayout(deviceName string, hand MainHand) (Layout, error) {
+	switch deviceName {
+	case "supernote_a5x":
 		var layout = Layout{
+			Name: deviceName,
 			Hand: hand,
+			Paper: Paper{
+				Width:  "15.6cm",
+				Height: "23cm",
+			},
 			Margin: Margin{
 				Top:    "1cm",
 				Right:  "5mm",
@@ -44,12 +47,20 @@ func NewLayout(device devices.Device, hand MainHand) (Layout, error) {
 
 		return layout, nil
 	default:
-		return Layout{}, fmt.Errorf("unknown device type %T: %w", device, UnknownDeviceTypeErr)
+		return Layout{}, fmt.Errorf("unknown device %s: %w", deviceName, UnknownDeviceErr)
 	}
 }
 
+type Paper struct {
+	Width  string
+	Height string
+}
+
 type Layout struct {
+	Name string
+
 	Hand        MainHand
+	Paper       Paper
 	Margin      Margin
 	MarginNotes MarginNotes
 	Sizes       Sizes
