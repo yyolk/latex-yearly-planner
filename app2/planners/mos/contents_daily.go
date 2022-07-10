@@ -10,10 +10,9 @@ import (
 )
 
 type dailyContents struct {
-	day    texcalendar.Day
-	hand   common.MainHand
-	ui     ui
-	layout common.Layout
+	day  texcalendar.Day
+	hand common.MainHand
+	ui   ui
 }
 
 func (r dailyContents) Build() ([]string, error) {
@@ -25,7 +24,7 @@ func (r dailyContents) Build() ([]string, error) {
 	}
 
 	return []string{
-		`\noindent\vskip1mm` + leftColumn + `\hspace{` + r.layout.Sizes.ThreeColumnsSeparatorSize + `}` + rightColumn,
+		`\noindent\vskip1mm` + leftColumn + `\hspace{\myLengthThreeColumnsSeparatorWidth}` + rightColumn,
 	}, nil
 }
 
