@@ -1,8 +1,10 @@
 package mos
 
 import (
+	"bytes"
 	"fmt"
 	"strings"
+	"text/template"
 	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
@@ -38,6 +40,17 @@ func (r header) apply(options ...headerOption) header {
 }
 
 func (r header) Build() ([]string, error) {
+	headerText, err := r.buildHeader()
+	if err != nil {
+		return nil, fmt.Errorf("build header: %w", err)
+	}
+
+	return repeat(headerText, r.repeat), nil
+}
+
+func (r header) buildHeader() (string, error) {
+	buffer := bytes.NewBuffer(nil)
+
 	left := `\Huge{}` + r.title + `{\color{white}{Q}}`
 	right := strings.Join(r.action.Slice(), " & ")
 
@@ -46,23 +59,42 @@ func (r header) Build() ([]string, error) {
 		right = `\Huge{\color{white}{Q}}` + r.title
 	}
 
-	s := `\marginnote{\rotatebox[origin=tr]{90}{%
-\renewcommand{\arraystretch}{` + r.ui.HeaderMarginNotesArrayStretch + `}` + r.months() + `\qquad{}` + r.quarters() + `%
+	err := template.
+		Must(template.New("header").Parse(headerTemplate)).
+		Execute(buffer, map[string]interface{}{
+			"Left":                          left,
+			"Right":                         right,
+			"Months":                        r.months(),
+			"Quarters":                      r.quarters(),
+			"TabularFormat":                 r.makeTabularFormat(),
+			"HeaderMarginNotesArrayStretch": r.ui.HeaderMarginNotesArrayStretch,
+			"HeaderArrayStretch":            r.ui.HeaderArrayStretch,
+		})
+
+	if err != nil {
+		return "", err
+	}
+
+	return buffer.String(), nil
+}
+
+const headerTemplate = `\marginnote{\rotatebox[origin=tr]{90}{%
+\renewcommand{\arraystretch}{ {{- .HeaderMarginNotesArrayStretch -}} }{{ .Months }}\qquad{}{{ .Quarters }}%
 }}%
-{\renewcommand{\arraystretch}{` + r.ui.HeaderArrayStretch + `}\begin{tabularx}{\linewidth}{` + r.makeTabularFormat() + `}
-` + left + ` & & ` + right + ` \\ \hline
+{\renewcommand{\arraystretch}{ {{- .HeaderArrayStretch -}} }\begin{tabularx}{\linewidth}{ {{- .TabularFormat -}} }
+{{ .Left }} & & {{ .Right }} \\ \hline
 \end{tabularx}}
 
 `
 
-	var out []string
-	out = append(out, s)
+func repeat(text string, repeat int) []string {
+	out := make([]string, 0, repeat)
 
-	for i := 1; i < r.repeat; i++ {
-		out = append(out, s)
+	for i := 0; i < repeat; i++ {
+		out = append(out, text)
 	}
 
-	return out, nil
+	return out
 }
 
 func (r header) makeTabularFormat() string {
