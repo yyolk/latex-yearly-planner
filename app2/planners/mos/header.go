@@ -88,7 +88,7 @@ const headerTemplate = `\marginnote{\rotatebox[origin=tr]{90}{%
 `
 
 func repeat(text string, repeat int) []string {
-	out := make([]string, 0, repeat)
+	out := []string{text}
 
 	for i := 0; i < repeat; i++ {
 		out = append(out, text)
