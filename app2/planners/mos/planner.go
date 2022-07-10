@@ -234,7 +234,7 @@ func (r *MonthsOnSides) toDoSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 	header := r.headerWithTitleAndSelection("To Do Index", toDoText)
 
-	if err := buffer.WriteBlocks(header.repeat(2), index{typ: ref.ToDo}); err != nil {
+	if err := buffer.WriteBlocks(header.repeatTimes(2), index{typ: ref.ToDo}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
@@ -254,7 +254,7 @@ func (r *MonthsOnSides) notesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 	header := r.headerWithTitleAndSelection("Notes Index", notesText)
 
-	if err := buffer.WriteBlocks(header.repeat(2), index{typ: ref.Note}); err != nil {
+	if err := buffer.WriteBlocks(header.repeatTimes(2), index{typ: ref.Note}); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 

@@ -21,7 +21,7 @@ type header struct {
 	selectedMonths  []time.Month
 	hand            common.MainHand
 	action          cell.Cells
-	rep             int
+	repeat          int
 }
 
 type headerOption func(*header)
@@ -111,7 +111,7 @@ func (r header) Build() ([]string, error) {
 	var out []string
 	out = append(out, s)
 
-	for i := 1; i < r.rep; i++ {
+	for i := 1; i < r.repeat; i++ {
 		out = append(out, s)
 	}
 
@@ -171,8 +171,8 @@ func (r header) maybeHLineRight() string {
 	return ""
 }
 
-func (r header) repeat(i int) pages.Block {
-	r.rep = i
+func (r header) repeatTimes(repeat int) pages.Block {
+	r.repeat = repeat
 
 	return r
 }
