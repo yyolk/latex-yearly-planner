@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/exec"
 	"path"
-	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/mos"
@@ -22,7 +21,7 @@ var UnknownSectionErr = errors.New("unknown section")
 
 type Planner struct {
 	params      common.Params
-	futureFiles []futureFile
+	futureFiles futureFiles
 	dir         string
 	builder     mos.MonthsOnSides
 }
@@ -107,15 +106,9 @@ func (r *Planner) Compile(ctx context.Context) error {
 }
 
 func (r *Planner) createRootDocument() error {
-	futureFiles := make([]string, 0, len(r.futureFiles))
-
-	for _, file := range r.futureFiles {
-		futureFiles = append(futureFiles, `\include{`+file.name+`}`)
-	}
-
 	buffer, err := document{
 		Layout:     r.builder.Layout(),
-		Files:      strings.Join(futureFiles, "\n"),
+		Files:      r.futureFiles.buildAsTexIncludes(),
 		ShowFrames: r.params.ShowFrames,
 		ShowLinks:  r.params.ShowLinks,
 	}.CreateBuffer()
