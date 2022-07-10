@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app/tex"
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
@@ -26,9 +27,15 @@ func NewYear(year int, options ...ApplyToParameters) Year {
 func (r Year) BuildCalendar() string {
 	quarterRows := make([]string, 0, len(r.year.Quarters))
 
+	leftSkip, rightSkip := "", "@{}"
+
+	if r.parameters.Hand == common.LeftHand {
+		leftSkip, rightSkip = rightSkip, leftSkip
+	}
+
 	for _, quarter := range r.year.GetQuarters() {
 		row := NewQuarter(quarter, WithParameters(r.parameters)).Row()
-		quarterRows = append(quarterRows, tex.TabularXAlignTopLineWidth("@{}*{3}{X}@{}", row))
+		quarterRows = append(quarterRows, `\setlength{\tabcolsep}{3.5pt}`+tex.TabularXAlignTopLineWidth(leftSkip+"*{3}{X}"+rightSkip, row))
 	}
 
 	return strings.Join(quarterRows, "\n"+`\vfill`+"\n")
