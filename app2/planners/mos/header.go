@@ -1,6 +1,7 @@
 package mos
 
 import (
+	"fmt"
 	"strings"
 	"time"
 
@@ -37,22 +38,18 @@ func (r header) apply(options ...headerOption) header {
 }
 
 func (r header) Build() ([]string, error) {
-	tabularFormat := `@{}lY|` + strings.Join(strings.Split(strings.Repeat("r", len(r.action)), ""), "|") + `|@{}`
-
-	left := `\Huge ` + r.title + `{\color{white}{Q}}`
+	left := `\Huge{}` + r.title + `{\color{white}{Q}}`
 	right := strings.Join(r.action.Slice(), " & ")
 
 	if r.hand == common.LeftHand {
-		tabularFormat = `@{}|` + strings.Join(strings.Split(strings.Repeat("l", len(r.action)), ""), "|") + `Yr@{}`
-
 		left = right
-		right = `\Huge {\color{white}{Q}}` + r.title
+		right = `\Huge{\color{white}{Q}}` + r.title
 	}
 
 	s := `\marginnote{\rotatebox[origin=tr]{90}{%
 \renewcommand{\arraystretch}{` + r.ui.HeaderMarginNotesArrayStretch + `}` + r.months() + `\qquad{}` + r.quarters() + `%
 }}%
-{\renewcommand{\arraystretch}{` + r.ui.HeaderArrayStretch + `}\begin{tabularx}{\linewidth}{` + tabularFormat + `}
+{\renewcommand{\arraystretch}{` + r.ui.HeaderArrayStretch + `}\begin{tabularx}{\linewidth}{` + r.makeTabularFormat() + `}
 ` + left + ` & & ` + right + ` \\ \hline
 \end{tabularx}}
 
@@ -66,6 +63,16 @@ func (r header) Build() ([]string, error) {
 	}
 
 	return out, nil
+}
+
+func (r header) makeTabularFormat() string {
+	format := `@{}lY*{%d}{r|}@{}`
+
+	if r.hand == common.LeftHand {
+		format = `@{}lY*{%d}{r|}@{}`
+	}
+
+	return fmt.Sprintf(format, len(r.action))
 }
 
 func (r header) months() string {
