@@ -106,13 +106,7 @@ func (r *Planner) Compile(ctx context.Context) error {
 }
 
 func (r *Planner) createRootDocument() error {
-	buffer, err := document{
-		Layout:     r.builder.Layout(),
-		Files:      r.futureFiles.buildAsTexIncludes(),
-		ShowFrames: r.params.ShowFrames,
-		ShowLinks:  r.params.ShowLinks,
-	}.CreateBuffer()
-
+	buffer, err := newDocument(r).createBuffer()
 	if err != nil {
 		return fmt.Errorf("create buffer: %w", err)
 	}

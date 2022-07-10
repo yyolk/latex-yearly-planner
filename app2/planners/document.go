@@ -15,7 +15,16 @@ type document struct {
 	ShowLinks  bool
 }
 
-func (d document) CreateBuffer() (*bytes.Buffer, error) {
+func newDocument(planner *Planner) document {
+	return document{
+		Layout:     planner.builder.Layout(),
+		Files:      planner.futureFiles.buildAsTexIncludes(),
+		ShowFrames: planner.params.ShowFrames,
+		ShowLinks:  planner.params.ShowLinks,
+	}
+}
+
+func (d document) createBuffer() (*bytes.Buffer, error) {
 	buffer := bytes.NewBuffer(nil)
 
 	err := template.
