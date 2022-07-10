@@ -24,8 +24,6 @@ type header struct {
 	repeat          int
 }
 
-type headerOption func(*header)
-
 func newHeader(layout common.Layout, ui ui, options ...headerOption) header {
 	return header{layout: layout, ui: ui}.apply(options...)
 }
@@ -36,54 +34,6 @@ func (r header) apply(options ...headerOption) header {
 	}
 
 	return r
-}
-
-func headerWithTexYear(year texcalendar.Year) headerOption {
-	return func(header *header) {
-		header.year = year
-	}
-}
-
-func headerWithHand(hand common.MainHand) headerOption {
-	return func(header *header) {
-		header.hand = hand
-	}
-}
-
-func headerWithTitle(left string) headerOption {
-	return func(header *header) {
-		header.title = left
-	}
-}
-
-func headerWithActions(cells cell.Cells) headerOption {
-	return func(header *header) {
-		header.action = cells
-	}
-}
-
-func headerAddAction(cell cell.Cell) headerOption {
-	return func(header *header) {
-		if header.hand == common.LeftHand {
-			header.action = header.action.Push(cell)
-
-			return
-		}
-
-		header.action = header.action.Shift(cell)
-	}
-}
-
-func headerSelectQuarter(quarter texcalendar.Quarter) headerOption {
-	return func(header *header) {
-		header.selectedQuarter = quarter
-	}
-}
-
-func headerSelectMonths(months ...time.Month) headerOption {
-	return func(header *header) {
-		header.selectedMonths = months
-	}
 }
 
 func (r header) Build() ([]string, error) {
