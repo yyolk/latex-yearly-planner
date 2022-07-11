@@ -34,6 +34,7 @@ func (r dailyContents) prioritiesAndNotesColumn() string {
 		r.newTodos(),
 		ref.NewNote("More", r.day.Ref()).Build(),
 		ref.NewReflect("Reflect", r.day.Ref()).Build(),
+		components.NewMesh(30, 19).Build(),
 	)
 }
 
@@ -61,7 +62,7 @@ const prioritiesAndNotesColumnFormat = `\begin{minipage}[t]{\dimexpr2\myLengthTh
 \myUnderline{Top Priorities}
 %s
 \vskip7mm\myUnderline{Notes | %s \hfill{}%s}
-\vspace{5mm}\hspace{.5mm}\vbox to 0mm{\myDotGrid{30}{19}}
+%s
 \end{minipage}`
 
 const scheduleColumnFormat = `\begin{minipage}[t]{\myLengthThreeColumnWidth}
