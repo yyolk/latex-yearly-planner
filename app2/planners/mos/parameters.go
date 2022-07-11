@@ -28,6 +28,9 @@ type ui struct {
 	ToScheduleHour             int
 	HourFormat                 string
 	EnableCalendarOnDailyPages bool
+
+	DailyNotesRows int
+	DailyNotesCols int
 }
 
 func newUI(layout common.Layout) (ui, error) {
@@ -49,6 +52,9 @@ func newUI(layout common.Layout) (ui, error) {
 			ToScheduleHour:             21,
 			HourFormat:                 "15",
 			EnableCalendarOnDailyPages: true,
+
+			DailyNotesRows: 41,
+			DailyNotesCols: 29,
 		}, nil
 	default:
 		return ui{}, fmt.Errorf("%s: %w", layout.Name, common.UnknownDeviceErr)
