@@ -31,6 +31,13 @@ type ui struct {
 
 	DailyNotesRows int
 	DailyNotesCols int
+
+	ReflectGratefulCols  int
+	ReflectGratefulRows  int
+	ReflectBestThingCols int
+	ReflectBestThingRows int
+	ReflectLogCols       int
+	ReflectLogRows       int
 }
 
 func newUI(layout common.Layout) (ui, error) {
@@ -55,6 +62,13 @@ func newUI(layout common.Layout) (ui, error) {
 
 			DailyNotesRows: 41,
 			DailyNotesCols: 29,
+
+			ReflectGratefulRows:  4,
+			ReflectGratefulCols:  29,
+			ReflectBestThingRows: 4,
+			ReflectBestThingCols: 29,
+			ReflectLogRows:       28,
+			ReflectLogCols:       29,
 		}, nil
 	default:
 		return ui{}, fmt.Errorf("%s: %w", layout.Name, common.UnknownDeviceErr)

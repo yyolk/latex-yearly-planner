@@ -223,7 +223,7 @@ func (r *MonthsOnSides) dailyReflectSection() (*bytes.Buffer, error) {
 				headerAddAction(weekCell),
 			)
 
-		if err := buffer.WriteBlocks(header, dailyReflectContents{day: day}); err != nil {
+		if err := buffer.WriteBlocks(header, dailyReflectContents{day: day, ui: r.ui}); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
