@@ -55,7 +55,7 @@ func (r dailyContents) optionalCalendar() string {
 		return ""
 	}
 
-	return r.day.CalendarMonth().Selected(r.day).LittleCalendar()
+	return `\vspace{5mm}` + r.day.CalendarMonth().Selected(r.day).LittleCalendar()
 }
 
 const prioritiesAndNotesColumnFormat = `\begin{minipage}[t]{\dimexpr2\myLengthThreeColumnWidth+\myLengthThreeColumnsSeparatorWidth}
