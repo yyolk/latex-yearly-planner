@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+	"github.com/kudrykv/latex-yearly-planner/app2/tex/components"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
@@ -32,19 +33,14 @@ func (r dailyContents) Build() ([]string, error) {
 func (r dailyContents) prioritiesAndNotesColumn() string {
 	return fmt.Sprintf(
 		prioritiesAndNotesColumnFormat,
-		strings.Join(r.newTodos(), "\n"),
+		r.newTodos(),
 		ref.NewNote("More", r.day.Ref()).Build(),
 		ref.NewReflect("Reflect", r.day.Ref()).Build(),
 	)
 }
 
-func (r dailyContents) newTodos() []string {
-	var priorities []string
-
-	for i := 0; i < r.ui.TodosNumber; i++ {
-		priorities = append(priorities, r.height()+`$\square$\myLineGray`)
-	}
-	return priorities
+func (r dailyContents) newTodos() string {
+	return components.NewTodos(r.ui.TodosNumber).Build()
 }
 
 func (r dailyContents) scheduleColumn() string {
