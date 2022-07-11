@@ -2,8 +2,6 @@ package mos
 
 import (
 	"fmt"
-	"strings"
-	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/components"
@@ -44,29 +42,11 @@ func (r dailyContents) newTodos() string {
 }
 
 func (r dailyContents) scheduleColumn() string {
-	hoursSchedule := r.hoursSchedule()
-
-	return fmt.Sprintf(scheduleColumnFormat, hoursSchedule, r.optionalCalendar())
+	return fmt.Sprintf(scheduleColumnFormat, r.hoursSchedule(), r.optionalCalendar())
 }
 
 func (r dailyContents) hoursSchedule() string {
-	var schedule []string
-
-	for i := r.ui.FromScheduleHour; i <= r.ui.ToScheduleHour; i++ {
-		formattedHour := time.Date(0, 0, 0, i, 0, 0, 0, time.Local).Format(r.ui.HourFormat)
-		schedule = append(schedule, r.scheduleHour(formattedHour))
-	}
-
-	return strings.Join(schedule, "\n")
-}
-
-func (r dailyContents) scheduleHour(strHour string) string {
-	return r.height() + strHour + `\myLineLightGray
-\vskip5mm\myLineGray`
-}
-
-func (r dailyContents) height() string {
-	return `\parbox{0pt}{\vskip5mm}`
+	return components.NewSchedule(r.ui.FromScheduleHour, r.ui.ToScheduleHour, r.ui.HourFormat).Build()
 }
 
 func (r dailyContents) optionalCalendar() string {
