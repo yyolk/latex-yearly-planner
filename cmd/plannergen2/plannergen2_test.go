@@ -16,7 +16,7 @@ func TestDefault(t *testing.T) {
 
 		args := []string{
 			"./app", "template", "mos",
-			"--hand", "left",
+			//"--hand", "left",
 			"--weekday", "1",
 			"--show-frames",
 			//"--show-links",
