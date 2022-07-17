@@ -25,10 +25,10 @@ func NewLayout(deviceName string, hand MainHand) (Layout, error) {
 				Height: 230,
 			},
 			Margin: Margin{
-				Top:    "1cm",
-				Right:  "5mm",
-				Bottom: "5mm",
-				Left:   "1cm",
+				Top:    10,
+				Right:  5,
+				Bottom: 5,
+				Left:   10,
 			},
 			MarginNotes: MarginNotes{
 				Margin:  "2mm",
@@ -73,10 +73,10 @@ type Layout struct {
 }
 
 type Margin struct {
-	Top    string
-	Right  string
-	Bottom string
-	Left   string
+	Top    Millimeters
+	Right  Millimeters
+	Bottom Millimeters
+	Left   Millimeters
 }
 
 type MarginNotes struct {
