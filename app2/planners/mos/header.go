@@ -112,10 +112,10 @@ func (r header) months() string {
 	months := r.year.Months()
 
 	for i := len(months) - 1; i >= 0; i-- {
-		item := cell.New(months[i].ShortName())
+		item := cell.New(months[i].ShortName()).RefAs(months[i].Name())
 
 		if months[i].IntersectsWith(r.selectedMonths) {
-			item = item.Ref()
+			item = item.NoLink()
 		}
 
 		strs = append(strs, item.Build())

@@ -3,36 +3,47 @@ package cell
 import "github.com/kudrykv/latex-yearly-planner/app/tex"
 
 type Cell struct {
-	text  string
-	refAs string
-	ref   bool
+	text   string
+	refAs  string
+	ref    bool
+	noLink bool
 }
 
 func New(text string) Cell {
 	return Cell{text: text}
 }
 
-func (c Cell) Ref() Cell {
-	c.ref = true
+func (r Cell) Ref() Cell {
+	r.ref = true
 
-	return c
+	return r
 }
 
-func (c Cell) Build() string {
-	refAs := c.refAs
+func (r Cell) Build() string {
+	refAs := r.refAs
 	if len(refAs) == 0 {
-		refAs = c.text
+		refAs = r.text
 	}
 
-	if !c.ref {
-		return tex.Hyperlink(refAs, c.text)
+	if !r.ref {
+		return tex.Hyperlink(refAs, r.text)
 	}
 
-	return tex.CellColor("black", tex.TextColor("white", tex.Hypertarget(refAs, c.text)))
+	if r.noLink {
+		return tex.CellColor("black", tex.TextColor("white", r.text))
+	}
+
+	return tex.CellColor("black", tex.TextColor("white", tex.Hypertarget(refAs, r.text)))
 }
 
-func (c Cell) RefAs(refAs string) Cell {
-	c.refAs = refAs
+func (r Cell) RefAs(refAs string) Cell {
+	r.refAs = refAs
 
-	return c
+	return r
+}
+
+func (r Cell) NoLink() Cell {
+	r.noLink = true
+
+	return r
 }
