@@ -21,8 +21,8 @@ func NewLayout(deviceName string, hand MainHand) (Layout, error) {
 			Name: deviceName,
 			Hand: hand,
 			Paper: Paper{
-				Width:  "15.6cm",
-				Height: "23cm",
+				Width:  156,
+				Height: 230,
 			},
 			Margin: Margin{
 				Top:    "1cm",
@@ -52,8 +52,14 @@ func NewLayout(deviceName string, hand MainHand) (Layout, error) {
 }
 
 type Paper struct {
-	Width  string
-	Height string
+	Width  Millimeters
+	Height Millimeters
+}
+
+type Millimeters float64
+
+func (r Millimeters) String() string {
+	return fmt.Sprintf("%.4fmm", r)
 }
 
 type Layout struct {
