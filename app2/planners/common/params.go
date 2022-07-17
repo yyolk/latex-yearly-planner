@@ -12,9 +12,9 @@ type Params[T any] struct {
 	Hand       MainHand
 
 	ShowFrames bool
+	ShowLinks  bool
 
-	ArrayStretch string
-	ShowLinks    bool
+	UI T
 }
 
 type ApplyParameterOption[T any] func(*Params[T])
@@ -74,5 +74,11 @@ func ParamWithLinks[T any](showLinks bool) ApplyParameterOption[T] {
 func ParamWithDeviceName[T any](deviceName string) ApplyParameterOption[T] {
 	return func(params *Params[T]) {
 		params.DeviceName = deviceName
+	}
+}
+
+func ParamWithUI[T any](ui T) ApplyParameterOption[T] {
+	return func(params *Params[T]) {
+		params.UI = ui
 	}
 }
