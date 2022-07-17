@@ -31,13 +31,13 @@ func NewLayout(deviceName string, hand MainHand) (Layout, error) {
 				Left:   10,
 			},
 			MarginNotes: MarginNotes{
-				Margin:  "2mm",
-				Width:   "8mm",
+				Margin:  2,
+				Width:   8,
 				Reverse: `\reversemarginpar`,
 			},
 			Sizes: Sizes{
-				TwoColumnsSeparatorSize:   "5mm",
-				ThreeColumnsSeparatorSize: "5mm",
+				TwoColumnsSeparatorSize:   5,
+				ThreeColumnsSeparatorSize: 5,
 			},
 		}
 		if hand == LeftHand {
@@ -80,12 +80,12 @@ type Margin struct {
 }
 
 type MarginNotes struct {
-	Margin  string
-	Width   string
+	Margin  Millimeters
+	Width   Millimeters
 	Reverse string
 }
 
 type Sizes struct {
-	TwoColumnsSeparatorSize   string
-	ThreeColumnsSeparatorSize string
+	TwoColumnsSeparatorSize   Millimeters
+	ThreeColumnsSeparatorSize Millimeters
 }
