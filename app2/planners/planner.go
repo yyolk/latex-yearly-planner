@@ -19,14 +19,14 @@ const (
 var UnknownTemplateName = errors.New("unknown planner name")
 var UnknownSectionErr = errors.New("unknown section")
 
-type Planner struct {
-	params      common.Params
+type Planner[T any] struct {
+	params      common.Params[T]
 	futureFiles futureFiles
 	dir         string
 	builder     mos.MonthsOnSides
 }
 
-func New(template string, params common.Params) (*Planner, error) {
+func New[T any](template string, params common.Params[T]) (*Planner[T], error) {
 	var builder mos.MonthsOnSides
 
 	switch template {
@@ -36,7 +36,7 @@ func New(template string, params common.Params) (*Planner, error) {
 		return nil, fmt.Errorf("%s: %w", template, UnknownTemplateName)
 	}
 
-	return &Planner{
+	return &Planner[T]{
 		params:      params,
 		futureFiles: nil,
 		dir:         "",
@@ -44,7 +44,7 @@ func New(template string, params common.Params) (*Planner, error) {
 	}, nil
 }
 
-func (r *Planner) Generate() error {
+func (r *Planner[T]) Generate() error {
 	layout, err := common.NewLayout(r.params.DeviceName, r.params.Hand)
 	if err != nil {
 		return fmt.Errorf("new layout: %w", err)
@@ -80,7 +80,7 @@ func (r *Planner) Generate() error {
 	return nil
 }
 
-func (r *Planner) WriteTeXTo(dir string) error {
+func (r *Planner[T]) WriteTeXTo(dir string) error {
 	for _, future := range r.futureFiles {
 		if err := os.WriteFile(path.Join(dir, future.name+".tex"), future.buffer.Bytes(), 0600); err != nil {
 			return fmt.Errorf("write file %s: %w", future.name, err)
@@ -92,7 +92,7 @@ func (r *Planner) WriteTeXTo(dir string) error {
 	return nil
 }
 
-func (r *Planner) Compile(ctx context.Context) error {
+func (r *Planner[T]) Compile(ctx context.Context) error {
 	for i := 0; i < r.builder.RunTimes(); i++ {
 		cmd := exec.CommandContext(ctx, "pdflatex", "./document.tex")
 		cmd.Dir = r.dir
@@ -105,7 +105,7 @@ func (r *Planner) Compile(ctx context.Context) error {
 	return nil
 }
 
-func (r *Planner) createRootDocument() error {
+func (r *Planner[T]) createRootDocument() error {
 	buffer, err := newDocument(r).createBuffer()
 	if err != nil {
 		return fmt.Errorf("create buffer: %w", err)

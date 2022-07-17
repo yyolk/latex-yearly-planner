@@ -18,7 +18,7 @@ type header struct {
 	layout common.Layout
 
 	title string
-	ui    ui
+	ui    UI
 
 	selectedQuarter texcalendar.Quarter
 	selectedMonths  []time.Month
@@ -27,7 +27,7 @@ type header struct {
 	repeat          int
 }
 
-func newHeader(layout common.Layout, ui ui, options ...headerOption) header {
+func newHeader(layout common.Layout, ui UI, options ...headerOption) header {
 	return header{layout: layout, ui: ui}.apply(options...)
 }
 

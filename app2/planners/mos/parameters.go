@@ -11,10 +11,10 @@ type Parameters struct {
 	year    int
 	weekday time.Weekday
 
-	ui ui
+	ui UI
 }
 
-type ui struct {
+type UI struct {
 	HeaderMarginNotesArrayStretch  string
 	HeaderArrayStretch             string
 	HeaderMarginNotesMonthsWidth   string
@@ -40,10 +40,10 @@ type ui struct {
 	ReflectLogRows       int
 }
 
-func newUI(layout common.Layout) (ui, error) {
+func newUI(layout common.Layout) (UI, error) {
 	switch layout.Name {
 	case "supernote_a5x":
-		return ui{
+		return UI{
 			HeaderMarginNotesArrayStretch:  "2.042",
 			HeaderMarginNotesMonthsWidth:   "15.7cm",
 			HeaderMarginNotesQuartersWidth: "5.605cm",
@@ -71,6 +71,6 @@ func newUI(layout common.Layout) (ui, error) {
 			ReflectLogCols:       29,
 		}, nil
 	default:
-		return ui{}, fmt.Errorf("%s: %w", layout.Name, common.UnknownDeviceErr)
+		return UI{}, fmt.Errorf("%s: %w", layout.Name, common.UnknownDeviceErr)
 	}
 }

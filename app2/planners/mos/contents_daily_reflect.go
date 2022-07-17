@@ -9,7 +9,7 @@ import (
 
 type dailyReflectContents struct {
 	day texcalendar.Day
-	ui  ui
+	ui  UI
 }
 
 func (r dailyReflectContents) Build() ([]string, error) {

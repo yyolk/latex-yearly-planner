@@ -7,7 +7,7 @@ import (
 
 type dailyNotesContents struct {
 	day texcalendar.Day
-	ui  ui
+	ui  UI
 }
 
 func (r dailyNotesContents) Build() ([]string, error) {

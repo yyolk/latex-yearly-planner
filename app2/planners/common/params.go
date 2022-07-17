@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-type Params struct {
+type Params[T any] struct {
 	Year       int
 	Weekday    time.Weekday
 	DeviceName string
@@ -17,10 +17,10 @@ type Params struct {
 	ShowLinks    bool
 }
 
-type ApplyParameterOption func(*Params)
+type ApplyParameterOption[T any] func(*Params[T])
 
-func NewParams(options ...ApplyParameterOption) Params {
-	params := Params{
+func NewParams[T any](options ...ApplyParameterOption[T]) Params[T] {
+	params := Params[T]{
 		Weekday: time.Monday,
 	}
 
@@ -31,44 +31,44 @@ func NewParams(options ...ApplyParameterOption) Params {
 	return params
 }
 
-func ParamWithYear(year int) ApplyParameterOption {
-	return func(params *Params) {
+func ParamWithYear[T any](year int) ApplyParameterOption[T] {
+	return func(params *Params[T]) {
 		params.Year = year
 	}
 }
 
-func ParamWithSections(sections []string) ApplyParameterOption {
-	return func(params *Params) {
+func ParamWithSections[T any](sections []string) ApplyParameterOption[T] {
+	return func(params *Params[T]) {
 		params.Sections = sections
 	}
 }
 
-func ParamWithWeekday(weekday time.Weekday) ApplyParameterOption {
-	return func(params *Params) {
+func ParamWithWeekday[T any](weekday time.Weekday) ApplyParameterOption[T] {
+	return func(params *Params[T]) {
 		params.Weekday = weekday
 	}
 }
 
-func ParamWithMainHand(hand MainHand) ApplyParameterOption {
-	return func(params *Params) {
+func ParamWithMainHand[T any](hand MainHand) ApplyParameterOption[T] {
+	return func(params *Params[T]) {
 		params.Hand = hand
 	}
 }
 
-func ParamWithFrames(showFrames bool) ApplyParameterOption {
-	return func(params *Params) {
+func ParamWithFrames[T any](showFrames bool) ApplyParameterOption[T] {
+	return func(params *Params[T]) {
 		params.ShowFrames = showFrames
 	}
 }
 
-func ParamWithLinks(showLinks bool) ApplyParameterOption {
-	return func(params *Params) {
+func ParamWithLinks[T any](showLinks bool) ApplyParameterOption[T] {
+	return func(params *Params[T]) {
 		params.ShowLinks = showLinks
 	}
 }
 
-func ParamWithDeviceName(deviceName string) ApplyParameterOption {
-	return func(params *Params) {
+func ParamWithDeviceName[T any](deviceName string) ApplyParameterOption[T] {
+	return func(params *Params[T]) {
 		params.DeviceName = deviceName
 	}
 }

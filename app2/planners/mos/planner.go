@@ -16,7 +16,7 @@ import (
 type MonthsOnSides struct {
 	layout common.Layout
 
-	ui      ui
+	ui      UI
 	weekday time.Weekday
 	year    texcalendar.Year
 }
@@ -27,7 +27,7 @@ const (
 	notesText    = "Notes"
 )
 
-func New(params common.Params) MonthsOnSides {
+func New[T any](params common.Params[T]) MonthsOnSides {
 	return MonthsOnSides{
 		weekday: params.Weekday,
 
@@ -48,7 +48,7 @@ func (r *MonthsOnSides) PrepareDetails(layout common.Layout) error {
 
 	var err error
 	if r.ui, err = newUI(r.layout); err != nil {
-		return fmt.Errorf("new ui: %w", err)
+		return fmt.Errorf("new UI: %w", err)
 	}
 
 	r.year.Apply(

@@ -12,7 +12,7 @@ import (
 type dailyContents struct {
 	day  texcalendar.Day
 	hand common.MainHand
-	ui   ui
+	ui   UI
 }
 
 func (r dailyContents) Build() ([]string, error) {

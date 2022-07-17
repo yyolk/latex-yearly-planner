@@ -7,6 +7,7 @@ import (
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/mos"
 	"github.com/urfave/cli/v2"
 )
 
@@ -75,13 +76,13 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 							}
 
 							params := common.NewParams(
-								common.ParamWithYear(appContext.Int(yearFlag)),
-								common.ParamWithDeviceName(appContext.String(deviceNameFlag)),
-								common.ParamWithSections(appContext.StringSlice(sectionsFlag)),
-								common.ParamWithWeekday(time.Weekday(appContext.Int(weekdayFlag))),
-								common.ParamWithMainHand(hand),
-								common.ParamWithFrames(appContext.Bool(framesFlag)),
-								common.ParamWithLinks(appContext.Bool(linksFlag)),
+								common.ParamWithYear[mos.UI](appContext.Int(yearFlag)),
+								common.ParamWithDeviceName[mos.UI](appContext.String(deviceNameFlag)),
+								common.ParamWithSections[mos.UI](appContext.StringSlice(sectionsFlag)),
+								common.ParamWithWeekday[mos.UI](time.Weekday(appContext.Int(weekdayFlag))),
+								common.ParamWithMainHand[mos.UI](hand),
+								common.ParamWithFrames[mos.UI](appContext.Bool(framesFlag)),
+								common.ParamWithLinks[mos.UI](appContext.Bool(linksFlag)),
 							)
 
 							planner, err := planners.New(planners.MonthsOnSidesTemplate, params)

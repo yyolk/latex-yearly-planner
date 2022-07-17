@@ -15,7 +15,7 @@ type document struct {
 	ShowLinks  bool
 }
 
-func newDocument(planner *Planner) document {
+func newDocument[T any](planner *Planner[T]) document {
 	return document{
 		Layout:     planner.builder.Layout(),
 		Files:      planner.futureFiles.buildAsTexIncludes(),
