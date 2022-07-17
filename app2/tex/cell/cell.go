@@ -3,10 +3,10 @@ package cell
 import "github.com/kudrykv/latex-yearly-planner/app/tex"
 
 type Cell struct {
-	text   string
-	refAs  string
-	ref    bool
-	noLink bool
+	text     string
+	refAs    string
+	ref      bool
+	noTarget bool
 }
 
 func New(text string) Cell {
@@ -29,7 +29,7 @@ func (r Cell) Build() string {
 		return tex.Hyperlink(refAs, r.text)
 	}
 
-	if r.noLink {
+	if r.noTarget {
 		return tex.CellColor("black", tex.TextColor("white", r.text))
 	}
 
@@ -42,8 +42,9 @@ func (r Cell) RefAs(refAs string) Cell {
 	return r
 }
 
-func (r Cell) NoLink() Cell {
-	r.noLink = true
+func (r Cell) NoTarget() Cell {
+	r.noTarget = true
+	r.ref = true
 
 	return r
 }
