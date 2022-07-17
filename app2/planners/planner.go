@@ -24,10 +24,16 @@ type Planner[T any] struct {
 	futureFiles futureFiles
 	dir         string
 	builder     mos.MonthsOnSides
+	layout      common.Layout
 }
 
 func New[T any](template string, params common.Params[T]) (*Planner[T], error) {
 	var builder mos.MonthsOnSides
+
+	layout, err := params.Layout()
+	if err != nil {
+		return nil, fmt.Errorf("layout: %w", err)
+	}
 
 	switch template {
 	case MonthsOnSidesTemplate:
@@ -38,6 +44,7 @@ func New[T any](template string, params common.Params[T]) (*Planner[T], error) {
 
 	return &Planner[T]{
 		params:      params,
+		layout:      layout,
 		futureFiles: nil,
 		dir:         "",
 		builder:     builder,
@@ -45,12 +52,7 @@ func New[T any](template string, params common.Params[T]) (*Planner[T], error) {
 }
 
 func (r *Planner[T]) Generate() error {
-	layout, err := common.NewLayout(r.params.DeviceName, r.params.Hand)
-	if err != nil {
-		return fmt.Errorf("new layout: %w", err)
-	}
-
-	if err = r.builder.PrepareDetails(layout); err != nil {
+	if err := r.builder.PrepareDetails(r.layout); err != nil {
 		return fmt.Errorf("prepare details: %w", err)
 	}
 

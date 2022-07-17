@@ -31,6 +31,10 @@ func NewParams[T any](options ...ApplyParameterOption[T]) Params[T] {
 	return params
 }
 
+func (r Params[T]) Layout() (Layout, error) {
+	return newLayout(r.DeviceName, r.Hand)
+}
+
 func ParamWithYear[T any](year int) ApplyParameterOption[T] {
 	return func(params *Params[T]) {
 		params.Year = year

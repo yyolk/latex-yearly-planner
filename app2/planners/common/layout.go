@@ -14,7 +14,7 @@ const (
 	RightHand
 )
 
-func NewLayout(deviceName string, hand MainHand) (Layout, error) {
+func newLayout(deviceName string, hand MainHand) (Layout, error) {
 	switch deviceName {
 	case "supernote_a5x":
 		var layout = Layout{
