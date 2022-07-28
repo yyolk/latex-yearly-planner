@@ -21,6 +21,7 @@ func TestDefault(t *testing.T) {
 			"--show-frames",
 			//"--show-links",
 			"--device-name", "supernote_a5x",
+			"--ui-path", "test.toml",
 		}
 
 		err := app2.New(in, out, errOut).Run(args)

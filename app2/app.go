@@ -3,8 +3,10 @@ package app2
 import (
 	"fmt"
 	"io"
+	"os"
 	"time"
 
+	"github.com/BurntSushi/toml"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/mos"
@@ -25,6 +27,8 @@ const (
 	deviceNameFlag = "device-name"
 
 	handFlag = "hand"
+
+	uiPathFlag = "ui-path"
 )
 
 func New(reader io.Reader, writer, errWriter io.Writer) *App {
@@ -53,6 +57,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 							&cli.IntFlag{Name: weekdayFlag, Value: 0},
 							&cli.BoolFlag{Name: framesFlag, Value: false},
 							&cli.BoolFlag{Name: linksFlag, Value: false},
+							&cli.StringFlag{Name: uiPathFlag},
 							&cli.StringSliceFlag{
 								Name: sectionsFlag,
 								Value: cli.NewStringSlice(
@@ -75,6 +80,18 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								hand = common.LeftHand
 							}
 
+							var ui mos.UI
+							if path := appContext.String(uiPathFlag); path != "" {
+								fileBytes, err := os.ReadFile(appContext.String(uiPathFlag))
+								if err != nil {
+									return fmt.Errorf("read file: %w", err)
+								}
+
+								if err = toml.Unmarshal(fileBytes, &ui); err != nil {
+									return fmt.Errorf("unmarshal ui: %w", err)
+								}
+							}
+
 							params := common.NewParams(
 								common.ParamWithYear[mos.UI](appContext.Int(yearFlag)),
 								common.ParamWithDeviceName[mos.UI](appContext.String(deviceNameFlag)),
@@ -83,6 +100,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								common.ParamWithMainHand[mos.UI](hand),
 								common.ParamWithFrames[mos.UI](appContext.Bool(framesFlag)),
 								common.ParamWithLinks[mos.UI](appContext.Bool(linksFlag)),
+								common.ParamWithUI(ui),
 							)
 
 							planner, err := planners.New(planners.MonthsOnSidesTemplate, params)

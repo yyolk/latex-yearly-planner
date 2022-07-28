@@ -27,8 +27,15 @@ const (
 	notesText    = "Notes"
 )
 
-func New[T any](params common.Params[T]) MonthsOnSides {
+func New[T any](params common.Params[T]) (MonthsOnSides, error) {
+	ui, ok := any(params.UI).(UI)
+	if !ok {
+		return MonthsOnSides{}, fmt.Errorf("invalid UI: %T", params.UI)
+	}
+
 	return MonthsOnSides{
+		ui: ui,
+
 		weekday: params.Weekday,
 
 		year: texcalendar.NewYear(params.Year, texcalendar.WithParameters(texcalendar.Parameters{
@@ -36,7 +43,7 @@ func New[T any](params common.Params[T]) MonthsOnSides {
 			Weekday:    params.Weekday,
 			FirstMonth: time.January,
 		})),
-	}
+	}, nil
 }
 
 func (r MonthsOnSides) Layout() common.Layout {
