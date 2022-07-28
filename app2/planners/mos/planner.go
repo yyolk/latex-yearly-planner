@@ -46,7 +46,7 @@ func New[T any](params common.Params[T]) (MonthsOnSides, error) {
 	}, nil
 }
 
-func (r MonthsOnSides) Layout() common.Layout {
+func (r *MonthsOnSides) Layout() common.Layout {
 	return r.layout
 }
 
@@ -68,7 +68,7 @@ func (r *MonthsOnSides) PrepareDetails(layout common.Layout) error {
 
 type sectionFunc func() (*bytes.Buffer, error)
 
-func (r MonthsOnSides) Sections() map[string]sectionFunc {
+func (r *MonthsOnSides) Sections() map[string]sectionFunc {
 	return map[string]sectionFunc{
 		common.TitleSection:        r.titleSection,
 		common.AnnualSection:       r.annualSection,
@@ -302,7 +302,7 @@ func (r *MonthsOnSides) rightCells() cell.Cells {
 	return cell.NewCells(calendarText, toDoText, notesText)
 }
 
-func (r MonthsOnSides) RunTimes() int {
+func (r *MonthsOnSides) RunTimes() int {
 	// MoS need to be compiled two times to correctly position margin notes
 	return 2
 }
