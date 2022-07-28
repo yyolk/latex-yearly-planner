@@ -18,12 +18,12 @@ type Parameters struct {
 type UI struct {
 	HeaderMarginNotesArrayStretch  string
 	HeaderArrayStretch             string
-	HeaderMarginNotesMonthsWidth   string
-	HeaderMarginNotesQuartersWidth string
+	HeaderMarginNotesMonthsWidth   common.Millimeters
+	HeaderMarginNotesQuartersWidth common.Millimeters
 
 	LittleCalArrayStretch string
 
-	LargeCalHeaderHeight       string
+	LargeCalHeaderHeight       common.Millimeters
 	TodosNumber                int
 	FromScheduleHour           int
 	ToScheduleHour             int
@@ -46,13 +46,13 @@ func newUI(layout common.Layout, overrides UI) (UI, error) {
 	case "supernote_a5x":
 		ui := UI{
 			HeaderMarginNotesArrayStretch:  "2.042",
-			HeaderMarginNotesMonthsWidth:   "15.7cm",
-			HeaderMarginNotesQuartersWidth: "5.605cm",
+			HeaderMarginNotesMonthsWidth:   157,
+			HeaderMarginNotesQuartersWidth: 56.05,
 			HeaderArrayStretch:             "1.8185",
 
 			LittleCalArrayStretch: "1.6",
 
-			LargeCalHeaderHeight: "5mm",
+			LargeCalHeaderHeight: 5,
 
 			TodosNumber: 8,
 

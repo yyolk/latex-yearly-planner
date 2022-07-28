@@ -1,6 +1,10 @@
 package tex
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+)
 
 const nl = "\n"
 
@@ -60,8 +64,8 @@ func RenewCommand(command, value string) string {
 	return fmt.Sprintf(`\renewcommand{%s}{%s}`, command, value)
 }
 
-func LineHeight(value string) string {
-	return Parbox(`0pt`, `\vskip`+value)
+func LineHeight(value common.Millimeters) string {
+	return Parbox(`0pt`, `\vskip`+value.String())
 }
 
 func Parbox(width, text string) string {

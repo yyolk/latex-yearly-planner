@@ -121,7 +121,7 @@ func (r header) months() string {
 		strs = append(strs, item.Build())
 	}
 
-	return `\begin{tabularx}{` + r.ui.HeaderMarginNotesMonthsWidth + `}{*{12}{|Y}|}
+	return `\begin{tabularx}{` + r.ui.HeaderMarginNotesMonthsWidth.String() + `}{*{12}{|Y}|}
 	` + r.maybeHLineLeft() + strings.Join(strs, " & ") + `\\ ` + r.maybeHLineRight() + `
 \end{tabularx}`
 }
@@ -139,7 +139,7 @@ func (r header) quarters() string {
 		quarters = append(quarters, item.Build())
 	}
 
-	return `\begin{tabularx}{` + r.ui.HeaderMarginNotesQuartersWidth + `}{*{4}{|Y}|}
+	return `\begin{tabularx}{` + r.ui.HeaderMarginNotesQuartersWidth.String() + `}{*{4}{|Y}|}
 	` + r.maybeHLineLeft() + strings.Join(quarters, " & ") + ` \\ ` + r.maybeHLineRight() + `
 \end{tabularx}`
 }

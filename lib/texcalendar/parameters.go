@@ -13,7 +13,7 @@ type Parameters struct {
 
 	LittleCalArrayStretch string
 
-	LargeCalHeaderHeight string
+	LargeCalHeaderHeight common.Millimeters
 }
 
 type ApplyToParameters func(*Parameters)
@@ -30,7 +30,7 @@ func WithLittleCalArrayStretch(arrayStretch string) ApplyToParameters {
 	}
 }
 
-func WithLargeCalHeaderHeight(largeCalHeaderHeight string) ApplyToParameters {
+func WithLargeCalHeaderHeight(largeCalHeaderHeight common.Millimeters) ApplyToParameters {
 	return func(parameters *Parameters) {
 		parameters.LargeCalHeaderHeight = largeCalHeaderHeight
 	}
