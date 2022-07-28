@@ -54,7 +54,7 @@ func (r *MonthsOnSides) PrepareDetails(layout common.Layout) error {
 	r.layout = layout
 
 	var err error
-	if r.ui, err = newUI(r.layout); err != nil {
+	if r.ui, err = newUI(r.layout, r.ui); err != nil {
 		return fmt.Errorf("new UI: %w", err)
 	}
 

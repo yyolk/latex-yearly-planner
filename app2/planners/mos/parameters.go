@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/imdario/mergo"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 )
 
@@ -40,10 +41,10 @@ type UI struct {
 	ReflectLogRows       int
 }
 
-func newUI(layout common.Layout) (UI, error) {
+func newUI(layout common.Layout, overrides UI) (UI, error) {
 	switch layout.Name {
 	case "supernote_a5x":
-		return UI{
+		ui := UI{
 			HeaderMarginNotesArrayStretch:  "2.042",
 			HeaderMarginNotesMonthsWidth:   "15.7cm",
 			HeaderMarginNotesQuartersWidth: "5.605cm",
@@ -69,7 +70,13 @@ func newUI(layout common.Layout) (UI, error) {
 			ReflectBestThingCols: 29,
 			ReflectLogRows:       28,
 			ReflectLogCols:       29,
-		}, nil
+		}
+
+		if err := mergo.Merge(&ui, overrides, mergo.WithOverride); err != nil {
+			return ui, fmt.Errorf("merge UI overrides: %w", err)
+		}
+
+		return ui, nil
 	default:
 		return UI{}, fmt.Errorf("%s: %w", layout.Name, common.UnknownDeviceErr)
 	}
