@@ -3,6 +3,8 @@ package common
 import (
 	"errors"
 	"fmt"
+
+	"github.com/kudrykv/latex-yearly-planner/app2/types"
 )
 
 type MainHand int
@@ -52,14 +54,8 @@ func newLayout(deviceName string, hand MainHand) (Layout, error) {
 }
 
 type Paper struct {
-	Width  Millimeters
-	Height Millimeters
-}
-
-type Millimeters float64
-
-func (r Millimeters) String() string {
-	return fmt.Sprintf("%.4fmm", r)
+	Width  types.Millimeters
+	Height types.Millimeters
 }
 
 type Layout struct {
@@ -73,19 +69,19 @@ type Layout struct {
 }
 
 type Margin struct {
-	Top    Millimeters
-	Right  Millimeters
-	Bottom Millimeters
-	Left   Millimeters
+	Top    types.Millimeters
+	Right  types.Millimeters
+	Bottom types.Millimeters
+	Left   types.Millimeters
 }
 
 type MarginNotes struct {
-	Margin  Millimeters
-	Width   Millimeters
+	Margin  types.Millimeters
+	Width   types.Millimeters
 	Reverse string
 }
 
 type Sizes struct {
-	TwoColumnsSeparatorSize   Millimeters
-	ThreeColumnsSeparatorSize Millimeters
+	TwoColumnsSeparatorSize   types.Millimeters
+	ThreeColumnsSeparatorSize types.Millimeters
 }

@@ -6,6 +6,7 @@ import (
 
 	"github.com/imdario/mergo"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+	"github.com/kudrykv/latex-yearly-planner/app2/types"
 )
 
 type Parameters struct {
@@ -18,12 +19,12 @@ type Parameters struct {
 type UI struct {
 	HeaderMarginNotesArrayStretch  string
 	HeaderArrayStretch             string
-	HeaderMarginNotesMonthsWidth   common.Millimeters
-	HeaderMarginNotesQuartersWidth common.Millimeters
+	HeaderMarginNotesMonthsWidth   types.Millimeters
+	HeaderMarginNotesQuartersWidth types.Millimeters
 
 	LittleCalArrayStretch string
 
-	LargeCalHeaderHeight       common.Millimeters
+	LargeCalHeaderHeight       types.Millimeters
 	TodosNumber                int
 	FromScheduleHour           int
 	ToScheduleHour             int

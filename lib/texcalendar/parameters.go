@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+	"github.com/kudrykv/latex-yearly-planner/app2/types"
 )
 
 type Parameters struct {
@@ -13,7 +14,7 @@ type Parameters struct {
 
 	LittleCalArrayStretch string
 
-	LargeCalHeaderHeight common.Millimeters
+	LargeCalHeaderHeight types.Millimeters
 }
 
 type ApplyToParameters func(*Parameters)
@@ -30,7 +31,7 @@ func WithLittleCalArrayStretch(arrayStretch string) ApplyToParameters {
 	}
 }
 
-func WithLargeCalHeaderHeight(largeCalHeaderHeight common.Millimeters) ApplyToParameters {
+func WithLargeCalHeaderHeight(largeCalHeaderHeight types.Millimeters) ApplyToParameters {
 	return func(parameters *Parameters) {
 		parameters.LargeCalHeaderHeight = largeCalHeaderHeight
 	}

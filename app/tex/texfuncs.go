@@ -3,7 +3,7 @@ package tex
 import (
 	"fmt"
 
-	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+	"github.com/kudrykv/latex-yearly-planner/app2/types"
 )
 
 const nl = "\n"
@@ -64,7 +64,7 @@ func RenewCommand(command, value string) string {
 	return fmt.Sprintf(`\renewcommand{%s}{%s}`, command, value)
 }
 
-func LineHeight(value common.Millimeters) string {
+func LineHeight(value types.Millimeters) string {
 	return Parbox(`0pt`, `\vskip`+value.String())
 }
 
