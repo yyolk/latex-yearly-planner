@@ -23,6 +23,16 @@ func TestYear_BuildCalendar(t *testing.T) {
 				So(calendar, ShouldEqual, readFile("testdata/year_2022_right_hand.txt"))
 			})
 		})
+
+		Convey("when left hand is set", func() {
+			Convey("should put week column to the right", func() {
+				year := NewYear(2022, WithHand(common.LeftHand))
+
+				calendar := year.BuildCalendar()
+
+				So(calendar, ShouldEqual, readFile("testdata/year_2022_left_hand.txt"))
+			})
+		})
 	})
 }
 
