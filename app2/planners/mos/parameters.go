@@ -22,7 +22,7 @@ type UI struct {
 	HeaderMarginNotesMonthsWidth   types.Millimeters
 	HeaderMarginNotesQuartersWidth types.Millimeters
 
-	LittleCalArrayStretch string
+	LittleCalArrayStretch types.Spring
 
 	LargeCalHeaderHeight       types.Millimeters
 	TodosNumber                int
@@ -51,7 +51,7 @@ func newUI(layout common.Layout, overrides UI) (UI, error) {
 			HeaderMarginNotesQuartersWidth: 56.05,
 			HeaderArrayStretch:             "1.8185",
 
-			LittleCalArrayStretch: "1.6",
+			LittleCalArrayStretch: 1.6,
 
 			LargeCalHeaderHeight: 5,
 

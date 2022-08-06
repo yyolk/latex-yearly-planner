@@ -12,7 +12,7 @@ type Parameters struct {
 	Weekday    time.Weekday
 	FirstMonth time.Month
 
-	LittleCalArrayStretch string
+	LittleCalArrayStretch types.Spring
 
 	LargeCalHeaderHeight types.Millimeters
 }
@@ -25,7 +25,7 @@ func WithParameters(externalParameters Parameters) ApplyToParameters {
 	}
 }
 
-func WithLittleCalArrayStretch(arrayStretch string) ApplyToParameters {
+func WithLittleCalArrayStretch(arrayStretch types.Spring) ApplyToParameters {
 	return func(parameters *Parameters) {
 		parameters.LittleCalArrayStretch = arrayStretch
 	}

@@ -45,7 +45,7 @@ func (r Month) LittleCalendar() string {
 		weekdays + `\\ \hline` + "\n" +
 		littleCalMatrix
 
-	return tex.RenewArrayStretch(r.parameters.LittleCalArrayStretch) + `\setlength{\tabcolsep}{0pt}` + "\n" +
+	return tex.RenewArrayStretch(r.parameters.LittleCalArrayStretch.String()) + `\setlength{\tabcolsep}{0pt}` + "\n" +
 		tex.TabularXAlignTopLineWidth(r.littleTableRule(), tabularContents)
 }
 

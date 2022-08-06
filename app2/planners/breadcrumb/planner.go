@@ -59,7 +59,7 @@ func newUI(layout common.Layout, ui UI) (UI, error) {
 	switch layout.Name {
 	case "supernote_a5x":
 		finalUI = UI{
-			LittleCalArrayStretch: "1.6",
+			LittleCalArrayStretch: 1.6,
 			LargeCalHeaderHeight:  5,
 		}
 
