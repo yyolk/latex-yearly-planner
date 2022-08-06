@@ -8,12 +8,15 @@ import (
 	"os/exec"
 	"path"
 
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/breadcrumb"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/mos"
+	"github.com/kudrykv/latex-yearly-planner/app2/types"
 )
 
 const (
 	MonthsOnSidesTemplate = "mos"
+	BreadcrumbTemplate    = "breadcrumb"
 )
 
 var UnknownTemplateName = errors.New("unknown planner name")
@@ -23,12 +26,18 @@ type Planner[T any] struct {
 	params      common.Params[T]
 	futureFiles futureFiles
 	dir         string
-	builder     mos.MonthsOnSides
+	builder     plannerImplementation
 	layout      common.Layout
 }
 
+type plannerImplementation interface {
+	PrepareDetails(layout common.Layout) error
+	Sections() map[string]types.SectionFunc
+	RunTimes() int
+}
+
 func New[T any](template string, params common.Params[T]) (*Planner[T], error) {
-	var builder mos.MonthsOnSides
+	var builder plannerImplementation
 
 	layout, err := params.Layout()
 	if err != nil {
@@ -37,9 +46,16 @@ func New[T any](template string, params common.Params[T]) (*Planner[T], error) {
 
 	switch template {
 	case MonthsOnSidesTemplate:
-		builder, _ = mos.New(params)
+		builder, err = mos.New(params)
+	case BreadcrumbTemplate:
+		builder, err = breadcrumb.New(params)
+
 	default:
 		return nil, fmt.Errorf("%s: %w", template, UnknownTemplateName)
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("%s: %w", template, err)
 	}
 
 	return &Planner[T]{

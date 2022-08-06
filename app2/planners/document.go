@@ -17,7 +17,7 @@ type document struct {
 
 func newDocument[T any](planner *Planner[T]) document {
 	return document{
-		Layout:     planner.builder.Layout(),
+		Layout:     planner.layout,
 		Files:      planner.futureFiles.buildAsTexIncludes(),
 		ShowFrames: planner.params.ShowFrames,
 		ShowLinks:  planner.params.ShowLinks,

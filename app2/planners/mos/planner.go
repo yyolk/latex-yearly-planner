@@ -10,6 +10,7 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
+	"github.com/kudrykv/latex-yearly-planner/app2/types"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
@@ -27,13 +28,13 @@ const (
 	notesText    = "Notes"
 )
 
-func New[T any](params common.Params[T]) (MonthsOnSides, error) {
+func New[T any](params common.Params[T]) (*MonthsOnSides, error) {
 	ui, ok := any(params.UI).(UI)
 	if !ok {
-		return MonthsOnSides{}, fmt.Errorf("invalid UI: %T", params.UI)
+		return nil, fmt.Errorf("invalid UI: %T", params.UI)
 	}
 
-	return MonthsOnSides{
+	return &MonthsOnSides{
 		ui: ui,
 
 		weekday: params.Weekday,
@@ -44,10 +45,6 @@ func New[T any](params common.Params[T]) (MonthsOnSides, error) {
 			FirstMonth: time.January,
 		})),
 	}, nil
-}
-
-func (r *MonthsOnSides) Layout() common.Layout {
-	return r.layout
 }
 
 func (r *MonthsOnSides) PrepareDetails(layout common.Layout) error {
@@ -66,10 +63,8 @@ func (r *MonthsOnSides) PrepareDetails(layout common.Layout) error {
 	return nil
 }
 
-type sectionFunc func() (*bytes.Buffer, error)
-
-func (r *MonthsOnSides) Sections() map[string]sectionFunc {
-	return map[string]sectionFunc{
+func (r *MonthsOnSides) Sections() map[string]types.SectionFunc {
+	return map[string]types.SectionFunc{
 		common.TitleSection:        r.titleSection,
 		common.AnnualSection:       r.annualSection,
 		common.QuarterliesSection:  r.quarterliesSection,
