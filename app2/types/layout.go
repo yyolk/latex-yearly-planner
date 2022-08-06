@@ -1,10 +1,10 @@
 package types
 
-type Layout[T any] struct {
+type Layout struct {
 	Paper       Paper
 	Margin      Margin
 	MarginNotes MarginNotes
 	Sizes       Sizes
 
-	Misc T
+	Misc any
 }
