@@ -8,8 +8,10 @@ import (
 )
 
 type Planner struct {
-	layout  types.Layout
-	builder *mos.Planner
+	layout      types.Layout
+	builder     *mos.Planner
+	workdir     string
+	futureFiles futureFiles
 }
 
 func New(templateName string, layout types.Layout) (*Planner, error) {
