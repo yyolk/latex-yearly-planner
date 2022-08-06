@@ -98,7 +98,7 @@ func (r Month) tabulate(matrix [][]string, join string) string {
 	rows := make([]string, 0, len(matrix))
 
 	for _, row := range matrix {
-		rows = append(rows, strings.Join(row, " & "))
+		rows = append(rows, strings.TrimSpace(strings.Join(row, " & ")))
 	}
 
 	return strings.Join(rows, join+"\n")

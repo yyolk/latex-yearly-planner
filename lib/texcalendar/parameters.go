@@ -25,6 +25,12 @@ func WithParameters(externalParameters Parameters) ApplyToParameters {
 	}
 }
 
+func WithHand(hand common.MainHand) ApplyToParameters {
+	return func(parameters *Parameters) {
+		parameters.Hand = hand
+	}
+}
+
 func WithLittleCalArrayStretch(arrayStretch types.Spring) ApplyToParameters {
 	return func(parameters *Parameters) {
 		parameters.LittleCalArrayStretch = arrayStretch
