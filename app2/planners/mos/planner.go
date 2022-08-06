@@ -93,7 +93,7 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 	header := r.headerWithTitleAndSelection(r.year.Name(), calendarText)
 
-	if err := buffer.WriteBlocks(header, annualContents{hand: r.layout.Hand, year: r.year}); err != nil {
+	if err := buffer.WriteBlocks(header, contents.NewAnnual(r.year)); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
