@@ -8,6 +8,7 @@ import (
 
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common/contents"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
 	"github.com/kudrykv/latex-yearly-planner/app2/types"
@@ -81,7 +82,7 @@ func (r *MonthsOnSides) Sections() map[string]types.SectionFunc {
 func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	if err := buffer.WriteBlocks(&titleContents{title: r.year.Name()}); err != nil {
+	if err := buffer.WriteBlocks(contents.NewTitle(r.year.Name())); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 

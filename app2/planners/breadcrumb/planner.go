@@ -1,11 +1,14 @@
 package breadcrumb
 
 import (
+	"bytes"
 	"fmt"
 	"time"
 
 	"github.com/imdario/mergo"
+	"github.com/kudrykv/latex-yearly-planner/app2/pages"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common/contents"
 	"github.com/kudrykv/latex-yearly-planner/app2/types"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
@@ -75,10 +78,21 @@ func newUI(layout common.Layout, ui UI) (UI, error) {
 }
 
 func (r *Planner) Sections() map[string]types.SectionFunc {
-	return map[string]types.SectionFunc{}
+	return map[string]types.SectionFunc{
+		common.TitleSection: r.titleSection,
+	}
 }
 
 func (r *Planner) RunTimes() int {
-	//TODO implement me
-	panic("implement me")
+	return 1
+}
+
+func (r *Planner) titleSection() (*bytes.Buffer, error) {
+	buffer := pages.NewBuffer()
+
+	if err := buffer.WriteBlocks(contents.NewTitle(r.year.Name())); err != nil {
+		return nil, fmt.Errorf("write to buffer: %w", err)
+	}
+
+	return buffer.Buffer, nil
 }
