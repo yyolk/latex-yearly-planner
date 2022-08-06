@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/imdario/mergo"
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common/contents"
@@ -54,27 +53,6 @@ func (r *Planner) PrepareDetails(layout common.Layout) error {
 	)
 
 	return nil
-}
-
-func newUI(layout common.Layout, ui UI) (UI, error) {
-	var finalUI UI
-
-	switch layout.Name {
-	case "supernote_a5x":
-		finalUI = UI{
-			LittleCalArrayStretch: 1.6,
-			LargeCalHeaderHeight:  5,
-		}
-
-		if err := mergo.Merge(&finalUI, ui); err != nil {
-			return finalUI, fmt.Errorf("merge: %w", err)
-		}
-
-	default:
-		return finalUI, fmt.Errorf("unknown layout: %s", layout.Name)
-	}
-
-	return finalUI, nil
 }
 
 func (r *Planner) Sections() map[string]types.SectionFunc {
