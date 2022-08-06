@@ -13,12 +13,12 @@ type header struct {
 }
 
 func (r header) Build() ([]string, error) {
-	leftTabular := tex.Tabular(strings.Repeat("l", len(r.left)), strings.Join(r.left.Slice(), " & "))
+	leftTabular := tex.Tabular(strings.Repeat("|l", len(r.left)), strings.Join(r.left.Slice(), " & "))
 	if len(r.left) == 0 {
 		leftTabular = ""
 	}
 
-	rightTabular := tex.Tabular(strings.Repeat("r", len(r.right)), strings.Join(r.right.Slice(), " & "))
+	rightTabular := tex.Tabular(strings.Repeat("r|", len(r.right)), strings.Join(r.right.Slice(), " & "))
 	if len(r.right) == 0 {
 		rightTabular = ""
 	}

@@ -58,8 +58,9 @@ func (r *Planner) PrepareDetails(layout common.Layout) error {
 
 func (r *Planner) Sections() map[string]types.SectionFunc {
 	return map[string]types.SectionFunc{
-		common.TitleSection:  r.titleSection,
-		common.AnnualSection: r.annualSection,
+		common.TitleSection:       r.titleSection,
+		common.AnnualSection:      r.annualSection,
+		common.QuarterliesSection: r.quarterliesSection,
 	}
 }
 
@@ -85,6 +86,22 @@ func (r *Planner) annualSection() (*bytes.Buffer, error) {
 		contents.NewAnnual(r.year),
 	); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
+	}
+
+	return buffer.Buffer, nil
+}
+
+func (r *Planner) quarterliesSection() (*bytes.Buffer, error) {
+	buffer := pages.NewBuffer()
+
+	for _, quarter := range r.year.Quarters() {
+		h := header{
+			left: []cell.Cell{cell.New(r.year.Name()), cell.New(quarter.Name())},
+		}
+
+		if err := buffer.WriteBlocks(h, contents.NewQuarterly(r.layout.Hand, quarter)); err != nil {
+			return nil, fmt.Errorf("write to buffer: %w", err)
+		}
 	}
 
 	return buffer.Buffer, nil

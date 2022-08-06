@@ -108,7 +108,7 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 			headerWithTitle(quarter.Name()).
 			apply(headerSelectQuarter(quarter))
 
-		if err := buffer.WriteBlocks(header, quarterlyContents{hand: r.layout.Hand, quarter: quarter}); err != nil {
+		if err := buffer.WriteBlocks(header, contents.NewQuarterly(r.layout.Hand, quarter)); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}
