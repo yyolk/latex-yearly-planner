@@ -40,7 +40,7 @@ func TestBreadcrumb(t *testing.T) {
 			"./app", "template", "breadcrumb",
 			//"--hand", "left",
 			"--weekday", "1",
-			"--show-frames",
+			//"--show-frames",
 			//"--show-links",
 			"--device-name", "supernote_a5x",
 		}
