@@ -30,6 +30,27 @@ func TestDefault(t *testing.T) {
 	})
 }
 
+func TestMoS2(t *testing.T) {
+	Convey("mos2", t, func() {
+		in := strings.NewReader("")
+		out := &strings.Builder{}
+		errOut := &strings.Builder{}
+
+		args := []string{
+			"./app", "template", "mos2",
+			//"--hand", "left",
+			"--weekday", "1",
+			"--show-frames",
+			//"--show-links",
+			"--device-name", "supernote_a5x",
+		}
+
+		err := app2.New(in, out, errOut).Run(args)
+
+		So(err, ShouldBeNil)
+	})
+}
+
 func TestBreadcrumb(t *testing.T) {
 	Convey("Breadcrumb", t, func() {
 		in := strings.NewReader("")
