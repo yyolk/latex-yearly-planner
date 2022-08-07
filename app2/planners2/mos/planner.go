@@ -3,6 +3,9 @@ package mos
 import (
 	"fmt"
 
+	"github.com/kudrykv/latex-yearly-planner/app2/pages2"
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+	"github.com/kudrykv/latex-yearly-planner/app2/planners/common/contents"
 	"github.com/kudrykv/latex-yearly-planner/app2/types"
 )
 
@@ -47,14 +50,18 @@ func (r *Planner) BuildData() (types.NamedDatas, error) {
 			return nil, fmt.Errorf("%s: %w", name, err)
 		}
 
-		result = append(result, types.NamedData{Name: name, Data: buff.Bytes()})
+		result = append(result, types.NamedData{Name: name, Data: buff})
 	}
 
 	return result, nil
 }
 
-func (r *Planner) sections() map[string]types.SectionFunc {
-	panic("here will be sections")
+type sectionFunc func() ([]byte, error)
+
+func (r *Planner) sections() map[string]sectionFunc {
+	return map[string]sectionFunc{
+		common.TitleSection: r.titleSection,
+	}
 }
 
 func (r *Planner) RunTimes() int {
@@ -69,4 +76,14 @@ func Contains[T comparable](slice []T, item T) bool {
 	}
 
 	return false
+}
+
+func (r *Planner) titleSection() ([]byte, error) {
+	buffer := pages2.NewBuffer()
+
+	if err := buffer.WriteBlocks(contents.NewTitle(r.parameters.calendar.Name())); err != nil {
+		return nil, fmt.Errorf("write title: %w", err)
+	}
+
+	return buffer.Bytes(), nil
 }

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
+	"github.com/kudrykv/latex-yearly-planner/app2/pages2"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common/contents"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
@@ -80,13 +81,13 @@ func (r *MonthsOnSides) Sections() map[string]types.SectionFunc {
 }
 
 func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
-	buffer := pages.NewBuffer()
+	buffer := pages2.NewBuffer()
 
 	if err := buffer.WriteBlocks(contents.NewTitle(r.year.Name())); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
-	return buffer.Buffer, nil
+	return buffer.Raw(), nil
 }
 
 func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {

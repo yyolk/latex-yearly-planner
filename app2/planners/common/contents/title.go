@@ -10,8 +10,8 @@ func NewTitle(name string) Title {
 	return Title{name: name}
 }
 
-func (r Title) Build() ([]string, error) {
-	return []string{fmt.Sprintf(titleTemplate, r.name)}, nil
+func (r Title) Build() ([][]byte, error) {
+	return [][]byte{[]byte(fmt.Sprintf(titleTemplate, r.name))}, nil
 }
 
 const titleTemplate = `\hspace{0pt}\vfil
