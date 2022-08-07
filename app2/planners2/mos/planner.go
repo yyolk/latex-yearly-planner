@@ -3,9 +3,9 @@ package mos
 import (
 	"fmt"
 
+	"github.com/kudrykv/latex-yearly-planner/app2/contents"
 	"github.com/kudrykv/latex-yearly-planner/app2/pages2"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
-	"github.com/kudrykv/latex-yearly-planner/app2/planners/common/contents"
 	"github.com/kudrykv/latex-yearly-planner/app2/types"
 )
 

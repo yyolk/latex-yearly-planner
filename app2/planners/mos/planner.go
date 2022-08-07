@@ -6,10 +6,10 @@ import (
 	"strconv"
 	"time"
 
+	contents2 "github.com/kudrykv/latex-yearly-planner/app2/contents"
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
 	"github.com/kudrykv/latex-yearly-planner/app2/pages2"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
-	"github.com/kudrykv/latex-yearly-planner/app2/planners/common/contents"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/cell"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
 	"github.com/kudrykv/latex-yearly-planner/app2/types"
@@ -83,7 +83,7 @@ func (r *MonthsOnSides) Sections() map[string]types.SectionFunc {
 func (r *MonthsOnSides) titleSection() (*bytes.Buffer, error) {
 	buffer := pages2.NewBuffer()
 
-	if err := buffer.WriteBlocks(contents.NewTitle(r.year.Name())); err != nil {
+	if err := buffer.WriteBlocks(contents2.NewTitle(r.year.Name())); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
@@ -94,7 +94,7 @@ func (r *MonthsOnSides) annualSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 	header := r.headerWithTitleAndSelection(r.year.Name(), calendarText)
 
-	if err := buffer.WriteBlocks(header, contents.NewAnnual(r.year)); err != nil {
+	if err := buffer.WriteBlocks(header, contents2.NewAnnual(r.year)); err != nil {
 		return nil, fmt.Errorf("write to buffer: %w", err)
 	}
 
@@ -109,7 +109,7 @@ func (r *MonthsOnSides) quarterliesSection() (*bytes.Buffer, error) {
 			headerWithTitle(quarter.Name()).
 			apply(headerSelectQuarter(quarter))
 
-		if err := buffer.WriteBlocks(header, contents.NewQuarterly(r.layout.Hand, quarter)); err != nil {
+		if err := buffer.WriteBlocks(header, contents2.NewQuarterly(r.layout.Hand, quarter)); err != nil {
 			return nil, fmt.Errorf("write to buffer: %w", err)
 		}
 	}

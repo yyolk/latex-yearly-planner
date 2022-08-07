@@ -3,7 +3,7 @@ package contents_test
 import (
 	"testing"
 
-	"github.com/kudrykv/latex-yearly-planner/app2/planners/common/contents"
+	"github.com/kudrykv/latex-yearly-planner/app2/contents"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
