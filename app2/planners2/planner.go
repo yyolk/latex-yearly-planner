@@ -2,6 +2,8 @@ package planners2
 
 import (
 	"fmt"
+	"os"
+	"path"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners2/mos"
 	"github.com/kudrykv/latex-yearly-planner/app2/types"
@@ -40,6 +42,33 @@ func (r *Planner) Generate() error {
 	if r.futureFiles, err = r.builder.BuildData(); err != nil {
 		return fmt.Errorf("build data: %w", err)
 	}
+
+	if err := r.createRootDocument(); err != nil {
+		return fmt.Errorf("create root document: %w", err)
+	}
+
+	return nil
+}
+
+func (r *Planner) WriteTeXTo(workdir string) error {
+	for _, future := range r.futureFiles {
+		if err := os.WriteFile(path.Join(workdir, future.Name+".tex"), future.Data, 0600); err != nil {
+			return fmt.Errorf("write file %s: %w", future.Name, err)
+		}
+	}
+
+	r.workdir = workdir
+
+	return nil
+}
+
+func (r *Planner) createRootDocument() error {
+	data, err := newDocument(r).build()
+	if err != nil {
+		return fmt.Errorf("build: %w", err)
+	}
+
+	r.futureFiles.Append("document", data)
 
 	return nil
 }

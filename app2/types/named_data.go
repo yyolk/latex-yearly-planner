@@ -6,3 +6,7 @@ type NamedData struct {
 }
 
 type NamedDatas []NamedData
+
+func (r *NamedDatas) Append(name string, data []byte) {
+	*r = append(*r, NamedData{name, data})
+}
