@@ -17,8 +17,52 @@ func New(layout types.Layout) (*Planner, error) {
 		return nil, fmt.Errorf("expected Parameters, got %T", layout.Misc)
 	}
 
-	return &Planner{
+	planner := &Planner{
 		layout:     layout,
 		parameters: parameters,
-	}, nil
+	}
+
+	for section := range planner.sections() {
+		if !Contains(parameters.enabledSections, section) {
+			return nil, fmt.Errorf("unknown section %s", section)
+		}
+	}
+
+	return planner, nil
+}
+
+func (r *Planner) BuildData() (types.NamedDatas, error) {
+	sections := r.sections()
+
+	result := make(types.NamedDatas, 0, len(r.parameters.enabledSections))
+
+	for _, name := range r.parameters.enabledSections {
+		section, ok := sections[name]
+		if !ok {
+			panic(fmt.Sprintf("unknown section %s", name))
+		}
+
+		buff, err := section()
+		if err != nil {
+			return nil, fmt.Errorf("%s: %w", name, err)
+		}
+
+		result = append(result, types.NamedData{Name: name, Data: buff.Bytes()})
+	}
+
+	return result, nil
+}
+
+func (r *Planner) sections() map[string]types.SectionFunc {
+	panic("here will be sections")
+}
+
+func Contains[T comparable](slice []T, item T) bool {
+	for _, a := range slice {
+		if a == item {
+			return true
+		}
+	}
+
+	return false
 }

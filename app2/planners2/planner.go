@@ -11,7 +11,7 @@ type Planner struct {
 	layout      types.Layout
 	builder     *mos.Planner
 	workdir     string
-	futureFiles futureFiles
+	futureFiles types.NamedDatas
 }
 
 func New(templateName string, layout types.Layout) (*Planner, error) {
@@ -33,4 +33,13 @@ func New(templateName string, layout types.Layout) (*Planner, error) {
 		layout:  layout,
 		builder: builder,
 	}, nil
+}
+
+func (r *Planner) Generate() error {
+	var err error
+	if r.futureFiles, err = r.builder.BuildData(); err != nil {
+		return fmt.Errorf("build data: %w", err)
+	}
+
+	return nil
 }
