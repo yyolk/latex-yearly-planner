@@ -57,6 +57,10 @@ func (r *Planner) sections() map[string]types.SectionFunc {
 	panic("here will be sections")
 }
 
+func (r *Planner) RunTimes() int {
+	return 2
+}
+
 func Contains[T comparable](slice []T, item T) bool {
 	for _, a := range slice {
 		if a == item {

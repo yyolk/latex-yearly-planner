@@ -1,8 +1,10 @@
 package planners2
 
 import (
+	"context"
 	"fmt"
 	"os"
+	"os/exec"
 	"path"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/planners2/mos"
@@ -58,6 +60,19 @@ func (r *Planner) WriteTeXTo(workdir string) error {
 	}
 
 	r.workdir = workdir
+
+	return nil
+}
+
+func (r *Planner) Compile(ctx context.Context) error {
+	for i := 0; i < r.builder.RunTimes(); i++ {
+		cmd := exec.CommandContext(ctx, "pdflatex", "./document.tex")
+		cmd.Dir = r.workdir
+
+		if err := cmd.Run(); err != nil {
+			return fmt.Errorf("run pdflatex: %w", err)
+		}
+	}
 
 	return nil
 }
