@@ -27,6 +27,12 @@ func NewParameters(options ...ParametersOption) *Parameters {
 	return &parameters
 }
 
+func WithSections(sections []string) ParametersOption {
+	return func(parameters *Parameters) {
+		parameters.enabledSections = sections
+	}
+}
+
 func (r *Parameters) Layout(deviceName string) (types.Layout, error) {
 	switch deviceName {
 	case "supernote_a5x":

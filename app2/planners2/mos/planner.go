@@ -25,6 +25,10 @@ func New(layout types.Layout) (*Planner, error) {
 		parameters: parameters,
 	}
 
+	if len(parameters.enabledSections) == 0 {
+		return nil, fmt.Errorf("no enabled sections")
+	}
+
 	for section := range planner.sections() {
 		if !Contains(parameters.enabledSections, section) {
 			return nil, fmt.Errorf("unknown section %s", section)
