@@ -59,3 +59,11 @@ func (r *Parameters) Layout(deviceName string) (types.Layout, error) {
 
 	return types.Layout{}, fmt.Errorf("unknown device: %s", deviceName)
 }
+
+func (r *Parameters) test() error {
+	if len(r.enabledSections) == 0 {
+		return fmt.Errorf("no enabled sections")
+	}
+
+	return nil
+}

@@ -20,19 +20,13 @@ func New(layout types.Layout) (*Planner, error) {
 		return nil, fmt.Errorf("expected Parameters, got %T", layout.Misc)
 	}
 
-	planner := &Planner{
-		layout:     layout,
-		parameters: parameters,
+	if err := parameters.test(); err != nil {
+		return nil, fmt.Errorf("test parameters: %w", err)
 	}
 
-	if len(parameters.enabledSections) == 0 {
-		return nil, fmt.Errorf("no enabled sections")
-	}
-
-	for section := range planner.sections() {
-		if !Contains(parameters.enabledSections, section) {
-			return nil, fmt.Errorf("unknown section %s", section)
-		}
+	planner := &Planner{layout: layout, parameters: parameters}
+	if err := planner.test(); err != nil {
+		return nil, fmt.Errorf("test planner: %w", err)
 	}
 
 	return planner, nil
@@ -90,4 +84,14 @@ func (r *Planner) titleSection() ([]byte, error) {
 	}
 
 	return buffer.Bytes(), nil
+}
+
+func (r *Planner) test() error {
+	for section := range r.sections() {
+		if !Contains(r.parameters.enabledSections, section) {
+			return fmt.Errorf("unknown section %s", section)
+		}
+	}
+
+	return nil
 }
