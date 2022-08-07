@@ -2,6 +2,7 @@ package planners2
 
 import (
 	"bytes"
+	"fmt"
 	"text/template"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/types"
@@ -11,6 +12,7 @@ type document struct {
 	template *template.Template
 
 	Layout types.Layout
+	Files  []string
 }
 
 func newDocument(planner *Planner) document {
@@ -18,7 +20,18 @@ func newDocument(planner *Planner) document {
 		template: template.Must(template.New("document").Parse(documentTex)),
 
 		Layout: planner.layout,
+		Files:  toIncludes(planner.futureFiles),
 	}
+}
+
+func toIncludes(datas types.NamedDatas) []string {
+	includes := make([]string, 0, len(datas))
+
+	for _, data := range datas {
+		includes = append(includes, fmt.Sprintf(`\include{%s}`, data.Name))
+	}
+
+	return includes
 }
 
 func (r document) build() ([]byte, error) {
