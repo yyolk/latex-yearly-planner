@@ -11,8 +11,9 @@ import (
 type Parameters struct {
 	enabledSections []string
 
-	calendar texcalendar.Year
-	weekday  time.Weekday
+	calendar      texcalendar.Year
+	weekday       time.Weekday
+	dailySchedule types.Schedule
 }
 
 type ParametersOption func(*Parameters)

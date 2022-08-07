@@ -68,7 +68,8 @@ type sectionFunc func() ([]byte, error)
 
 func (r *Planner) sections() map[string]sectionFunc {
 	return map[string]sectionFunc{
-		common.TitleSection: r.titleSection,
+		common.TitleSection:   r.titleSection,
+		common.DailiesSection: r.dailiesSection,
 	}
 }
 
@@ -91,6 +92,23 @@ func (r *Planner) titleSection() ([]byte, error) {
 
 	if err := buffer.WriteBlocks(contents.NewTitle(r.parameters.calendar.Name())); err != nil {
 		return nil, fmt.Errorf("write title: %w", err)
+	}
+
+	return buffer.Bytes(), nil
+}
+
+func (r *Planner) dailiesSection() ([]byte, error) {
+	buffer := pages2.NewBuffer()
+
+	for _, day := range r.parameters.calendar.Days() {
+		daily := contents.NewDaily(
+			contents.DailyWithDay(day),
+			contents.DailyWithSchedule(r.parameters.dailySchedule),
+		)
+
+		if err := buffer.WriteBlocks(daily); err != nil {
+			return nil, fmt.Errorf("write daily: %w", err)
+		}
 	}
 
 	return buffer.Bytes(), nil
