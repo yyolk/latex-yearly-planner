@@ -27,6 +27,12 @@ func NewParameters(options ...ParametersOption) *Parameters {
 	return &parameters
 }
 
+func WithYear(year int) ParametersOption {
+	return func(parameters *Parameters) {
+		parameters.calendar = texcalendar.NewYear(year)
+	}
+}
+
 func WithSections(sections []string) ParametersOption {
 	return func(parameters *Parameters) {
 		parameters.enabledSections = sections
