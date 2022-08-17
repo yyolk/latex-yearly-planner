@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/kudrykv/latex-yearly-planner/app2"
+	"github.com/kudrykv/latex-yearly-planner/app3"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -30,8 +31,8 @@ func TestDefault(t *testing.T) {
 	})
 }
 
-func TestMoS2(t *testing.T) {
-	Convey("mos2", t, func() {
+func TestMoS3(t *testing.T) {
+	Convey("mos", t, func() {
 		in := strings.NewReader("")
 		out := &strings.Builder{}
 		errOut := &strings.Builder{}
@@ -42,7 +43,7 @@ func TestMoS2(t *testing.T) {
 			"--parameters-path", "cfg2/sn_a5x_mos.toml",
 		}
 
-		err := app2.New(in, out, errOut).Run(args)
+		err := app3.New(in, out, errOut).Run(args)
 
 		So(err, ShouldBeNil)
 	})

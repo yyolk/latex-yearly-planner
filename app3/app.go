@@ -1,4 +1,4 @@
-package app2
+package app3
 
 import (
 	"fmt"
@@ -6,9 +6,9 @@ import (
 	"os"
 
 	"github.com/BurntSushi/toml"
-	"github.com/kudrykv/latex-yearly-planner/app2/planners2"
 	mos2 "github.com/kudrykv/latex-yearly-planner/app2/planners2/mos"
 	"github.com/kudrykv/latex-yearly-planner/app2/types"
+	"github.com/kudrykv/latex-yearly-planner/app3/planners"
 	"github.com/urfave/cli/v2"
 )
 
@@ -59,7 +59,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 
 							layout.Misc = parameters
 
-							planner, err := planners2.New("mos", layout)
+							planner, err := planners.New("mos", layout)
 							if err != nil {
 								return fmt.Errorf("new planner: %w", err)
 							}
