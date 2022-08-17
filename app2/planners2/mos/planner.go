@@ -34,7 +34,7 @@ func New(layout types.Layout) (*Planner, error) {
 
 func (r *Planner) test() error {
 	for section := range r.sections() {
-		if !Contains(r.parameters.enabledSections, section) {
+		if !Contains(r.parameters.EnabledSections, section) {
 			return fmt.Errorf("unknown section %s", section)
 		}
 	}
@@ -45,9 +45,9 @@ func (r *Planner) test() error {
 func (r *Planner) BuildData() (types.NamedDatas, error) {
 	sections := r.sections()
 
-	result := make(types.NamedDatas, 0, len(r.parameters.enabledSections))
+	result := make(types.NamedDatas, 0, len(r.parameters.EnabledSections))
 
-	for _, name := range r.parameters.enabledSections {
+	for _, name := range r.parameters.EnabledSections {
 		section, ok := sections[name]
 		if !ok {
 			panic(fmt.Sprintf("unknown section %s", name))

@@ -1,0 +1,28 @@
+EnabledSections = [
+    "title",
+    "dailies"
+]
+
+# Layout-related stuff
+[Paper]
+Width = 156
+Height = 230
+
+[Margin]
+Top = 10
+Bottom = 10
+Left = 5
+Right = 5
+
+[MarginNotes]
+Margin = 2
+Width = 8
+Reverse = true
+
+[Sizes]
+TwoColumnsSeparatorSize = 5
+ThreeColumnsSeparatorSize = 5
+
+[Debug]
+ShowLinks = true
+ShowFrams = true

@@ -38,11 +38,8 @@ func TestMoS2(t *testing.T) {
 
 		args := []string{
 			"./app", "template", "mos2",
-			//"--hand", "left",
-			"--weekday", "1",
-			"--show-frames",
-			//"--show-links",
-			"--device-name", "supernote_a5x",
+			"--layout-path", "cfg2/sn_a5x_mos.toml",
+			"--parameters-path", "cfg2/sn_a5x_mos.toml",
 		}
 
 		err := app2.New(in, out, errOut).Run(args)

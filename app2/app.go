@@ -11,6 +11,9 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/breadcrumb"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/mos"
+	"github.com/kudrykv/latex-yearly-planner/app2/planners2"
+	mos2 "github.com/kudrykv/latex-yearly-planner/app2/planners2/mos"
+	"github.com/kudrykv/latex-yearly-planner/app2/types"
 	"github.com/urfave/cli/v2"
 )
 
@@ -29,7 +32,8 @@ const (
 
 	handFlag = "hand"
 
-	uiPathFlag = "ui-path"
+	layoutPathFlag     = "layout-path"
+	parametersPathFlag = "parameters-path"
 )
 
 func New(reader io.Reader, writer, errWriter io.Writer) *App {
@@ -51,12 +55,64 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 				Subcommands: cli.Commands{
 					templateCommand[mos.UI](planners.MonthsOnSidesTemplate),
 					templateCommand[breadcrumb.UI](planners.BreadcrumbTemplate),
+
+					&cli.Command{
+						Name: "mos2",
+
+						Flags: flags(),
+
+						Action: func(appContext *cli.Context) error {
+							var layout types.Layout
+							if err := readToml(appContext.String(layoutPathFlag), &layout); err != nil {
+								return fmt.Errorf("read layout: %w", err)
+							}
+
+							var parameters mos2.Parameters
+							if err := readToml(appContext.String(parametersPathFlag), &parameters); err != nil {
+								return fmt.Errorf("read parameters: %w", err)
+							}
+
+							layout.Misc = parameters
+
+							planner, err := planners2.New("mos", layout)
+							if err != nil {
+								return fmt.Errorf("new planner: %w", err)
+							}
+
+							if err := planner.Generate(); err != nil {
+								return fmt.Errorf("generate: %w", err)
+							}
+
+							if err := planner.WriteTeXTo("./out"); err != nil {
+								return fmt.Errorf("write tex: %w", err)
+							}
+
+							if err := planner.Compile(appContext.Context); err != nil {
+								return fmt.Errorf("compile: %w", err)
+							}
+
+							return nil
+						},
+					},
 				},
 			},
 		},
 	}
 
 	return r
+}
+
+func readToml(path string, dst any) error {
+	fileBytes, err := os.ReadFile(path)
+	if err != nil {
+		return fmt.Errorf("read file: %w", err)
+	}
+
+	if err := toml.Unmarshal(fileBytes, dst); err != nil {
+		return fmt.Errorf("unmarshal: %w", err)
+	}
+
+	return nil
 }
 
 func templateCommand[T any](template string) *cli.Command {
@@ -72,8 +128,8 @@ func templateCommand[T any](template string) *cli.Command {
 			}
 
 			var ui T
-			if path := appContext.String(uiPathFlag); path != "" {
-				fileBytes, err := os.ReadFile(appContext.String(uiPathFlag))
+			if path := appContext.String(layoutPathFlag); path != "" {
+				fileBytes, err := os.ReadFile(appContext.String(layoutPathFlag))
 				if err != nil {
 					return fmt.Errorf("read file: %w", err)
 				}
@@ -118,28 +174,8 @@ func templateCommand[T any](template string) *cli.Command {
 
 func flags() []cli.Flag {
 	return []cli.Flag{
-		&cli.IntFlag{Name: yearFlag, Value: time.Now().Year()},
-		&cli.StringFlag{Name: deviceNameFlag, Required: true},
-		&cli.StringFlag{Name: handFlag, Value: "right"},
-		&cli.IntFlag{Name: weekdayFlag, Value: 0},
-		&cli.BoolFlag{Name: framesFlag, Value: false},
-		&cli.BoolFlag{Name: linksFlag, Value: false},
-		&cli.StringFlag{Name: uiPathFlag},
-		&cli.StringSliceFlag{
-			Name: sectionsFlag,
-			Value: cli.NewStringSlice(
-				common.TitleSection,
-				common.AnnualSection,
-				common.QuarterliesSection,
-				common.MonthliesSection,
-				common.WeekliesSection,
-				common.DailiesSection,
-				common.DailyNotesSection,
-				common.DailyReflectSection,
-				common.ToDoSection,
-				common.NotesSection,
-			),
-		},
+		&cli.StringFlag{Name: layoutPathFlag},
+		&cli.StringFlag{Name: parametersPathFlag},
 	}
 }
 
