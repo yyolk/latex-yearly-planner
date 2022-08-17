@@ -2,13 +2,34 @@ package planners
 
 import (
 	"context"
+	"errors"
+	"fmt"
+
+	"github.com/kudrykv/latex-yearly-planner/app3/planners/mos"
 )
 
 type Planner struct {
+	builder *mos.Planner
 }
 
+var ErrInvalidParameters = errors.New("invalid parameters")
+
 func New(template string, layout any) (*Planner, error) {
-	return &Planner{}, nil
+	var builder *mos.Planner
+
+	switch template {
+	case "mos":
+		parameters, ok := layout.(mos.Parameters)
+		if !ok {
+			return nil, fmt.Errorf("%w: want mos.Parameters, got %T: ", ErrInvalidParameters, layout)
+		}
+
+		builder = mos.New(parameters)
+	}
+
+	return &Planner{
+		builder: builder,
+	}, nil
 }
 
 func (r *Planner) Generate() error {
