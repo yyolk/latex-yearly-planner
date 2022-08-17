@@ -1,9 +1,9 @@
 package mos
 
-import "github.com/kudrykv/latex-yearly-planner/app2/planners/common"
+import "github.com/kudrykv/latex-yearly-planner/app3/types"
 
 type Parameters struct {
-	Layout common.Layout
+	Screen types.Screen
 
 	Year int
 }

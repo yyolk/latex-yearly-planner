@@ -6,10 +6,13 @@ import (
 	"fmt"
 
 	"github.com/kudrykv/latex-yearly-planner/app3/planners/mos"
+	"github.com/kudrykv/latex-yearly-planner/app3/types"
 )
 
 type Planner struct {
 	builder *mos.Planner
+
+	futureFiles types.NamedBuffers
 }
 
 var ErrInvalidParameters = errors.New("invalid parameters")
