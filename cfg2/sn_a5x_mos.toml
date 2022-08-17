@@ -27,14 +27,14 @@ TwoColumnsSeparatorSize = 5
 ThreeColumnsSeparatorSize = 5
 
 [Debug]
-ShowLinks = true
-ShowFrams = true
+ShowLinks = false
+ShowFrames = false
 
 [SomeCalendarProps]
 Hand = 1
 Weekday = 0
 FirstMonth = 1
-LittleCalArrayStretch = 1.85
+LittleCalArrayStretch = 1.65
 LargeCalHeaderHeight = 5
 
 [DailyParameters]
