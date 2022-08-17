@@ -1,3 +1,5 @@
+Year = 2022
+
 EnabledSections = [
     "title",
     "dailies"
@@ -26,3 +28,12 @@ ThreeColumnsSeparatorSize = 5
 [Debug]
 ShowLinks = true
 ShowFrams = true
+
+[DailyParameters]
+ShowCalendar = true
+TodosNumber = 8
+NotesNumber = 14
+[DailyParameters.Schedule]
+FromHour = 8
+ToHour = 18
+HourFormat = "15"

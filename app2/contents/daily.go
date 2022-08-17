@@ -6,62 +6,35 @@ import (
 
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/components"
 	"github.com/kudrykv/latex-yearly-planner/app2/tex/ref"
-	"github.com/kudrykv/latex-yearly-planner/app2/types"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
 type Daily struct {
-	day texcalendar.Day
-
-	schedule types.Schedule
-
-	showCalendar bool
-
+	day           texcalendar.Day
 	nearNotesLine string
-	todosNumber   int
-	notesNumber   int
+
+	parameters DailyParameters
 }
 
-type DailyOption func(*Daily)
+type DailyParameters struct {
+	Schedule Schedule
 
-func NewDaily(options ...DailyOption) Daily {
-	daily := Daily{}
+	ShowCalendar bool
 
-	for _, option := range options {
-		option(&daily)
-	}
-
-	return daily
+	TodosNumber int
+	NotesNumber int
 }
 
-func DailyWithDay(day texcalendar.Day) DailyOption {
-	return func(r *Daily) {
-		r.day = day
-	}
+type Schedule struct {
+	FromHour   int
+	ToHour     int
+	HourFormat string
 }
 
-func DailyWithSchedule(schedule types.Schedule) DailyOption {
-	return func(r *Daily) {
-		r.schedule = schedule
-	}
-}
-
-func DailyWithCalendar(show bool) DailyOption {
-	return func(r *Daily) {
-		r.showCalendar = show
-	}
-}
-
-func DailyWithPlanning(todosNumber, notesNumber int) DailyOption {
-	return func(r *Daily) {
-		r.todosNumber = todosNumber
-		r.notesNumber = notesNumber
-	}
-}
-
-func DailyWithNearNotesLine(line string) DailyOption {
-	return func(r *Daily) {
-		r.nearNotesLine = line
+func NewDaily(day texcalendar.Day, parameters DailyParameters) Daily {
+	return Daily{
+		day:        day,
+		parameters: parameters,
 	}
 }
 
@@ -81,11 +54,13 @@ func (r Daily) scheduleColumn() string {
 }
 
 func (r Daily) hoursSchedule() string {
-	return components.NewSchedule(r.schedule.FromHour, r.schedule.ToHour, r.schedule.HourFormat).Build()
+	return components.NewSchedule(
+		r.parameters.Schedule.FromHour, r.parameters.Schedule.ToHour, r.parameters.Schedule.HourFormat,
+	).Build()
 }
 
 func (r Daily) optionalCalendar() string {
-	if r.showCalendar {
+	if r.parameters.ShowCalendar {
 		return `\vspace{5mm}` + r.day.CalendarMonth().Selected(r.day).LittleCalendar()
 	}
 
@@ -95,7 +70,7 @@ func (r Daily) optionalCalendar() string {
 func (r Daily) prioritiesAndNotesColumn() string {
 	return fmt.Sprintf(
 		prioritiesAndNotesColumnFormat,
-		components.NewTodos(r.todosNumber).Build(),
+		components.NewTodos(r.parameters.TodosNumber).Build(),
 		ref.NewNote("More", r.day.Ref()).Build(),
 		ref.NewReflect("Reflect", r.day.Ref()).Build(),
 		components.NewMesh(30, 19).Build(),

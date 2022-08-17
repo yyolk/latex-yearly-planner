@@ -7,6 +7,7 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/pages2"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app2/types"
+	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
 type Planner struct {
@@ -23,6 +24,8 @@ func New(layout types.Layout) (*Planner, error) {
 	if err := parameters.test(); err != nil {
 		return nil, fmt.Errorf("test parameters: %w", err)
 	}
+
+	parameters.calendar = texcalendar.NewYear(parameters.Year)
 
 	planner := &Planner{layout: layout, parameters: parameters}
 	if err := planner.test(); err != nil {
@@ -101,10 +104,7 @@ func (r *Planner) dailiesSection() ([]byte, error) {
 	buffer := pages2.NewBuffer()
 
 	for _, day := range r.parameters.calendar.Days() {
-		daily := contents.NewDaily(
-			contents.DailyWithDay(day),
-			contents.DailyWithSchedule(r.parameters.dailySchedule),
-		)
+		daily := contents.NewDaily(day, r.parameters.DailyParameters)
 
 		if err := buffer.WriteBlocks(daily); err != nil {
 			return nil, fmt.Errorf("write daily: %w", err)

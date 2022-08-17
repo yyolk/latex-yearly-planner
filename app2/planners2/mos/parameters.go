@@ -4,16 +4,19 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/kudrykv/latex-yearly-planner/app2/types"
+	"github.com/kudrykv/latex-yearly-planner/app2/contents"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
 type Parameters struct {
+	Year    int
+	Weekday time.Weekday
+
 	EnabledSections []string
 
-	calendar      texcalendar.Year
-	weekday       time.Weekday
-	dailySchedule types.Schedule
+	DailyParameters contents.DailyParameters
+
+	calendar texcalendar.Year
 }
 
 func (r *Parameters) test() error {
