@@ -2,14 +2,12 @@ package planners
 
 import (
 	"context"
-
-	"github.com/kudrykv/latex-yearly-planner/app2/types"
 )
 
 type Planner struct {
 }
 
-func New(template string, layout types.Layout) (*Planner, error) {
+func New(template string, layout any) (*Planner, error) {
 	return &Planner{}, nil
 }
 

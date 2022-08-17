@@ -6,9 +6,8 @@ import (
 	"os"
 
 	"github.com/BurntSushi/toml"
-	mos2 "github.com/kudrykv/latex-yearly-planner/app2/planners2/mos"
-	"github.com/kudrykv/latex-yearly-planner/app2/types"
 	"github.com/kudrykv/latex-yearly-planner/app3/planners"
+	"github.com/kudrykv/latex-yearly-planner/app3/planners/mos"
 	"github.com/urfave/cli/v2"
 )
 
@@ -47,19 +46,12 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 						},
 
 						Action: func(appContext *cli.Context) error {
-							var layout types.Layout
-							if err := readToml(appContext.String(layoutPathFlag), &layout); err != nil {
-								return fmt.Errorf("read layout: %w", err)
-							}
-
-							var parameters mos2.Parameters
+							var parameters mos.Parameters
 							if err := readToml(appContext.String(parametersPathFlag), &parameters); err != nil {
 								return fmt.Errorf("read parameters: %w", err)
 							}
 
-							layout.Misc = parameters
-
-							planner, err := planners.New("mos", layout)
+							planner, err := planners.New("mos", parameters)
 							if err != nil {
 								return fmt.Errorf("new planner: %w", err)
 							}
