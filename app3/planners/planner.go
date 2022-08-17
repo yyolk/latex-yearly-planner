@@ -36,7 +36,27 @@ func New(template string, layout any) (*Planner, error) {
 }
 
 func (r *Planner) Generate() error {
-	panic("not implemented")
+	var err error
+	if r.futureFiles, err = r.builder.Generate(); err != nil {
+		return fmt.Errorf("generate %T: %w", r.builder, err)
+	}
+
+	if err := r.createRootDocument(); err != nil {
+		return fmt.Errorf("create root document: %w", err)
+	}
+
+	return nil
+}
+
+func (r *Planner) createRootDocument() error {
+	buffer, err := newDocument(r).build()
+	if err != nil {
+		return fmt.Errorf("build document: %w", err)
+	}
+
+	r.futureFiles = append(r.futureFiles, types.NamedBuffer{Name: "document", Buffer: buffer})
+
+	return nil
 }
 
 func (r *Planner) WriteTeXTo(dir string) error {

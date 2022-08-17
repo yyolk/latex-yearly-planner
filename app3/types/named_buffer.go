@@ -3,9 +3,9 @@ package types
 import "bytes"
 
 type NamedBuffer struct {
-	bytes.Buffer
-
 	Name string
+
+	Buffer *bytes.Buffer
 }
 
 type NamedBuffers []NamedBuffer
