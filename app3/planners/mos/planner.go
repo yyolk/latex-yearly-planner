@@ -14,3 +14,7 @@ func New(Parameters) *Planner {
 func (r *Planner) Generate() (types.NamedBuffers, error) {
 	panic("not implemented")
 }
+
+func (r *Planner) RunTimes() int {
+	return 2
+}

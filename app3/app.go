@@ -64,7 +64,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								return fmt.Errorf("write tex: %w", err)
 							}
 
-							if err := planner.Compile(appContext.Context); err != nil {
+							if err := planner.Compile(appContext.Context, "./out"); err != nil {
 								return fmt.Errorf("compile: %w", err)
 							}
 

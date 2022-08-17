@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"path"
 
 	"github.com/kudrykv/latex-yearly-planner/app3/planners/mos"
@@ -74,6 +75,15 @@ func (r *Planner) WriteTeXTo(dir string) error {
 	return nil
 }
 
-func (r *Planner) Compile(ctx context.Context) error {
-	panic("not implemented")
+func (r *Planner) Compile(ctx context.Context, dir string) error {
+	for i := 0; i < r.builder.RunTimes(); i++ {
+		cmd := exec.CommandContext(ctx, "pdflatex", "./document.tex")
+		cmd.Dir = dir
+
+		if err := cmd.Run(); err != nil {
+			return fmt.Errorf("run pdflatex: %w", err)
+		}
+	}
+
+	return nil
 }
