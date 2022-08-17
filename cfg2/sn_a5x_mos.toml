@@ -1,4 +1,5 @@
 Year = 2022
+Weekday = 0
 
 EnabledSections = [
     "title",
@@ -29,10 +30,17 @@ ThreeColumnsSeparatorSize = 5
 ShowLinks = true
 ShowFrams = true
 
+[SomeCalendarProps]
+Hand = 1
+Weekday = 0
+FirstMonth = 1
+LittleCalArrayStretch = 1.85
+LargeCalHeaderHeight = 5
+
 [DailyParameters]
 ShowCalendar = true
 TodosNumber = 8
-NotesNumber = 14
+NotesNumber = 25
 [DailyParameters.Schedule]
 FromHour = 8
 ToHour = 18

@@ -2,15 +2,14 @@ package mos
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app2/contents"
 	"github.com/kudrykv/latex-yearly-planner/lib/texcalendar"
 )
 
 type Parameters struct {
-	Year    int
-	Weekday time.Weekday
+	Year              int
+	SomeCalendarProps texcalendar.Parameters
 
 	EnabledSections []string
 

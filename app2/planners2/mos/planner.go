@@ -25,7 +25,8 @@ func New(layout types.Layout) (*Planner, error) {
 		return nil, fmt.Errorf("test parameters: %w", err)
 	}
 
-	parameters.calendar = texcalendar.NewYear(parameters.Year)
+	withParameters := texcalendar.WithParameters(parameters.SomeCalendarProps)
+	parameters.calendar = texcalendar.NewYear(parameters.Year, withParameters)
 
 	planner := &Planner{layout: layout, parameters: parameters}
 	if err := planner.test(); err != nil {
