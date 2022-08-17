@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
+	"path"
 
 	"github.com/kudrykv/latex-yearly-planner/app3/planners/mos"
 	"github.com/kudrykv/latex-yearly-planner/app3/types"
@@ -60,7 +62,16 @@ func (r *Planner) createRootDocument() error {
 }
 
 func (r *Planner) WriteTeXTo(dir string) error {
-	panic("not implemented")
+	for _, futureFile := range r.futureFiles {
+		filepath := path.Join(dir, futureFile.Name+".tex")
+		bufferBytes := futureFile.Buffer.Bytes()
+
+		if err := os.WriteFile(filepath, bufferBytes, 0644); err != nil {
+			return fmt.Errorf("write file %s: %w", futureFile.Name, err)
+		}
+	}
+
+	return nil
 }
 
 func (r *Planner) Compile(ctx context.Context) error {
