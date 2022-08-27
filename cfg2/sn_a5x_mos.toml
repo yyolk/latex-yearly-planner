@@ -7,41 +7,21 @@ EnabledSections = [
 ]
 
 # Layout-related stuff
-[Paper]
+[Document.Screen]
 Width = 156
 Height = 230
 
-[Margin]
+[Document.Margin]
 Top = 10
 Bottom = 10
 Left = 5
 Right = 5
 
-[MarginNotes]
-Margin = 2
+[Document.MarginNotes]
+Separator = 2
 Width = 8
 Reverse = true
 
-[Sizes]
-TwoColumnsSeparatorSize = 5
-ThreeColumnsSeparatorSize = 5
-
-[Debug]
+[Document.Debug]
 ShowLinks = false
 ShowFrames = false
-
-[SomeCalendarProps]
-Hand = 1
-Weekday = 0
-FirstMonth = 1
-LittleCalArrayStretch = 1.65
-LargeCalHeaderHeight = 5
-
-[DailyParameters]
-ShowCalendar = true
-TodosNumber = 8
-NotesNumber = 25
-[DailyParameters.Schedule]
-FromHour = 8
-ToHour = 18
-HourFormat = "15"

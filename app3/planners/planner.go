@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app3/planners/mos"
 	"github.com/kudrykv/latex-yearly-planner/app3/types"
@@ -86,4 +87,14 @@ func (r *Planner) Compile(ctx context.Context, dir string) error {
 	}
 
 	return nil
+}
+
+func (r *Planner) Files() string {
+	pieces := make([]string, 0, len(r.futureFiles))
+
+	for _, futureFile := range r.futureFiles {
+		pieces = append(pieces, fmt.Sprintf(`\include{%s}`, futureFile.Name))
+	}
+
+	return strings.Join(pieces, "\n")
 }

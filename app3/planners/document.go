@@ -2,24 +2,32 @@ package planners
 
 import (
 	"bytes"
+	"fmt"
 	"text/template"
 )
 
 type document struct {
 	template *template.Template
+	planner  *Planner
 }
 
 func newDocument(planner *Planner) document {
 	return document{
 		template: template.Must(template.New("document").Parse(documentTex)),
+		planner:  planner,
 	}
 }
 
 func (r document) build() (*bytes.Buffer, error) {
 	buffer := bytes.NewBuffer(make([]byte, 0, len(documentTex)))
 
-	if err := r.template.ExecuteTemplate(buffer, "document", r); err != nil {
-		return nil, err
+	data := map[string]any{
+		"Files":    r.planner.Files(),
+		"Document": r.planner.builder.Document(),
+	}
+
+	if err := r.template.ExecuteTemplate(buffer, "document", data); err != nil {
+		return nil, fmt.Errorf("executing template: %w", err)
 	}
 
 	return buffer, nil
@@ -27,7 +35,7 @@ func (r document) build() (*bytes.Buffer, error) {
 
 const documentTex = `\documentclass[9pt]{extarticle}
 
-\usepackage{{ if .Layout.Debug.ShowFrames }}[showframe]{{end}}{geometry}
+\usepackage{{ if .Document.Debug.ShowFrames }}[showframe]{{end}}{geometry}
 \usepackage[table]{xcolor}
 \usepackage{tabularx}
 \usepackage{hyperref}
@@ -36,21 +44,19 @@ const documentTex = `\documentclass[9pt]{extarticle}
 \usepackage{multido}
 \usepackage{amssymb}
 
-\hypersetup{
-    {{- if not .Layout.Debug.ShowLinks}}hidelinks=true{{end -}}
-}
+\hypersetup{ {{- if not .Document.Debug.ShowLinks}}hidelinks=true{{end -}} }
 
-\geometry{paperwidth={{.Layout.Paper.Width}}, paperheight={{.Layout.Paper.Height}}}
+\geometry{paperwidth={{.Document.Screen.Width}}, paperheight={{.Document.Screen.Height}}}
 \geometry{
-             top={{ .Layout.Margin.Top }},
-          bottom={{ .Layout.Margin.Bottom }},
-            left={{ .Layout.Margin.Left }},
-           right={{ .Layout.Margin.Right }},
-  marginparwidth={{ .Layout.MarginNotes.Width }},
-    marginparsep={{ .Layout.MarginNotes.Margin }}
+             top={{ .Document.Margin.Top }},
+          bottom={{ .Document.Margin.Bottom }},
+            left={{ .Document.Margin.Left }},
+           right={{ .Document.Margin.Right }},
+  marginparwidth={{ .Document.MarginNotes.Width }},
+    marginparsep={{ .Document.MarginNotes.Separator }}
 }
 
-{{ if .Layout.MarginNotes.Reverse -}}
+{{ if .Document.MarginNotes.Reverse -}}
 	\reversemarginpar
 {{- end }}
 

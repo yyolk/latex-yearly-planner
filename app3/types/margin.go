@@ -6,3 +6,9 @@ type Margin struct {
 	Bottom Millimeters
 	Left   Millimeters
 }
+
+type MarginNotes struct {
+	Width     Millimeters
+	Separator Millimeters
+	Reverse   bool
+}
