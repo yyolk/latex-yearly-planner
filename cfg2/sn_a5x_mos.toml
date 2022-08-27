@@ -24,3 +24,11 @@ Reverse = true
 [Document.Debug]
 ShowLinks = false
 ShowFrames = false
+
+# planner setup
+[DailyParameters]
+[DailyParameters.ScheduleParameters]
+FromHour = 7
+ToHour = 19
+Format = "15"
+LineHeight = 5

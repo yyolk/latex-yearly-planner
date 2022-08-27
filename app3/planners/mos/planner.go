@@ -59,11 +59,18 @@ func (r *Planner) sections() map[string]types2.SectionFunc {
 func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
+	var (
+		daily sections.Daily
+		err   error
+	)
+
 	for _, day := range r.year.Days() {
 		header := sections.NewMOSHeader()
-		daily := sections.NewDaily(day, r.parameters.DailyParameters)
+		if daily, err = sections.NewDaily(day, r.parameters.DailyParameters); err != nil {
+			return nil, fmt.Errorf("new daily: %w", err)
+		}
 
-		if err := buffer.WriteBlocks(header, daily); err != nil {
+		if err = buffer.WriteBlocks(header, daily); err != nil {
 			return nil, fmt.Errorf("write blocks: %w", err)
 		}
 	}
