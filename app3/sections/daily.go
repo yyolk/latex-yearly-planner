@@ -4,11 +4,13 @@ import (
 	"fmt"
 
 	"github.com/kudrykv/latex-yearly-planner/app3/components"
+	"github.com/kudrykv/latex-yearly-planner/app3/types"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
 type DailyParameters struct {
-	ScheduleParameters components.ScheduleParameters
+	ScheduleColumnWidth types.Millimeters
+	ScheduleParameters  components.ScheduleParameters
 }
 
 type Daily struct {
@@ -30,6 +32,19 @@ func NewDaily(day calendar.Day, parameters DailyParameters) (Daily, error) {
 	}, nil
 }
 
-func (d Daily) Build() ([]string, error) {
-	return []string{d.schedule.Build()}, nil
+func (r Daily) Build() ([]string, error) {
+	return []string{r.scheduleColumn()}, nil
 }
+
+func (r Daily) scheduleColumn() string {
+	return fmt.Sprintf(
+		scheduleColumnFormat,
+		r.parameters.ScheduleColumnWidth,
+		r.schedule.Build(),
+	)
+}
+
+const scheduleColumnFormat = `\begin{minipage}[t]{%s}
+\myUnderline{Schedule\textcolor{white}{g}}
+%s
+\end{minipage}`

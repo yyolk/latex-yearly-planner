@@ -27,6 +27,7 @@ ShowFrames = false
 
 # planner setup
 [DailyParameters]
+ScheduleColumnWidth = 50
 [DailyParameters.ScheduleParameters]
 FromHour = 7
 ToHour = 19
