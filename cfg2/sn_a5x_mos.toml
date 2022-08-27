@@ -43,3 +43,9 @@ LineHeight = 5
 [DailyParameters.TodosParameters]
 Number = 8
 LineHeight = 5
+
+[DailyParameters.NotesParameters]
+[DailyParameters.NotesParameters.Dotted]
+Distance = 5
+Rows = 27
+Columns = 19

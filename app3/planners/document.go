@@ -73,7 +73,7 @@ const documentTex = `\documentclass[9pt]{extarticle}
   \fi%
 }
 
-\newcommand{\myDotGrid}[2]{\leavevmode\multido{\dC=0mm+5mm}{#1}{\multido{\dR=0mm+5mm}{#2}{\put(\dR,\dC){\circle*{0.1}}}}}
+\newcommand{\myDotGrid}[2]{\vskip5mm\leavevmode\multido{\dC=0mm+5mm}{#1}{\multido{\dR=0mm+5mm}{#2}{\put(\dR,\dC){\scriptsize.}}}}
 
 \newlength{\myLenLineThicknessDefault}
 \newlength{\myLenLineThicknessThick}

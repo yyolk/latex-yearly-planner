@@ -12,11 +12,12 @@ import (
 type DailyParameters struct {
 	ScheduleColumnWidth           types.Millimeters
 	PrioritiesAndNotesColumnWidth types.Millimeters
-	ScheduleParameters            components.ScheduleParameters
-	TodosParameters               components.TodosParameters
 	PrioritiesAndNotesSkip        types.Millimeters
 	ColumnsSeparatorWidth         types.Millimeters
 	ScheduleToTheRight            bool
+	ScheduleParameters            components.ScheduleParameters
+	TodosParameters               components.TodosParameters
+	NotesParameters               components.NotesParameters
 }
 
 type Daily struct {
@@ -24,6 +25,7 @@ type Daily struct {
 	parameters DailyParameters
 	schedule   components.Schedule
 	todos      components.Todos
+	notes      components.Notes
 }
 
 func NewDaily(day calendar.Day, parameters DailyParameters) (Daily, error) {
@@ -37,11 +39,17 @@ func NewDaily(day calendar.Day, parameters DailyParameters) (Daily, error) {
 		return Daily{}, fmt.Errorf("new todos: %w", err)
 	}
 
+	notes, err := components.NewNotes(parameters.NotesParameters)
+	if err != nil {
+		return Daily{}, fmt.Errorf("new notes: %w", err)
+	}
+
 	return Daily{
 		day:        day,
 		parameters: parameters,
 		schedule:   schedule,
 		todos:      todos,
+		notes:      notes,
 	}, nil
 }
 
@@ -73,6 +81,7 @@ func (r Daily) prioritiesAndNotesColumn() string {
 		r.parameters.PrioritiesAndNotesColumnWidth,
 		r.todos.Build(),
 		r.parameters.PrioritiesAndNotesSkip,
+		r.notes.Build(),
 	)
 }
 
@@ -85,5 +94,5 @@ const prioritiesAndNotesColumnFormat = `\begin{minipage}[t]{%s}
 \myUnderline{Top Priorities}
 %s
 \vskip%s\myUnderline{Notes | later here \hfill{}later there}
-notes box
+%s
 \end{minipage}`
