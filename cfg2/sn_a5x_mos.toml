@@ -25,9 +25,15 @@ Reverse = true
 ShowLinks = false
 ShowFrames = false
 
-# planner setup
+### planner setup
+# daily setup
 [DailyParameters]
 ScheduleColumnWidth = 50
+PrioritiesAndNotesColumnWidth = 90
+ColumnsSeparatorWidth = 5
+PrioritiesAndNotesSkip = 7
+ScheduleToTheRight = true
+
 [DailyParameters.ScheduleParameters]
 FromHour = 7
 ToHour = 19
