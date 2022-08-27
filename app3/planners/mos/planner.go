@@ -60,7 +60,10 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	for _, day := range r.year.Days() {
-		if err := buffer.WriteBlocks(sections.NewDaily(day, r.parameters.DailyParameters)); err != nil {
+		header := sections.NewMOSHeader()
+		daily := sections.NewDaily(day, r.parameters.DailyParameters)
+
+		if err := buffer.WriteBlocks(header, daily); err != nil {
 			return nil, fmt.Errorf("write blocks: %w", err)
 		}
 	}
