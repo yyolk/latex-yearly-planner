@@ -39,3 +39,7 @@ FromHour = 7
 ToHour = 19
 Format = "15"
 LineHeight = 5
+
+[DailyParameters.TodosParameters]
+Number = 8
+LineHeight = 5

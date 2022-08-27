@@ -14,11 +14,18 @@ type TodosParameters struct {
 	LineHeight types.Millimeters
 }
 
-var ErrNegativeTodos = errors.New("number of todos must be positive")
+var (
+	ErrNegativeTodos      = errors.New("number of todos must be positive")
+	ErrNegativeLineHeight = errors.New("line height must be positive")
+)
 
 func (r TodosParameters) Test() error {
-	if r.Number < 0 {
+	if r.Number <= 0 {
 		return ErrNegativeTodos
+	}
+
+	if r.LineHeight <= 0 {
+		return ErrNegativeLineHeight
 	}
 
 	return nil
