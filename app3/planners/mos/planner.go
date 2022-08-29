@@ -7,6 +7,7 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	types2 "github.com/kudrykv/latex-yearly-planner/app2/types"
+	"github.com/kudrykv/latex-yearly-planner/app3/components"
 	"github.com/kudrykv/latex-yearly-planner/app3/sections"
 	"github.com/kudrykv/latex-yearly-planner/app3/types"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
@@ -65,7 +66,12 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, day := range r.year.Days() {
-		header := sections.NewMOSHeaderDaily(day, r.parameters.MOSHeaderParameters)
+		tabs := components.Tabs{
+			{Text: "Calendar"},
+			{Text: "Notes"},
+			{Text: "Todos"},
+		}
+		header := sections.NewMOSHeaderDaily(day, tabs, r.parameters.MOSHeaderParameters)
 
 		if daily, err = sections.NewDaily(day, r.parameters.DailyParameters); err != nil {
 			return nil, fmt.Errorf("new daily: %w", err)
