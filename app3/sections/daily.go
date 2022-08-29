@@ -9,23 +9,36 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
+type SafeBuilder interface {
+	Build() string
+}
+
+type SafeBuilderNoop struct{}
+
+func (s SafeBuilderNoop) Build() string {
+	return ""
+}
+
 type DailyParameters struct {
 	ScheduleColumnWidth           types.Millimeters
 	PrioritiesAndNotesColumnWidth types.Millimeters
 	PrioritiesAndNotesSkip        types.Millimeters
 	ColumnsSeparatorWidth         types.Millimeters
-	ScheduleToTheRight            bool
 	ScheduleParameters            components.ScheduleParameters
 	TodosParameters               components.TodosParameters
 	NotesParameters               components.NotesParameters
+	LittleCalendarParameters      components.LittleCalendarParameters
+	ScheduleToTheRight            bool
+	EnableLittleCalendar          bool
 }
 
 type Daily struct {
-	day        calendar.Day
-	parameters DailyParameters
-	schedule   components.Schedule
-	todos      components.Todos
-	notes      components.Notes
+	day            calendar.Day
+	parameters     DailyParameters
+	schedule       components.Schedule
+	todos          components.Todos
+	notes          components.Notes
+	littleCalendar SafeBuilder
 }
 
 func NewDaily(day calendar.Day, parameters DailyParameters) (Daily, error) {
@@ -44,12 +57,20 @@ func NewDaily(day calendar.Day, parameters DailyParameters) (Daily, error) {
 		return Daily{}, fmt.Errorf("new notes: %w", err)
 	}
 
+	littleCalendar := SafeBuilder(SafeBuilderNoop{})
+	if parameters.EnableLittleCalendar {
+		if littleCalendar, err = components.NewLittleCalendar(day, parameters.LittleCalendarParameters); err != nil {
+			return Daily{}, fmt.Errorf("new little calendar: %w", err)
+		}
+	}
+
 	return Daily{
-		day:        day,
-		parameters: parameters,
-		schedule:   schedule,
-		todos:      todos,
-		notes:      notes,
+		day:            day,
+		parameters:     parameters,
+		schedule:       schedule,
+		todos:          todos,
+		notes:          notes,
+		littleCalendar: littleCalendar,
 	}, nil
 }
 
@@ -72,6 +93,7 @@ func (r Daily) scheduleColumn() string {
 		scheduleColumnFormat,
 		r.parameters.ScheduleColumnWidth,
 		r.schedule.Build(),
+		r.littleCalendar.Build(),
 	)
 }
 
@@ -87,6 +109,7 @@ func (r Daily) prioritiesAndNotesColumn() string {
 
 const scheduleColumnFormat = `\begin{minipage}[t]{%s}
 \myUnderline{Schedule\textcolor{white}{g}}
+%s
 %s
 \end{minipage}`
 

@@ -33,6 +33,7 @@ PrioritiesAndNotesColumnWidth = 90
 ColumnsSeparatorWidth = 5
 PrioritiesAndNotesSkip = 7
 ScheduleToTheRight = true
+EnableLittleCalendar = true
 
 [DailyParameters.ScheduleParameters]
 FromHour = 7
