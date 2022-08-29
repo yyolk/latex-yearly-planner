@@ -37,7 +37,7 @@ func NewLittleCalendar(today calendar.Day, parameters LittleCalendarParameters) 
 func (r LittleCalendar) Build() string {
 	heading := strings.Join(r.centerItems(r.weekNumberInHeader(r.weeks())), " & ")
 	return fmt.Sprintf(`
-{%%
+\vskip5mm{%%
 \setlength{\tabcolsep}{0pt}%%
 \renewcommand{\arraystretch}{1.5}%%
 \begin{tabularx}{\linewidth}[t]{%s}

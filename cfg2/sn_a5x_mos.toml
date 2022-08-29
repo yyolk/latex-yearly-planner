@@ -50,3 +50,6 @@ LineHeight = 5
 Distance = 5
 Rows = 27
 Columns = 19
+
+[DailyParameters.LittleCalendarParameters]
+WeekNumberToTheRight = true
