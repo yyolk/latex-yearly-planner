@@ -38,7 +38,8 @@ func (r MOSHeaderDaily) Build() ([]string, error) {
 	)}, nil
 }
 
-const dailyHeaderTemplate = `%s%%
+const dailyHeaderTemplate = `\marginnote{\rotatebox[origin=tr]{90}{hello world}}%%
+%s%%
 \hfill{}%%
 %s
 \myLinePlain
