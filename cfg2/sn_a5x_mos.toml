@@ -26,6 +26,9 @@ ShowLinks = false
 ShowFrames = false
 
 ### planner setup
+[MOSHeaderParameters]
+AfterHeaderSkip = 2.5
+
 # daily setup
 [DailyParameters]
 ScheduleColumnWidth = 50

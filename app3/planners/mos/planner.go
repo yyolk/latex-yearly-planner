@@ -65,7 +65,8 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, day := range r.year.Days() {
-		header := sections.NewMOSHeader()
+		header := sections.NewMOSHeaderDaily(day, r.parameters.MOSHeaderParameters)
+
 		if daily, err = sections.NewDaily(day, r.parameters.DailyParameters); err != nil {
 			return nil, fmt.Errorf("new daily: %w", err)
 		}

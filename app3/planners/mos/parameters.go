@@ -12,7 +12,8 @@ type Parameters struct {
 
 	Document types.Document
 
-	Year            int
-	Weekday         time.Weekday
-	DailyParameters sections.DailyParameters
+	Year                int
+	Weekday             time.Weekday
+	MOSHeaderParameters sections.MOSHeaderParameters
+	DailyParameters     sections.DailyParameters
 }
