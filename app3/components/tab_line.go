@@ -35,6 +35,9 @@ func (r TabLine) Build() string {
 	)
 }
 
-const tabLineTemplate = `{\renewcommand{\arraystretch}{%s}\setlength{\tabcolsep}{%s}\begin{tabular}{%s}
+const tabLineTemplate = `{%%
+\renewcommand{\arraystretch}{%s}%%
+\setlength{\tabcolsep}{%s}%%
+\begin{tabular}{%s}
 %s
 \end{tabular}}`
