@@ -17,7 +17,7 @@ Left = 14
 Right = 5
 
 [Document.MarginNotes]
-Separator = 6
+Separator = 6.3
 Width = 10
 Reverse = true
 

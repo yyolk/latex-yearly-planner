@@ -36,7 +36,7 @@ func (r Tab) String() string {
 	}
 
 	if r.Target {
-		return fmt.Sprintf(`\hypertarget{%s}{%s}`, ref, text)
+		return fmt.Sprintf(`\hypertarget{%s}{\cellcolor{black}{\textcolor{white}{%s}}}`, ref, text)
 	}
 
 	return fmt.Sprintf(`\hyperlink{%s}{%s}`, ref, text)
