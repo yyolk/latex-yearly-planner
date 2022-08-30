@@ -1,8 +1,14 @@
 package components
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/kudrykv/latex-yearly-planner/app3/types"
+)
 
 type TabLineParameters struct {
+	VerticalSpacing     types.Spring
+	SpaceBetweenColumns types.Millimeters
 }
 
 type TabLine struct {
@@ -22,11 +28,13 @@ func (r TabLine) Build() string {
 
 	return fmt.Sprintf(
 		tabLineTemplate,
+		r.parameters.VerticalSpacing,
+		r.parameters.SpaceBetweenColumns,
 		rule,
 		r.tabs,
 	)
 }
 
-const tabLineTemplate = `\begin{tabular}{%s}
+const tabLineTemplate = `{\renewcommand{\arraystretch}{%s}\setlength{\tabcolsep}{%s}\begin{tabular}{%s}
 %s
-\end{tabular}`
+\end{tabular}}`

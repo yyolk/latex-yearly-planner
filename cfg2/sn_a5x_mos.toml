@@ -17,7 +17,7 @@ Left = 14
 Right = 5
 
 [Document.MarginNotes]
-Separator = 4
+Separator = 6
 Width = 10
 Reverse = true
 
@@ -28,6 +28,12 @@ ShowFrames = false
 ### planner setup
 [MOSHeaderParameters]
 AfterHeaderSkip = 2.5
+[MOSHeaderParameters.HeadingTabLineParameters]
+VerticalSpacing = 1
+SpaceBetweenColumns = 2
+[MOSHeaderParameters.QuartersTabLineParameters]
+VerticalSpacing = 2
+SpaceBetweenColumns = 3
 
 # daily setup
 [DailyParameters]
