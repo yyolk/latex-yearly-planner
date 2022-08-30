@@ -1,6 +1,7 @@
 package sections
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/kudrykv/latex-yearly-planner/app3/components"
@@ -19,14 +20,21 @@ type MOSHeaderDaily struct {
 	parameters MOSHeaderParameters
 }
 
-func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSHeaderParameters) MOSHeaderDaily {
+var ErrMissingQuarter = errors.New("missing quarter")
+
+func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeaderDaily, error) {
 	tabLine := components.NewTabLine(tabs, parameters.TabLineParameters)
+
+	quarter := today.CalendarQuarter()
+	if quarter == nil {
+		return MOSHeaderDaily{}, fmt.Errorf("partially initialized day: %w", ErrMissingQuarter)
+	}
 
 	return MOSHeaderDaily{
 		today:      today,
 		tabLine:    tabLine,
 		parameters: parameters,
-	}
+	}, nil
 }
 
 func (r MOSHeaderDaily) Build() ([]string, error) {

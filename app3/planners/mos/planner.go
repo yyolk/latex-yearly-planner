@@ -61,8 +61,9 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	var (
-		daily sections.Daily
-		err   error
+		daily  sections.Daily
+		header sections.MOSHeaderDaily
+		err    error
 	)
 
 	for _, day := range r.year.Days() {
@@ -71,7 +72,10 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 			{Text: "Notes"},
 			{Text: "Todos"},
 		}
-		header := sections.NewMOSHeaderDaily(day, tabs, r.parameters.MOSHeaderParameters)
+
+		if header, err = sections.NewMOSHeaderDaily(day, tabs, r.parameters.MOSHeaderParameters); err != nil {
+			return nil, fmt.Errorf("new header: %w", err)
+		}
 
 		if daily, err = sections.NewDaily(day, r.parameters.DailyParameters); err != nil {
 			return nil, fmt.Errorf("new daily: %w", err)
