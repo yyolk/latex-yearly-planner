@@ -20,14 +20,14 @@ type MOSHeaderDaily struct {
 	parameters MOSHeaderParameters
 }
 
-var ErrMissingQuarter = errors.New("missing quarter")
+var ErrMissingYear = errors.New("missing year")
 
 func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeaderDaily, error) {
 	tabLine := components.NewTabLine(tabs, parameters.TabLineParameters)
 
-	quarter := today.CalendarQuarter()
+	quarter := today.CalendarYear()
 	if quarter == nil {
-		return MOSHeaderDaily{}, fmt.Errorf("partially initialized day: %w", ErrMissingQuarter)
+		return MOSHeaderDaily{}, fmt.Errorf("partially initialized day: %w", ErrMissingYear)
 	}
 
 	return MOSHeaderDaily{

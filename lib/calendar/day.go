@@ -10,6 +10,7 @@ type Day struct {
 	week    *Week
 	month   *Month
 	quarter *Quarter
+	year    *Year
 }
 
 func NewDay(moment time.Time) Day {
@@ -56,14 +57,15 @@ func (r Day) CalendarMonth() *Month {
 	return r.month
 }
 
-func (r Day) CalendarQuarter() *Quarter {
-	return r.quarter
+func (r Day) CalendarYear() *Year {
+	return r.year
 }
 
-func (r Day) enrich(week Week, month Month, quarter Quarter) Day {
+func (r Day) enrich(week Week, month Month, quarter Quarter, year Year) Day {
 	r.week = &week
 	r.month = &month
 	r.quarter = &quarter
+	r.year = &year
 
 	return r
 }

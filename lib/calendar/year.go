@@ -55,7 +55,7 @@ func (y Year) Days() Days {
 						continue
 					}
 
-					days = append(days, day.enrich(week, month, quarter))
+					days = append(days, day.enrich(week, month, quarter, y))
 				}
 			}
 		}
