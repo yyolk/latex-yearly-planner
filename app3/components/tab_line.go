@@ -18,7 +18,7 @@ func NewTabLine(tabs Tabs, parameters TabLineParameters) TabLine {
 }
 
 func (r TabLine) Build() string {
-	rule := fmt.Sprintf(`|*{3}{l|}@{}`)
+	rule := fmt.Sprintf(`|*{%d}{l|}@{}`, len(r.tabs))
 
 	return fmt.Sprintf(
 		tabLineTemplate,

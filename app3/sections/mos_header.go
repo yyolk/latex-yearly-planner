@@ -10,28 +10,31 @@ import (
 )
 
 type MOSHeaderParameters struct {
-	AfterHeaderSkip   types.Millimeters
-	TabLineParameters components.TabLineParameters
+	AfterHeaderSkip           types.Millimeters
+	HeadingTabLineParameters  components.TabLineParameters
+	QuartersTabLineParameters components.TabLineParameters
 }
 
 type MOSHeaderDaily struct {
 	today      calendar.Day
 	tabLine    components.TabLine
 	parameters MOSHeaderParameters
+	year       calendar.Year
 }
 
 var ErrMissingYear = errors.New("missing year")
 
 func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeaderDaily, error) {
-	tabLine := components.NewTabLine(tabs, parameters.TabLineParameters)
+	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
-	quarter := today.CalendarYear()
-	if quarter == nil {
+	year := today.CalendarYear()
+	if year == nil {
 		return MOSHeaderDaily{}, fmt.Errorf("partially initialized day: %w", ErrMissingYear)
 	}
 
 	return MOSHeaderDaily{
 		today:      today,
+		year:       *year,
 		tabLine:    tabLine,
 		parameters: parameters,
 	}, nil
@@ -40,13 +43,14 @@ func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSH
 func (r MOSHeaderDaily) Build() ([]string, error) {
 	return []string{fmt.Sprintf(
 		dailyHeaderTemplate,
+		r.quarters().Build(),
 		r.today.Format("Monday, 2"),
 		r.tabLine.Build(),
 		r.parameters.AfterHeaderSkip,
 	)}, nil
 }
 
-const dailyHeaderTemplate = `\marginnote{\rotatebox[origin=tr]{90}{hello world}}%%
+const dailyHeaderTemplate = `\marginnote{\rotatebox[origin=tr]{90}{%s}}%%
 %s%%
 \hfill{}%%
 %s
@@ -54,3 +58,13 @@ const dailyHeaderTemplate = `\marginnote{\rotatebox[origin=tr]{90}{hello world}}
 \vskip%s
 
 `
+
+func (r MOSHeaderDaily) quarters() components.TabLine {
+	tabs := components.Tabs{}
+
+	for i := len(r.year.Quarters) - 1; i >= 0; i-- {
+		tabs = append(tabs, components.Tab{Text: r.year.Quarters[i].Name()})
+	}
+
+	return components.NewTabLine(tabs, r.parameters.QuartersTabLineParameters)
+}

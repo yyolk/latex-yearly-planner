@@ -49,10 +49,9 @@ Number = 8
 LineHeight = 5
 
 [DailyParameters.NotesParameters]
-[DailyParameters.NotesParameters.Dotted]
-Distance = 5
-Rows = 27
-Columns = 17
+[DailyParameters.NotesParameters.Lined]
+Number = 27
+Height = 5
 
 [DailyParameters.LittleCalendarParameters]
 WeekNumberToTheRight = true
