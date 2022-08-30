@@ -28,12 +28,16 @@ ShowFrames = false
 ### planner setup
 [MOSHeaderParameters]
 AfterHeaderSkip = 2.5
+MonthAndQuarterSpace = 11.7
 [MOSHeaderParameters.HeadingTabLineParameters]
 VerticalSpacing = 1
 SpaceBetweenColumns = 2
 [MOSHeaderParameters.QuartersTabLineParameters]
 VerticalSpacing = 2
-SpaceBetweenColumns = 3
+SpaceBetweenColumns = 5
+[MOSHeaderParameters.MonthsTabLineParameters]
+VerticalSpacing = 2
+SpaceBetweenColumns = 3.5
 
 # daily setup
 [DailyParameters]

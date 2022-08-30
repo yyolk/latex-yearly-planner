@@ -11,8 +11,10 @@ import (
 
 type MOSHeaderParameters struct {
 	AfterHeaderSkip           types.Millimeters
+	MonthAndQuarterSpace      types.Millimeters
 	HeadingTabLineParameters  components.TabLineParameters
 	QuartersTabLineParameters components.TabLineParameters
+	MonthsTabLineParameters   components.TabLineParameters
 }
 
 type MOSHeaderDaily struct {
@@ -43,6 +45,8 @@ func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSH
 func (r MOSHeaderDaily) Build() ([]string, error) {
 	return []string{fmt.Sprintf(
 		dailyHeaderTemplate,
+		r.months().Build(),
+		r.parameters.MonthAndQuarterSpace,
 		r.quarters().Build(),
 		r.today.Format("Monday, 2"),
 		r.tabLine.Build(),
@@ -50,7 +54,7 @@ func (r MOSHeaderDaily) Build() ([]string, error) {
 	)}, nil
 }
 
-const dailyHeaderTemplate = `\marginnote{\rotatebox[origin=tr]{90}{%s}}%%
+const dailyHeaderTemplate = `\marginnote{\rotatebox[origin=tr]{90}{%s\hspace{%s}%s}}%%
 %s%%
 \hfill{}%%
 %s
@@ -58,6 +62,17 @@ const dailyHeaderTemplate = `\marginnote{\rotatebox[origin=tr]{90}{%s}}%%
 \vskip%s
 
 `
+
+func (r MOSHeaderDaily) months() components.TabLine {
+	tabs := components.Tabs{}
+	months := r.year.Months()
+
+	for i := len(months) - 1; i >= 0; i-- {
+		tabs = append(tabs, components.Tab{Text: months[i].Month().String()[:3]})
+	}
+
+	return components.NewTabLine(tabs, r.parameters.MonthsTabLineParameters)
+}
 
 func (r MOSHeaderDaily) quarters() components.TabLine {
 	tabs := components.Tabs{}
