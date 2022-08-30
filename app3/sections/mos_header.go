@@ -22,21 +22,35 @@ type MOSHeaderDaily struct {
 	tabLine    components.TabLine
 	parameters MOSHeaderParameters
 	year       calendar.Year
+	quarter    calendar.Quarter
+	month      calendar.Month
 }
 
-var ErrMissingYear = errors.New("missing year")
+var ErrIncompleteDay = errors.New("incomplete day")
 
 func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeaderDaily, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
 	year := today.CalendarYear()
 	if year == nil {
-		return MOSHeaderDaily{}, fmt.Errorf("partially initialized day: %w", ErrMissingYear)
+		return MOSHeaderDaily{}, fmt.Errorf("get year: %w", ErrIncompleteDay)
+	}
+
+	quarter := today.CalendarQuarter()
+	if quarter == nil {
+		return MOSHeaderDaily{}, fmt.Errorf("get quarter: %w", ErrIncompleteDay)
+	}
+
+	month := today.CalendarMonth()
+	if month == nil {
+		return MOSHeaderDaily{}, fmt.Errorf("get month: %w", ErrIncompleteDay)
 	}
 
 	return MOSHeaderDaily{
 		today:      today,
 		year:       *year,
+		quarter:    *quarter,
+		month:      *month,
 		tabLine:    tabLine,
 		parameters: parameters,
 	}, nil
@@ -68,7 +82,9 @@ func (r MOSHeaderDaily) months() components.TabLine {
 	months := r.year.Months()
 
 	for i := len(months) - 1; i >= 0; i-- {
-		tabs = append(tabs, components.Tab{Text: months[i].Month().String()[:3]})
+		target := months[i].Month() == r.month.Month()
+
+		tabs = append(tabs, components.Tab{Text: months[i].Month().String()[:3], Target: target})
 	}
 
 	return components.NewTabLine(tabs, r.parameters.MonthsTabLineParameters)
@@ -78,7 +94,9 @@ func (r MOSHeaderDaily) quarters() components.TabLine {
 	tabs := components.Tabs{}
 
 	for i := len(r.year.Quarters) - 1; i >= 0; i-- {
-		tabs = append(tabs, components.Tab{Text: r.year.Quarters[i].Name()})
+		target := r.year.Quarters[i].Number() == r.quarter.Number()
+
+		tabs = append(tabs, components.Tab{Text: r.year.Quarters[i].Name(), Target: target})
 	}
 
 	return components.NewTabLine(tabs, r.parameters.QuartersTabLineParameters)

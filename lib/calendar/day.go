@@ -57,6 +57,10 @@ func (r Day) CalendarMonth() *Month {
 	return r.month
 }
 
+func (r Day) CalendarQuarter() *Quarter {
+	return r.quarter
+}
+
 func (r Day) CalendarYear() *Year {
 	return r.year
 }
