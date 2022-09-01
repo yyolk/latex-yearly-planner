@@ -63,7 +63,7 @@ func (r MOSHeaderDaily) Build() ([]string, error) {
 		r.months().Build(),
 		r.parameters.MonthAndQuarterSpace,
 		r.quarters().Build(),
-		r.today.Format("Monday, 2"),
+		r.title(),
 		r.tabLine.Build(),
 		r.parameters.AfterHeaderSkip,
 	)}, nil
@@ -110,7 +110,7 @@ func (r MOSHeaderDaily) title() string {
 		return title
 	}
 
-	return fmt.Sprintf(`\hyperref{%s}{%s}`, r.reference, title)
+	return fmt.Sprintf(`\hypertarget{%s}{%s}`, r.reference, title)
 }
 
 func (r MOSHeaderDaily) Target(referencer interface{ Reference() string }) MOSHeaderDaily {
