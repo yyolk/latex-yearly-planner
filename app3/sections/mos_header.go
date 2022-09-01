@@ -18,6 +18,7 @@ type MOSHeaderParameters struct {
 }
 
 type MOSHeaderDaily struct {
+	reference  string
 	today      calendar.Day
 	tabLine    components.TabLine
 	parameters MOSHeaderParameters
@@ -100,4 +101,20 @@ func (r MOSHeaderDaily) quarters() components.TabLine {
 	}
 
 	return components.NewTabLine(tabs, r.parameters.QuartersTabLineParameters)
+}
+
+func (r MOSHeaderDaily) title() string {
+	title := r.today.Format("Monday, 2")
+
+	if len(r.reference) == 0 {
+		return title
+	}
+
+	return fmt.Sprintf(`\hyperref{%s}{%s}`, r.reference, title)
+}
+
+func (r MOSHeaderDaily) Target(referencer interface{ Reference() string }) MOSHeaderDaily {
+	r.reference = referencer.Reference()
+
+	return r
 }

@@ -127,3 +127,7 @@ const prioritiesAndNotesColumnFormat = `\begin{minipage}[t]{%s}
 \vskip%s\myUnderline{Notes %s}
 %s
 \end{minipage}`
+
+func (r Daily) Reference() string {
+	return r.day.Format("2006-01-02")
+}
