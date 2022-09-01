@@ -30,3 +30,7 @@ func (r DailyNotes) Build() ([]string, error) {
 func (r DailyNotes) Link(text string) string {
 	return fmt.Sprintf(`\hyperlink{daily-notes-%s}{%s}`, r.day.Format("2006-01-02"), text)
 }
+
+func (r DailyNotes) Reference() string {
+	return fmt.Sprintf(`daily-notes-%s`, r.day.Format("2006-01-02"))
+}

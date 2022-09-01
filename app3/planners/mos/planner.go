@@ -109,6 +109,7 @@ func (r *Planner) dailyNotesSection() (*bytes.Buffer, error) {
 
 	var (
 		header sections.MOSHeaderDaily
+		daily  sections.Daily
 		err    error
 	)
 
@@ -117,7 +118,13 @@ func (r *Planner) dailyNotesSection() (*bytes.Buffer, error) {
 			return nil, fmt.Errorf("new header: %w", err)
 		}
 
+		if daily, err = sections.NewDaily(day, r.parameters.DailyParameters); err != nil {
+			return nil, fmt.Errorf("new daily: %w", err)
+		}
+
 		notes := sections.NewDailyNotes(day, r.parameters.DailyNotesParameters)
+		header = header.Target(notes)
+		header = header.LinkBack(daily)
 
 		if err = buffer.WriteBlocks(header, notes); err != nil {
 			return nil, fmt.Errorf("write daily notes blocks: %w", err)

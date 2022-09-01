@@ -18,13 +18,14 @@ type MOSHeaderParameters struct {
 }
 
 type MOSHeaderDaily struct {
-	reference  string
-	today      calendar.Day
-	tabLine    components.TabLine
-	parameters MOSHeaderParameters
-	year       calendar.Year
-	quarter    calendar.Quarter
-	month      calendar.Month
+	targetReference string
+	linkReference   string
+	today           calendar.Day
+	tabLine         components.TabLine
+	parameters      MOSHeaderParameters
+	year            calendar.Year
+	quarter         calendar.Quarter
+	month           calendar.Month
 }
 
 var ErrIncompleteDay = errors.New("incomplete day")
@@ -63,6 +64,7 @@ func (r MOSHeaderDaily) Build() ([]string, error) {
 		r.months().Build(),
 		r.parameters.MonthAndQuarterSpace,
 		r.quarters().Build(),
+		r.target(),
 		r.title(),
 		r.tabLine.Build(),
 		r.parameters.AfterHeaderSkip,
@@ -70,7 +72,7 @@ func (r MOSHeaderDaily) Build() ([]string, error) {
 }
 
 const dailyHeaderTemplate = `\marginnote{\rotatebox[origin=tr]{90}{%s\hspace{%s}%s}}%%
-%s%%
+%s%s%%
 \hfill{}%%
 %s
 \myLinePlain
@@ -103,18 +105,32 @@ func (r MOSHeaderDaily) quarters() components.TabLine {
 	return components.NewTabLine(tabs, r.parameters.QuartersTabLineParameters)
 }
 
+func (r MOSHeaderDaily) target() string {
+	if len(r.targetReference) == 0 {
+		return ""
+	}
+
+	return fmt.Sprintf(`\hypertarget{%s}{}`, r.targetReference)
+}
+
 func (r MOSHeaderDaily) title() string {
 	title := r.today.Format("Monday, 2")
 
-	if len(r.reference) == 0 {
+	if len(r.linkReference) == 0 {
 		return title
 	}
 
-	return fmt.Sprintf(`\hypertarget{%s}{%s}`, r.reference, title)
+	return fmt.Sprintf(`\hyperlink{%s}{%s}`, r.linkReference, title)
 }
 
 func (r MOSHeaderDaily) Target(referencer interface{ Reference() string }) MOSHeaderDaily {
-	r.reference = referencer.Reference()
+	r.targetReference = referencer.Reference()
+
+	return r
+}
+
+func (r MOSHeaderDaily) LinkBack(referencer interface{ Reference() string }) MOSHeaderDaily {
+	r.linkReference = referencer.Reference()
 
 	return r
 }
