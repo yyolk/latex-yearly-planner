@@ -53,12 +53,19 @@ func (r *Planner) Generate() (types.NamedBuffers, error) {
 
 func (r *Planner) sections() map[string]types2.SectionFunc {
 	return map[string]types2.SectionFunc{
-		common.DailiesSection: r.dailiesSection,
+		common.DailiesSection:    r.dailiesSection,
+		common.DailyNotesSection: r.dailyNotesSection,
 	}
 }
 
 func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
+
+	tabs := components.Tabs{
+		{Text: "Calendar"},
+		{Text: "Notes"},
+		{Text: "Todos"},
+	}
 
 	var (
 		daily  sections.Daily
@@ -67,12 +74,6 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, day := range r.year.Days() {
-		tabs := components.Tabs{
-			{Text: "Calendar"},
-			{Text: "Notes"},
-			{Text: "Todos"},
-		}
-
 		if header, err = sections.NewMOSHeaderDaily(day, tabs, r.parameters.MOSHeaderParameters); err != nil {
 			return nil, fmt.Errorf("new header: %w", err)
 		}
@@ -81,10 +82,43 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 			return nil, fmt.Errorf("new daily: %w", err)
 		}
 
-		daily = daily.NearNotesLine("— later here\\hfill{}later there")
+		if r.parameters.DailyNotesEnabled() {
+			notes := sections.NewDailyNotes(day, r.parameters.DailyNotesParameters)
+
+			daily = daily.NearNotesLine(fmt.Sprintf("— %s", notes.Link("More")))
+		}
 
 		if err = buffer.WriteBlocks(header, daily); err != nil {
-			return nil, fmt.Errorf("write blocks: %w", err)
+			return nil, fmt.Errorf("write daily blocks: %w", err)
+		}
+	}
+
+	return buffer.Buffer, nil
+}
+
+func (r *Planner) dailyNotesSection() (*bytes.Buffer, error) {
+	buffer := pages.NewBuffer()
+
+	tabs := components.Tabs{
+		{Text: "Calendar"},
+		{Text: "Notes"},
+		{Text: "Todos"},
+	}
+
+	var (
+		header sections.MOSHeaderDaily
+		err    error
+	)
+
+	for _, day := range r.year.Days() {
+		if header, err = sections.NewMOSHeaderDaily(day, tabs, r.parameters.MOSHeaderParameters); err != nil {
+			return nil, fmt.Errorf("new header: %w", err)
+		}
+
+		notes := sections.NewDailyNotes(day, r.parameters.DailyNotesParameters)
+
+		if err = buffer.WriteBlocks(header, notes); err != nil {
+			return nil, fmt.Errorf("write daily notes blocks: %w", err)
 		}
 	}
 
