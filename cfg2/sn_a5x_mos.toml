@@ -69,3 +69,6 @@ WeekNumberToTheRight = true
 
 [DailyNotesParameters]
 Pages = 3
+[DailyNotesParameters.NotesParameters.Lined]
+Number = 33
+Height = 5

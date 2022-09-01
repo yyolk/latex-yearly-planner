@@ -15,12 +15,19 @@ type DailyNotesParameters struct {
 type DailyNotes struct {
 	parameters DailyNotesParameters
 	day        calendar.Day
+	notes      components.Notes
 }
 
 func NewDailyNotes(day calendar.Day, parameters DailyNotesParameters) (DailyNotes, error) {
+	notes, err := components.NewNotes(parameters.NotesParameters)
+	if err != nil {
+		return DailyNotes{}, fmt.Errorf("new notes: %w", err)
+	}
+
 	return DailyNotes{
 		day:        day,
 		parameters: parameters,
+		notes:      notes,
 	}, nil
 }
 
@@ -28,7 +35,7 @@ func (r DailyNotes) Build() ([]string, error) {
 	pages := make([]string, 0, r.parameters.Pages)
 
 	for i := 0; i < r.parameters.Pages; i++ {
-		pages = append(pages, r.day.Format("2006-01-02"))
+		pages = append(pages, r.notes.Build())
 	}
 
 	return pages, nil
