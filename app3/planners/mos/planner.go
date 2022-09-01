@@ -81,6 +81,8 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 			return nil, fmt.Errorf("new daily: %w", err)
 		}
 
+		daily = daily.NearNotesLine("— later here\\hfill{}later there")
+
 		if err = buffer.WriteBlocks(header, daily); err != nil {
 			return nil, fmt.Errorf("write blocks: %w", err)
 		}

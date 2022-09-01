@@ -39,6 +39,7 @@ type Daily struct {
 	todos          components.Todos
 	notes          components.Notes
 	littleCalendar SafeBuilder
+	nearNotesLine  string
 }
 
 func NewDaily(day calendar.Day, parameters DailyParameters) (Daily, error) {
@@ -74,6 +75,12 @@ func NewDaily(day calendar.Day, parameters DailyParameters) (Daily, error) {
 	}, nil
 }
 
+func (r Daily) NearNotesLine(nearNotesLine string) Daily {
+	r.nearNotesLine = nearNotesLine
+
+	return r
+}
+
 func (r Daily) Build() ([]string, error) {
 	pieces := []string{
 		r.scheduleColumn(),
@@ -103,6 +110,7 @@ func (r Daily) prioritiesAndNotesColumn() string {
 		r.parameters.PrioritiesAndNotesColumnWidth,
 		r.todos.Build(),
 		r.parameters.PrioritiesAndNotesSkip,
+		r.nearNotesLine,
 		r.notes.Build(),
 	)
 }
@@ -116,6 +124,6 @@ const scheduleColumnFormat = `\begin{minipage}[t]{%s}
 const prioritiesAndNotesColumnFormat = `\begin{minipage}[t]{%s}
 \myUnderline{Top Priorities}
 %s
-\vskip%s\myUnderline{Notes | later here \hfill{}later there}
+\vskip%s\myUnderline{Notes %s}
 %s
 \end{minipage}`
