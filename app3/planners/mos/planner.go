@@ -69,6 +69,7 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 
 	var (
 		daily  sections.Daily
+		notes  sections.DailyNotes
 		header sections.MOSHeaderDaily
 		err    error
 	)
@@ -85,7 +86,9 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 		header = header.Target(daily)
 
 		if r.parameters.DailyNotesEnabled() {
-			notes := sections.NewDailyNotes(day, r.parameters.DailyNotesParameters)
+			if notes, err = sections.NewDailyNotes(day, r.parameters.DailyNotesParameters); err != nil {
+				return nil, fmt.Errorf("new daily notes: %w", err)
+			}
 
 			daily = daily.NearNotesLine(fmt.Sprintf("— %s", notes.Link("More")))
 		}
@@ -110,6 +113,7 @@ func (r *Planner) dailyNotesSection() (*bytes.Buffer, error) {
 	var (
 		header sections.MOSHeaderDaily
 		daily  sections.Daily
+		notes  sections.DailyNotes
 		err    error
 	)
 
@@ -122,7 +126,10 @@ func (r *Planner) dailyNotesSection() (*bytes.Buffer, error) {
 			return nil, fmt.Errorf("new daily: %w", err)
 		}
 
-		notes := sections.NewDailyNotes(day, r.parameters.DailyNotesParameters)
+		if notes, err = sections.NewDailyNotes(day, r.parameters.DailyNotesParameters); err != nil {
+			return nil, fmt.Errorf("new daily notes: %w", err)
+		}
+
 		header = header.Target(notes)
 		header = header.LinkBack(daily)
 		header = header.Repeat(notes)

@@ -3,11 +3,13 @@ package sections
 import (
 	"fmt"
 
+	"github.com/kudrykv/latex-yearly-planner/app3/components"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
 type DailyNotesParameters struct {
-	Pages int
+	Pages           int
+	NotesParameters components.NotesParameters
 }
 
 type DailyNotes struct {
@@ -15,11 +17,11 @@ type DailyNotes struct {
 	day        calendar.Day
 }
 
-func NewDailyNotes(day calendar.Day, parameters DailyNotesParameters) DailyNotes {
+func NewDailyNotes(day calendar.Day, parameters DailyNotesParameters) (DailyNotes, error) {
 	return DailyNotes{
 		day:        day,
 		parameters: parameters,
-	}
+	}, nil
 }
 
 func (r DailyNotes) Build() ([]string, error) {
