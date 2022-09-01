@@ -125,6 +125,7 @@ func (r *Planner) dailyNotesSection() (*bytes.Buffer, error) {
 		notes := sections.NewDailyNotes(day, r.parameters.DailyNotesParameters)
 		header = header.Target(notes)
 		header = header.LinkBack(daily)
+		header = header.Repeat(notes)
 
 		if err = buffer.WriteBlocks(header, notes); err != nil {
 			return nil, fmt.Errorf("write daily notes blocks: %w", err)

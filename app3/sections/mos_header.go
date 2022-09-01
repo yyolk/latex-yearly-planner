@@ -26,6 +26,7 @@ type MOSHeaderDaily struct {
 	year            calendar.Year
 	quarter         calendar.Quarter
 	month           calendar.Month
+	repeat          int
 }
 
 var ErrIncompleteDay = errors.New("incomplete day")
@@ -59,16 +60,32 @@ func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSH
 }
 
 func (r MOSHeaderDaily) Build() ([]string, error) {
-	return []string{fmt.Sprintf(
-		dailyHeaderTemplate,
-		r.months().Build(),
-		r.parameters.MonthAndQuarterSpace,
-		r.quarters().Build(),
-		r.target(),
-		r.title(),
-		r.tabLine.Build(),
-		r.parameters.AfterHeaderSkip,
-	)}, nil
+	repeat := r.repeat
+	if repeat <= 1 {
+		repeat = 1
+	}
+
+	pages := make([]string, 0, repeat)
+
+	for i := 0; i < repeat; i++ {
+		target := r.target()
+		if i > 0 {
+			target = ""
+		}
+
+		pages = append(pages, fmt.Sprintf(
+			dailyHeaderTemplate,
+			r.months().Build(),
+			r.parameters.MonthAndQuarterSpace,
+			r.quarters().Build(),
+			target,
+			r.title(),
+			r.tabLine.Build(),
+			r.parameters.AfterHeaderSkip,
+		))
+	}
+
+	return pages, nil
 }
 
 const dailyHeaderTemplate = `\marginnote{\rotatebox[origin=tr]{90}{%s\hspace{%s}%s}}%%
@@ -131,6 +148,12 @@ func (r MOSHeaderDaily) Target(referencer interface{ Reference() string }) MOSHe
 
 func (r MOSHeaderDaily) LinkBack(referencer interface{ Reference() string }) MOSHeaderDaily {
 	r.linkReference = referencer.Reference()
+
+	return r
+}
+
+func (r MOSHeaderDaily) Repeat(repeater interface{ Repeat() int }) MOSHeaderDaily {
+	r.repeat = repeater.Repeat()
 
 	return r
 }

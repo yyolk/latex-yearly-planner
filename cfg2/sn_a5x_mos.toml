@@ -66,3 +66,6 @@ Height = 5
 
 [DailyParameters.LittleCalendarParameters]
 WeekNumberToTheRight = true
+
+[DailyNotesParameters]
+Pages = 3

@@ -7,6 +7,7 @@ import (
 )
 
 type DailyNotesParameters struct {
+	Pages int
 }
 
 type DailyNotes struct {
@@ -22,9 +23,13 @@ func NewDailyNotes(day calendar.Day, parameters DailyNotesParameters) DailyNotes
 }
 
 func (r DailyNotes) Build() ([]string, error) {
-	return []string{
-		r.day.Format("2006-01-02"),
-	}, nil
+	pages := make([]string, 0, r.parameters.Pages)
+
+	for i := 0; i < r.parameters.Pages; i++ {
+		pages = append(pages, r.day.Format("2006-01-02"))
+	}
+
+	return pages, nil
 }
 
 func (r DailyNotes) Link(text string) string {
@@ -33,4 +38,8 @@ func (r DailyNotes) Link(text string) string {
 
 func (r DailyNotes) Reference() string {
 	return fmt.Sprintf(`daily-notes-%s`, r.day.Format("2006-01-02"))
+}
+
+func (r DailyNotes) Repeat() int {
+	return r.parameters.Pages
 }
