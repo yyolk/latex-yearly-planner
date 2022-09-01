@@ -12,11 +12,12 @@ type Parameters struct {
 
 	Document types.Document
 
-	Year                 int
-	Weekday              time.Weekday
-	MOSHeaderParameters  sections.MOSHeaderParameters
-	DailyParameters      sections.DailyParameters
-	DailyNotesParameters sections.DailyNotesParameters
+	Year                   int
+	Weekday                time.Weekday
+	MOSHeaderParameters    sections.MOSHeaderParameters
+	DailyParameters        sections.DailyParameters
+	DailyNotesParameters   sections.DailyNotesParameters
+	DailyReflectParameters sections.DailyReflectParameters
 }
 
 func (r Parameters) DailyNotesEnabled() bool {

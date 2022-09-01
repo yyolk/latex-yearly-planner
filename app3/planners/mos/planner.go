@@ -53,8 +53,9 @@ func (r *Planner) Generate() (types.NamedBuffers, error) {
 
 func (r *Planner) sections() map[string]types2.SectionFunc {
 	return map[string]types2.SectionFunc{
-		common.DailiesSection:    r.dailiesSection,
-		common.DailyNotesSection: r.dailyNotesSection,
+		common.DailiesSection:      r.dailiesSection,
+		common.DailyNotesSection:   r.dailyNotesSection,
+		common.DailyReflectSection: r.dailyReflectSection,
 	}
 }
 
@@ -136,6 +137,42 @@ func (r *Planner) dailyNotesSection() (*bytes.Buffer, error) {
 
 		if err = buffer.WriteBlocks(header, notes); err != nil {
 			return nil, fmt.Errorf("write daily notes blocks: %w", err)
+		}
+	}
+
+	return buffer.Buffer, nil
+}
+
+func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
+	buffer := pages.NewBuffer()
+
+	tabs := components.Tabs{
+		{Text: "Calendar"},
+		{Text: "Notes"},
+		{Text: "Todos"},
+	}
+
+	var (
+		header sections.MOSHeaderDaily
+		daily  sections.Daily
+		err    error
+	)
+
+	for _, day := range r.year.Days() {
+		if header, err = sections.NewMOSHeaderDaily(day, tabs, r.parameters.MOSHeaderParameters); err != nil {
+			return nil, fmt.Errorf("new header: %w", err)
+		}
+
+		if daily, err = sections.NewDaily(day, r.parameters.DailyParameters); err != nil {
+			return nil, fmt.Errorf("new daily: %w", err)
+		}
+
+		reflect := sections.NewDailyReflect(day, r.parameters.DailyReflectParameters)
+
+		header = header.Target(daily)
+
+		if err = buffer.WriteBlocks(header, reflect); err != nil {
+			return nil, fmt.Errorf("write daily blocks: %w", err)
 		}
 	}
 
