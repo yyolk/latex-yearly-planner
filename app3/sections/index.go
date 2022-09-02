@@ -75,3 +75,7 @@ const indexTemplate = `{\arrayrulecolor{gray}\begin{tabularx}{\linewidth}{l|l}
 func (r Index) Repeat() int {
 	return r.parameters.Pages
 }
+
+func (r Index) Title() string {
+	return "Index"
+}

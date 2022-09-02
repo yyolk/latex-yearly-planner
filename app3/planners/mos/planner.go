@@ -87,6 +87,7 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 		}
 
 		header = header.Target(daily)
+		header = header.Title(daily)
 
 		if r.parameters.DailyNotesEnabled() {
 			if notes, err = sections.NewDailyNotes(day, r.parameters.DailyNotesParameters); err != nil {
@@ -144,6 +145,7 @@ func (r *Planner) dailyNotesSection() (*bytes.Buffer, error) {
 		header = header.Target(notes)
 		header = header.LinkBack(daily)
 		header = header.Repeat(notes)
+		header = header.Title(daily)
 
 		if err = buffer.WriteBlocks(header, notes); err != nil {
 			return nil, fmt.Errorf("write daily notes blocks: %w", err)
@@ -184,6 +186,7 @@ func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
 
 		header = header.Target(reflect)
 		header = header.LinkBack(daily)
+		header = header.Title(daily)
 
 		if err = buffer.WriteBlocks(header, reflect); err != nil {
 			return nil, fmt.Errorf("write daily blocks: %w", err)
@@ -213,6 +216,7 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 	}
 
 	header = header.Repeat(index)
+	header = header.Title(index)
 
 	if err = buffer.WriteBlocks(header, index); err != nil {
 		return nil, fmt.Errorf("write index blocks: %w", err)

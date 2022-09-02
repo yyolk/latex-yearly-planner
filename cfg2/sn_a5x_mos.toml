@@ -2,9 +2,9 @@ Year = 2022
 Weekday = 1
 
 Sections = [
-#    "dailies",
-#    "daily_notes",
-#    "daily_reflect",
+    "dailies",
+    "daily_notes",
+    "daily_reflect",
     "notes"
 ]
 

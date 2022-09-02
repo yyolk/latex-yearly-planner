@@ -131,3 +131,7 @@ const prioritiesAndNotesColumnFormat = `\begin{minipage}[t]{%s}
 func (r Daily) Reference() string {
 	return r.day.Format("2006-01-02")
 }
+
+func (r Daily) Title() string {
+	return r.day.Format("Monday, 2")
+}

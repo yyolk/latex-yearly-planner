@@ -27,6 +27,7 @@ type MOSHeaderDaily struct {
 	quarter         calendar.Quarter
 	month           calendar.Month
 	repeat          int
+	titleText       string
 }
 
 var ErrIncompleteDay = errors.New("incomplete day")
@@ -148,13 +149,11 @@ func (r MOSHeaderDaily) target() string {
 }
 
 func (r MOSHeaderDaily) title() string {
-	title := r.today.Format("Monday, 2")
-
 	if len(r.linkReference) == 0 {
-		return title
+		return r.titleText
 	}
 
-	return fmt.Sprintf(`\hyperlink{%s}{%s}`, r.linkReference, title)
+	return fmt.Sprintf(`\hyperlink{%s}{%s}`, r.linkReference, r.titleText)
 }
 
 func (r MOSHeaderDaily) Target(referencer interface{ Reference() string }) MOSHeaderDaily {
@@ -171,6 +170,12 @@ func (r MOSHeaderDaily) LinkBack(referencer interface{ Reference() string }) MOS
 
 func (r MOSHeaderDaily) Repeat(repeater interface{ Repeat() int }) MOSHeaderDaily {
 	r.repeat = repeater.Repeat()
+
+	return r
+}
+
+func (r MOSHeaderDaily) Title(titler interface{ Title() string }) MOSHeaderDaily {
+	r.titleText = titler.Title()
 
 	return r
 }
