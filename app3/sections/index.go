@@ -71,7 +71,7 @@ const indexTemplate = `{\arrayrulecolor{gray}\renewcommand{\arraystretch}{0}\beg
 %s
 \end{tabularx}}`
 
-func (r Index) Repeat() int {
+func (r Index) IndexPages() int {
 	return r.parameters.Pages
 }
 
@@ -88,4 +88,18 @@ func (r Index) CurrentPage(page int) Index {
 	r.page = page
 
 	return r
+}
+
+func (r Index) ItemPages() int {
+	return r.parameters.ItemsPerPage * r.parameters.Pages
+}
+
+func (r Index) IndexPageFromItemPage(page int) Index {
+	r.page = (page-1)/r.parameters.ItemsPerPage + 1
+
+	return r
+}
+
+func (r Index) Reference() string {
+	return r.Title()
 }

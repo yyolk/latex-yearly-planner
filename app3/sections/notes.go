@@ -15,6 +15,7 @@ type Notes struct {
 	parameters NotesParameters
 	notes      components.Notes
 	index      Index
+	page       int
 }
 
 func NewNotes(index Index, parameters NotesParameters) (Notes, error) {
@@ -32,4 +33,14 @@ func NewNotes(index Index, parameters NotesParameters) (Notes, error) {
 
 func (r Notes) Build() ([]string, error) {
 	return []string{r.notes.Build()}, nil
+}
+
+func (r Notes) CurrentPage(page int) Notes {
+	r.page = page
+
+	return r
+}
+
+func (r Notes) Title() string {
+	return fmt.Sprintf("Note %d", r.page)
 }

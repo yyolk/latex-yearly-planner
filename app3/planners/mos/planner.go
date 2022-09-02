@@ -215,23 +215,30 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 		return nil, fmt.Errorf("new index: %w", err)
 	}
 
-	for page := 1; page <= index.Repeat(); page++ {
+	notes, err := sections.NewNotes(index, r.parameters.NotesParameters)
+	if err != nil {
+		return nil, fmt.Errorf("new notes: %w", err)
+	}
+
+	for page := 1; page <= index.IndexPages(); page++ {
 		index = index.CurrentPage(page)
 		header = header.Title(index)
+		header = header.Target(index)
 
 		if err = buffer.WriteBlocks(header, index); err != nil {
 			return nil, fmt.Errorf("write index blocks: %w", err)
 		}
 	}
 
-	//notes, err := sections.NewNotes(index, r.parameters.NotesParameters)
-	//if err != nil {
-	//	return nil, fmt.Errorf("new notes: %w", err)
-	//}
-	//
-	//if err = buffer.WriteBlocks(notes); err != nil {
-	//	return nil, fmt.Errorf("write notes blocks: %w", err)
-	//}
+	for page := 1; page <= index.ItemPages(); page++ {
+		notes = notes.CurrentPage(page)
+		header = header.Title(notes)
+		header = header.LinkBack(index.IndexPageFromItemPage(page))
+
+		if err = buffer.WriteBlocks(header, notes); err != nil {
+			return nil, fmt.Errorf("write index blocks: %w", err)
+		}
+	}
 
 	return buffer.Buffer, nil
 }
