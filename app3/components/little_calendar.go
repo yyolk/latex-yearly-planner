@@ -11,6 +11,7 @@ import (
 
 type LittleCalendarParameters struct {
 	WeekNumberToTheRight bool
+	WeekHighlight        bool
 }
 
 type LittleCalendar struct {
@@ -84,7 +85,13 @@ func (r LittleCalendar) matrix() string {
 
 	for _, week := range r.month.Weeks {
 		weekRow := r.weekRow(week)
-		pieces = append(pieces, strings.Join(weekRow, " & "))
+		highlight := ""
+
+		if r.parameters.WeekHighlight && r.today.Week().WeekNumber() == week.WeekNumber() {
+			highlight = `\rowcolor{lightgray}`
+		}
+
+		pieces = append(pieces, highlight+strings.Join(weekRow, " & "))
 	}
 
 	return strings.Join(pieces, " \\\\ \n")
