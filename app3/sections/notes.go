@@ -7,6 +7,7 @@ import (
 )
 
 type NotesParameters struct {
+	IndexParameters IndexParameters
 	NotesParameters components.NotesParameters
 }
 

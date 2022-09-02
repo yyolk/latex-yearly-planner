@@ -196,6 +196,15 @@ func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
 func (r *Planner) notesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
+	index, err := sections.NewIndex(r.parameters.NotesParameters.IndexParameters)
+	if err != nil {
+		return nil, fmt.Errorf("new index: %w", err)
+	}
+
+	if err = buffer.WriteBlocks(index); err != nil {
+		return nil, fmt.Errorf("write index blocks: %w", err)
+	}
+
 	notes, err := sections.NewNotes(r.parameters.NotesParameters)
 	if err != nil {
 		return nil, fmt.Errorf("new notes: %w", err)
