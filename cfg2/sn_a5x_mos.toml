@@ -96,8 +96,9 @@ Height = 5
 # notes setup
 [NotesParameters]
 [NotesParameters.IndexParameters]
-ItemsPerPage = 10
-Pages = 3
+ItemsPerPage = 25
+Pages = 4
+LineHeight = 8
 [NotesParameters.NotesParameters.Lined]
 Number = 33
 Height = 5
