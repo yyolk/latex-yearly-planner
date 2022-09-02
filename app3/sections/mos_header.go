@@ -82,10 +82,12 @@ func (r MOSHeaderDaily) Build() ([]string, error) {
 
 	pages := make([]string, 0, repeat)
 
-	for i := 0; i < repeat; i++ {
+	for i := 1; i <= repeat; i++ {
 		target := r.target()
-		if i > 0 {
+		postfix := ""
+		if i > 1 {
 			target = ""
+			postfix = fmt.Sprintf(" %d", i)
 		}
 
 		pages = append(pages, fmt.Sprintf(
@@ -94,7 +96,7 @@ func (r MOSHeaderDaily) Build() ([]string, error) {
 			r.parameters.MonthAndQuarterSpace,
 			r.quarters().Build(),
 			target,
-			r.title(),
+			r.title()+postfix,
 			r.tabLine.Build(),
 			r.parameters.AfterHeaderSkip,
 		))
