@@ -91,7 +91,7 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 				return nil, fmt.Errorf("new daily notes: %w", err)
 			}
 
-			daily = daily.NearNotesLine(fmt.Sprintf("— %s", notes.Link("More")))
+			daily = daily.NearNotesLine(fmt.Sprintf("$\\vert$ %s", notes.Link("More")))
 		}
 
 		if err = buffer.WriteBlocks(header, daily); err != nil {
