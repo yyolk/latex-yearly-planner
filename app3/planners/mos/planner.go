@@ -69,10 +69,11 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 	}
 
 	var (
-		daily  sections.Daily
-		notes  sections.DailyNotes
-		header sections.MOSHeaderDaily
-		err    error
+		daily   sections.Daily
+		notes   sections.DailyNotes
+		reflect sections.DailyReflect
+		header  sections.MOSHeaderDaily
+		err     error
 	)
 
 	for _, day := range r.year.Days() {
@@ -91,7 +92,12 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 				return nil, fmt.Errorf("new daily notes: %w", err)
 			}
 
-			daily = daily.NearNotesLine(fmt.Sprintf("$\\vert$ %s", notes.Link("More")))
+			daily = daily.AppendNearNotesLine(fmt.Sprintf("$\\vert$ %s", notes.Link()))
+		}
+
+		if r.parameters.ReflectEnabled() {
+			reflect = sections.NewDailyReflect(day, r.parameters.DailyReflectParameters)
+			daily = daily.AppendNearNotesLine(fmt.Sprintf("\\hfill{}%s", reflect.Link()))
 		}
 
 		if err = buffer.WriteBlocks(header, daily); err != nil {
@@ -153,9 +159,10 @@ func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
 	}
 
 	var (
-		header sections.MOSHeaderDaily
-		daily  sections.Daily
-		err    error
+		header  sections.MOSHeaderDaily
+		reflect sections.DailyReflect
+		daily   sections.Daily
+		err     error
 	)
 
 	for _, day := range r.year.Days() {
@@ -167,9 +174,10 @@ func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
 			return nil, fmt.Errorf("new daily: %w", err)
 		}
 
-		reflect := sections.NewDailyReflect(day, r.parameters.DailyReflectParameters)
+		reflect = sections.NewDailyReflect(day, r.parameters.DailyReflectParameters)
 
-		header = header.Target(daily)
+		header = header.Target(reflect)
+		header = header.LinkBack(daily)
 
 		if err = buffer.WriteBlocks(header, reflect); err != nil {
 			return nil, fmt.Errorf("write daily blocks: %w", err)

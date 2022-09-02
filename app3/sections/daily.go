@@ -75,8 +75,8 @@ func NewDaily(day calendar.Day, parameters DailyParameters) (Daily, error) {
 	}, nil
 }
 
-func (r Daily) NearNotesLine(nearNotesLine string) Daily {
-	r.nearNotesLine = nearNotesLine
+func (r Daily) AppendNearNotesLine(nearNotesLine string) Daily {
+	r.nearNotesLine += nearNotesLine
 
 	return r
 }

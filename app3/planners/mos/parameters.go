@@ -29,3 +29,13 @@ func (r Parameters) DailyNotesEnabled() bool {
 
 	return false
 }
+
+func (r Parameters) ReflectEnabled() bool {
+	for _, section := range r.Sections {
+		if section == "daily_reflect" {
+			return true
+		}
+	}
+
+	return false
+}

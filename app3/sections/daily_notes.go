@@ -41,8 +41,8 @@ func (r DailyNotes) Build() ([]string, error) {
 	return pages, nil
 }
 
-func (r DailyNotes) Link(text string) string {
-	return fmt.Sprintf(`\hyperlink{daily-notes-%s}{%s}`, r.day.Format("2006-01-02"), text)
+func (r DailyNotes) Link() string {
+	return fmt.Sprintf(`\hyperlink{daily-notes-%s}{%s}`, r.day.Format("2006-01-02"), "More")
 }
 
 func (r DailyNotes) Reference() string {
