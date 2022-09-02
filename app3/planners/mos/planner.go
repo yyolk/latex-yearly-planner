@@ -196,12 +196,25 @@ func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
 func (r *Planner) notesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
+	tabs := components.Tabs{
+		{Text: "Calendar"},
+		{Text: "Notes"},
+		{Text: "Todos"},
+	}
+
+	header, err := sections.NewMOSHeaderIncomplete(r.year, tabs, r.parameters.MOSHeaderParameters)
+	if err != nil {
+		return nil, fmt.Errorf("new header: %w", err)
+	}
+
 	index, err := sections.NewIndex(r.parameters.NotesParameters.IndexParameters)
 	if err != nil {
 		return nil, fmt.Errorf("new index: %w", err)
 	}
 
-	if err = buffer.WriteBlocks(index); err != nil {
+	header = header.Repeat(index)
+
+	if err = buffer.WriteBlocks(header, index); err != nil {
 		return nil, fmt.Errorf("write index blocks: %w", err)
 	}
 
