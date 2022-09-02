@@ -68,7 +68,7 @@ func (r Index) Build() ([]string, error) {
 	return pages, nil
 }
 
-const indexTemplate = `{\arrayrulecolor{gray}\begin{tabularx}{\linewidth}{l|l}
+const indexTemplate = `{\arrayrulecolor{gray}\renewcommand{\arraystretch}{0}\begin{tabularx}{\linewidth}{l|l}
 %s
 \end{tabularx}}`
 

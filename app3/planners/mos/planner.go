@@ -201,7 +201,7 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 
 	tabs := components.Tabs{
 		{Text: "Calendar"},
-		{Text: "Notes"},
+		{Text: "Notes", Target: true},
 		{Text: "Todos"},
 	}
 

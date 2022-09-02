@@ -2,9 +2,9 @@ Year = 2022
 Weekday = 1
 
 Sections = [
-    "dailies",
-    "daily_notes",
-    "daily_reflect",
+#    "dailies",
+#    "daily_notes",
+#    "daily_reflect",
     "notes"
 ]
 
@@ -33,7 +33,7 @@ ShowFrames = false
 AfterHeaderSkip = 2.5
 MonthAndQuarterSpace = 11.7
 [MOSHeaderParameters.HeadingTabLineParameters]
-VerticalSpacing = 1
+VerticalSpacing = 1.5
 SpaceBetweenColumns = 2
 [MOSHeaderParameters.QuartersTabLineParameters]
 VerticalSpacing = 2
