@@ -38,6 +38,7 @@ func (r IndexParameters) Test() error {
 
 type Index struct {
 	parameters IndexParameters
+	page       int
 }
 
 func NewIndex(parameters IndexParameters) (Index, error) {
@@ -51,21 +52,19 @@ func NewIndex(parameters IndexParameters) (Index, error) {
 }
 
 func (r Index) Build() ([]string, error) {
-	pages := make([]string, 0, r.parameters.Pages)
-
-	for i := 1; i <= r.parameters.Pages; i++ {
-		items := make([]string, 0, r.parameters.ItemsPerPage)
-
-		for j := 1; j <= r.parameters.ItemsPerPage; j++ {
-			itemNumber := (i-1)*r.parameters.ItemsPerPage + j
-
-			items = append(items, fmt.Sprintf(`%d & \parbox{0pt}{\vskip%s} \\ \hline`, itemNumber, r.parameters.LineHeight))
-		}
-
-		pages = append(pages, fmt.Sprintf(indexTemplate, strings.Join(items, "\n")))
+	if r.page < 1 || r.page > r.parameters.Pages {
+		return nil, fmt.Errorf("invalid page: %d", r.page)
 	}
 
-	return pages, nil
+	items := make([]string, 0, r.parameters.ItemsPerPage)
+
+	for j := 1; j <= r.parameters.ItemsPerPage; j++ {
+		itemNumber := (r.page-1)*r.parameters.ItemsPerPage + j
+
+		items = append(items, fmt.Sprintf(`%d & \parbox{0pt}{\vskip%s} \\ \hline`, itemNumber, r.parameters.LineHeight))
+	}
+
+	return []string{fmt.Sprintf(indexTemplate, strings.Join(items, "\n"))}, nil
 }
 
 const indexTemplate = `{\arrayrulecolor{gray}\renewcommand{\arraystretch}{0}\begin{tabularx}{\linewidth}{l|l}
@@ -77,5 +76,16 @@ func (r Index) Repeat() int {
 }
 
 func (r Index) Title() string {
-	return "Index"
+	postfix := ""
+	if r.page > 1 {
+		postfix = fmt.Sprintf(" %d", r.page)
+	}
+
+	return "Index" + postfix
+}
+
+func (r Index) CurrentPage(page int) Index {
+	r.page = page
+
+	return r
 }

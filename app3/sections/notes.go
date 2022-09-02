@@ -14,9 +14,10 @@ type NotesParameters struct {
 type Notes struct {
 	parameters NotesParameters
 	notes      components.Notes
+	index      Index
 }
 
-func NewNotes(parameters NotesParameters) (Notes, error) {
+func NewNotes(index Index, parameters NotesParameters) (Notes, error) {
 	notes, err := components.NewNotes(parameters.NotesParameters)
 	if err != nil {
 		return Notes{}, fmt.Errorf("new notes: %w", err)
@@ -24,6 +25,7 @@ func NewNotes(parameters NotesParameters) (Notes, error) {
 
 	return Notes{
 		parameters: parameters,
+		index:      index,
 		notes:      notes,
 	}, nil
 }
