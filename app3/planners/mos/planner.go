@@ -96,7 +96,10 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 		}
 
 		if r.parameters.ReflectEnabled() {
-			reflect = sections.NewDailyReflect(day, r.parameters.DailyReflectParameters)
+			if reflect, err = sections.NewDailyReflect(day, r.parameters.DailyReflectParameters); err != nil {
+				return nil, fmt.Errorf("new daily reflect: %w", err)
+			}
+
 			daily = daily.AppendNearNotesLine(fmt.Sprintf("\\hfill{}%s", reflect.Link()))
 		}
 
@@ -174,7 +177,9 @@ func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
 			return nil, fmt.Errorf("new daily: %w", err)
 		}
 
-		reflect = sections.NewDailyReflect(day, r.parameters.DailyReflectParameters)
+		if reflect, err = sections.NewDailyReflect(day, r.parameters.DailyReflectParameters); err != nil {
+			return nil, fmt.Errorf("new daily reflect: %w", err)
+		}
 
 		header = header.Target(reflect)
 		header = header.LinkBack(daily)

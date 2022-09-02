@@ -69,7 +69,22 @@ Height = 5
 WeekNumberToTheRight = true
 
 [DailyNotesParameters]
-Pages = 3
+Pages = 1
 [DailyNotesParameters.NotesParameters.Lined]
 Number = 33
+Height = 5
+
+[DailyReflectParameters]
+BlocksSeparateSize = 5
+[DailyReflectParameters.GoalsNotesParameters.Lined]
+Number = 3
+Height = 5
+[DailyReflectParameters.GratefulNotesParameters.Lined]
+Number = 5
+Height = 5
+[DailyReflectParameters.BestThingNotesParameters.Lined]
+Number = 5
+Height = 5
+[DailyReflectParameters.DailyLogNotesParameters.Lined]
+Number = 20
 Height = 5
