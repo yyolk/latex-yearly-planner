@@ -56,6 +56,7 @@ func (r *Planner) sections() map[string]types2.SectionFunc {
 		common.DailiesSection:      r.dailiesSection,
 		common.DailyNotesSection:   r.dailyNotesSection,
 		common.DailyReflectSection: r.dailyReflectSection,
+		common.NotesSection:        r.notesSection,
 	}
 }
 
@@ -187,6 +188,21 @@ func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
 		if err = buffer.WriteBlocks(header, reflect); err != nil {
 			return nil, fmt.Errorf("write daily blocks: %w", err)
 		}
+	}
+
+	return buffer.Buffer, nil
+}
+
+func (r *Planner) notesSection() (*bytes.Buffer, error) {
+	buffer := pages.NewBuffer()
+
+	notes, err := sections.NewNotes(r.parameters.NotesParameters)
+	if err != nil {
+		return nil, fmt.Errorf("new notes: %w", err)
+	}
+
+	if err = buffer.WriteBlocks(notes); err != nil {
+		return nil, fmt.Errorf("write notes blocks: %w", err)
 	}
 
 	return buffer.Buffer, nil
