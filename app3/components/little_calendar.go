@@ -100,6 +100,12 @@ func (r LittleCalendar) weekRow(week calendar.Week) []string {
 			continue
 		}
 
+		if r.today.Day() == day.Day() {
+			row = append(row, fmt.Sprintf(`\cellcolor{black}{\textcolor{white}{%d}}`, day.Day()))
+
+			continue
+		}
+
 		row = append(row, strconv.Itoa(day.Day()))
 	}
 
