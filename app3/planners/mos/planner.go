@@ -230,6 +230,17 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 		}
 	}
 
+	tabs = components.Tabs{
+		{Text: "Calendar"},
+		{Text: "Notes"},
+		{Text: "Todos"},
+	}
+
+	header, err = sections.NewMOSHeaderIncomplete(r.year, tabs, r.parameters.MOSHeaderParameters)
+	if err != nil {
+		return nil, fmt.Errorf("new header: %w", err)
+	}
+
 	for page := 1; page <= index.ItemPages(); page++ {
 		notes = notes.CurrentPage(page)
 		header = header.Title(notes)
