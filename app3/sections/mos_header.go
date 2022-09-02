@@ -87,8 +87,8 @@ func (r MOSHeaderDaily) Build() ([]string, error) {
 		target := r.target()
 		postfix := ""
 		if i > 1 {
-			target = ""
 			postfix = fmt.Sprintf(" %d", i)
+			target += postfix
 		}
 
 		pages = append(pages, fmt.Sprintf(
