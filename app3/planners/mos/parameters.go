@@ -41,3 +41,23 @@ func (r Parameters) ReflectEnabled() bool {
 
 	return false
 }
+
+func (r Parameters) NotesEnabled() bool {
+	for _, section := range r.Sections {
+		if section == "notes" {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (r Parameters) TodosEnabled() bool {
+	for _, section := range r.Sections {
+		if section == "todo" {
+			return true
+		}
+	}
+
+	return false
+}

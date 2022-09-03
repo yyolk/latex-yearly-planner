@@ -64,12 +64,6 @@ func (r *Planner) sections() map[string]types2.SectionFunc {
 func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	tabs := components.Tabs{
-		{Text: "Calendar"},
-		{Text: "Notes", Reference: "note-Index"},
-		{Text: "Todos", Reference: "todo-Index"},
-	}
-
 	var (
 		daily   sections.Daily
 		notes   sections.DailyNotes
@@ -79,7 +73,7 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, day := range r.year.Days() {
-		if header, err = sections.NewMOSHeaderDaily(day, tabs, r.parameters.MOSHeaderParameters); err != nil {
+		if header, err = sections.NewMOSHeaderDaily(day, r.tabs(), r.parameters.MOSHeaderParameters); err != nil {
 			return nil, fmt.Errorf("new header: %w", err)
 		}
 
@@ -117,12 +111,6 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 func (r *Planner) dailyNotesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	tabs := components.Tabs{
-		{Text: "Calendar"},
-		{Text: "Notes", Reference: "note-Index"},
-		{Text: "Todos", Reference: "todo-Index"},
-	}
-
 	var (
 		header sections.MOSHeaderDaily
 		daily  sections.Daily
@@ -131,7 +119,7 @@ func (r *Planner) dailyNotesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, day := range r.year.Days() {
-		if header, err = sections.NewMOSHeaderDaily(day, tabs, r.parameters.MOSHeaderParameters); err != nil {
+		if header, err = sections.NewMOSHeaderDaily(day, r.tabs(), r.parameters.MOSHeaderParameters); err != nil {
 			return nil, fmt.Errorf("new header: %w", err)
 		}
 
@@ -159,12 +147,6 @@ func (r *Planner) dailyNotesSection() (*bytes.Buffer, error) {
 func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	tabs := components.Tabs{
-		{Text: "Calendar"},
-		{Text: "Notes", Reference: "note-Index"},
-		{Text: "Todos", Reference: "todo-Index"},
-	}
-
 	var (
 		header  sections.MOSHeaderDaily
 		reflect sections.DailyReflect
@@ -173,7 +155,7 @@ func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
 	)
 
 	for _, day := range r.year.Days() {
-		if header, err = sections.NewMOSHeaderDaily(day, tabs, r.parameters.MOSHeaderParameters); err != nil {
+		if header, err = sections.NewMOSHeaderDaily(day, r.tabs(), r.parameters.MOSHeaderParameters); err != nil {
 			return nil, fmt.Errorf("new header: %w", err)
 		}
 
@@ -200,13 +182,7 @@ func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
 func (r *Planner) notesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	tabs := components.Tabs{
-		{Text: "Calendar"},
-		{Text: "Notes", Target: true, Reference: "note-Index"},
-		{Text: "Todos", Reference: "todo-Index"},
-	}
-
-	header, err := sections.NewMOSHeaderIncomplete(r.year, tabs, r.parameters.MOSHeaderParameters)
+	header, err := sections.NewMOSHeaderIncomplete(r.year, r.tabs(targetNotes), r.parameters.MOSHeaderParameters)
 	if err != nil {
 		return nil, fmt.Errorf("new header: %w", err)
 	}
@@ -232,13 +208,7 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 		}
 	}
 
-	tabs = components.Tabs{
-		{Text: "Calendar"},
-		{Text: "Notes", Reference: "note-Index"},
-		{Text: "Todos", Reference: "todo-Index"},
-	}
-
-	header, err = sections.NewMOSHeaderIncomplete(r.year, tabs, r.parameters.MOSHeaderParameters)
+	header, err = sections.NewMOSHeaderIncomplete(r.year, r.tabs(), r.parameters.MOSHeaderParameters)
 	if err != nil {
 		return nil, fmt.Errorf("new header: %w", err)
 	}
@@ -260,13 +230,7 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 func (r *Planner) todosSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	tabs := components.Tabs{
-		{Text: "Calendar"},
-		{Text: "Notes", Reference: "note-Index"},
-		{Text: "Todos", Target: true, Reference: "todo-Index"},
-	}
-
-	header, err := sections.NewMOSHeaderIncomplete(r.year, tabs, r.parameters.MOSHeaderParameters)
+	header, err := sections.NewMOSHeaderIncomplete(r.year, r.tabs(targetTodos), r.parameters.MOSHeaderParameters)
 	if err != nil {
 		return nil, fmt.Errorf("new header: %w", err)
 	}
@@ -292,13 +256,7 @@ func (r *Planner) todosSection() (*bytes.Buffer, error) {
 		}
 	}
 
-	tabs = components.Tabs{
-		{Text: "Calendar"},
-		{Text: "Notes", Reference: "note-Index"},
-		{Text: "Todos", Reference: "todo-Index"},
-	}
-
-	header, err = sections.NewMOSHeaderIncomplete(r.year, tabs, r.parameters.MOSHeaderParameters)
+	header, err = sections.NewMOSHeaderIncomplete(r.year, r.tabs(), r.parameters.MOSHeaderParameters)
 	if err != nil {
 		return nil, fmt.Errorf("new header: %w", err)
 	}
@@ -315,6 +273,39 @@ func (r *Planner) todosSection() (*bytes.Buffer, error) {
 	}
 
 	return buffer.Buffer, nil
+}
+
+const (
+	targetNotes = iota + 1
+	targetTodos
+)
+
+func (r *Planner) tabs(target ...int) components.Tabs {
+	tabs := components.Tabs{{Text: "Calendar"}}
+
+	if r.parameters.NotesEnabled() {
+		focus := contains(target, targetNotes)
+
+		tabs = append(tabs, components.Tab{Text: "Notes", Reference: "note-Index", Target: focus})
+	}
+
+	if r.parameters.TodosEnabled() {
+		focus := contains(target, targetNotes)
+
+		tabs = append(tabs, components.Tab{Text: "Todos", Reference: "todo-Index", Target: focus})
+	}
+
+	return tabs
+}
+
+func contains(list []int, target int) bool {
+	for _, item := range list {
+		if item == target {
+			return true
+		}
+	}
+
+	return false
 }
 
 func (r *Planner) RunTimes() int {
