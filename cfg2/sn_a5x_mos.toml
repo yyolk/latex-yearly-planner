@@ -16,7 +16,7 @@ Height = 230
 
 [Document.Margin]
 Top = 10
-Bottom = 10
+Bottom = 5
 Left = 14
 Right = 5
 
@@ -109,3 +109,6 @@ Height = 5
 ItemsPerPage = 25
 Pages = 4
 LineHeight = 8
+[TodosParameters.TodosParameters]
+Number = 33
+LineHeight = 6
