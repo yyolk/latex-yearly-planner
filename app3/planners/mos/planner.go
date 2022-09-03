@@ -222,6 +222,7 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 
 	for page := 1; page <= index.IndexPages(); page++ {
 		index = index.CurrentPage(page)
+		index = index.ItemReferencePrefix("note-")
 		header = header.Title(index)
 		header = header.Target(index)
 
@@ -244,6 +245,7 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 	for page := 1; page <= index.ItemPages(); page++ {
 		notes = notes.CurrentPage(page)
 		header = header.Title(notes)
+		header = header.Target(notes)
 		header = header.LinkBack(index.IndexPageFromItemPage(page))
 
 		if err = buffer.WriteBlocks(header, notes); err != nil {

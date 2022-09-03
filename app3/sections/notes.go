@@ -44,3 +44,7 @@ func (r Notes) CurrentPage(page int) Notes {
 func (r Notes) Title() string {
 	return fmt.Sprintf("Note %d", r.page)
 }
+
+func (r Notes) Reference() string {
+	return fmt.Sprintf("note-%d", r.page)
+}

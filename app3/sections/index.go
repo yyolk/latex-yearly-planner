@@ -37,8 +37,9 @@ func (r IndexParameters) Test() error {
 }
 
 type Index struct {
-	parameters IndexParameters
-	page       int
+	parameters      IndexParameters
+	page            int
+	referencePrefix string
 }
 
 func NewIndex(parameters IndexParameters) (Index, error) {
@@ -61,7 +62,7 @@ func (r Index) Build() ([]string, error) {
 	for j := 1; j <= r.parameters.ItemsPerPage; j++ {
 		itemNumber := (r.page-1)*r.parameters.ItemsPerPage + j
 
-		items = append(items, fmt.Sprintf(`%d & \parbox{0pt}{\vskip%s} \\ \hline`, itemNumber, r.parameters.LineHeight))
+		items = append(items, fmt.Sprintf(`\hyperlink{%s%d}{%d} & \parbox{0pt}{\vskip%s} \\ \hline`, r.referencePrefix, itemNumber, itemNumber, r.parameters.LineHeight))
 	}
 
 	return []string{fmt.Sprintf(indexTemplate, strings.Join(items, "\n"))}, nil
@@ -102,4 +103,10 @@ func (r Index) IndexPageFromItemPage(page int) Index {
 
 func (r Index) Reference() string {
 	return r.Title()
+}
+
+func (r Index) ItemReferencePrefix(referencePrefix string) Index {
+	r.referencePrefix = referencePrefix
+
+	return r
 }
