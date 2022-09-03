@@ -66,8 +66,8 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 
 	tabs := components.Tabs{
 		{Text: "Calendar"},
-		{Text: "Notes"},
-		{Text: "Todos"},
+		{Text: "Notes", Reference: "note-Index"},
+		{Text: "Todos", Reference: "todo-Index"},
 	}
 
 	var (
@@ -119,8 +119,8 @@ func (r *Planner) dailyNotesSection() (*bytes.Buffer, error) {
 
 	tabs := components.Tabs{
 		{Text: "Calendar"},
-		{Text: "Notes"},
-		{Text: "Todos"},
+		{Text: "Notes", Reference: "note-Index"},
+		{Text: "Todos", Reference: "todo-Index"},
 	}
 
 	var (
@@ -161,8 +161,8 @@ func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
 
 	tabs := components.Tabs{
 		{Text: "Calendar"},
-		{Text: "Notes"},
-		{Text: "Todos"},
+		{Text: "Notes", Reference: "note-Index"},
+		{Text: "Todos", Reference: "todo-Index"},
 	}
 
 	var (
@@ -202,8 +202,8 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 
 	tabs := components.Tabs{
 		{Text: "Calendar"},
-		{Text: "Notes", Target: true},
-		{Text: "Todos"},
+		{Text: "Notes", Target: true, Reference: "note-Index"},
+		{Text: "Todos", Reference: "todo-Index"},
 	}
 
 	header, err := sections.NewMOSHeaderIncomplete(r.year, tabs, r.parameters.MOSHeaderParameters)
@@ -234,8 +234,8 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 
 	tabs = components.Tabs{
 		{Text: "Calendar"},
-		{Text: "Notes"},
-		{Text: "Todos"},
+		{Text: "Notes", Reference: "note-Index"},
+		{Text: "Todos", Reference: "todo-Index"},
 	}
 
 	header, err = sections.NewMOSHeaderIncomplete(r.year, tabs, r.parameters.MOSHeaderParameters)
@@ -262,8 +262,8 @@ func (r *Planner) todosSection() (*bytes.Buffer, error) {
 
 	tabs := components.Tabs{
 		{Text: "Calendar"},
-		{Text: "Notes"},
-		{Text: "Todos", Target: true},
+		{Text: "Notes", Reference: "note-Index"},
+		{Text: "Todos", Target: true, Reference: "todo-Index"},
 	}
 
 	header, err := sections.NewMOSHeaderIncomplete(r.year, tabs, r.parameters.MOSHeaderParameters)
@@ -294,8 +294,8 @@ func (r *Planner) todosSection() (*bytes.Buffer, error) {
 
 	tabs = components.Tabs{
 		{Text: "Calendar"},
-		{Text: "Notes"},
-		{Text: "Todos"},
+		{Text: "Notes", Reference: "note-Index"},
+		{Text: "Todos", Reference: "todo-Index"},
 	}
 
 	header, err = sections.NewMOSHeaderIncomplete(r.year, tabs, r.parameters.MOSHeaderParameters)
