@@ -57,6 +57,7 @@ func (r *Planner) sections() map[string]types2.SectionFunc {
 		common.DailyNotesSection:   r.dailyNotesSection,
 		common.DailyReflectSection: r.dailyReflectSection,
 		common.NotesSection:        r.notesSection,
+		common.ToDoSection:         r.todosSection,
 	}
 }
 
@@ -249,6 +250,66 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 		header = header.LinkBack(index.IndexPageFromItemPage(page))
 
 		if err = buffer.WriteBlocks(header, notes); err != nil {
+			return nil, fmt.Errorf("write index blocks: %w", err)
+		}
+	}
+
+	return buffer.Buffer, nil
+}
+
+func (r *Planner) todosSection() (*bytes.Buffer, error) {
+	buffer := pages.NewBuffer()
+
+	tabs := components.Tabs{
+		{Text: "Calendar"},
+		{Text: "Notes"},
+		{Text: "Todos", Target: true},
+	}
+
+	header, err := sections.NewMOSHeaderIncomplete(r.year, tabs, r.parameters.MOSHeaderParameters)
+	if err != nil {
+		return nil, fmt.Errorf("new header: %w", err)
+	}
+
+	index, err := sections.NewIndex(r.parameters.TodosParameters.IndexParameters)
+	if err != nil {
+		return nil, fmt.Errorf("new index: %w", err)
+	}
+
+	todos, err := sections.NewTodos(index, r.parameters.TodosParameters)
+	if err != nil {
+		return nil, fmt.Errorf("new todos: %w", err)
+	}
+
+	index = index.ItemReferencePrefix("todo-")
+
+	for page := 1; page <= index.IndexPages(); page++ {
+		index = index.CurrentPage(page)
+		header = header.Title(index).Target(index)
+
+		if err = buffer.WriteBlocks(header, index); err != nil {
+			return nil, fmt.Errorf("write index blocks: %w", err)
+		}
+	}
+
+	tabs = components.Tabs{
+		{Text: "Calendar"},
+		{Text: "Notes"},
+		{Text: "Todos"},
+	}
+
+	header, err = sections.NewMOSHeaderIncomplete(r.year, tabs, r.parameters.MOSHeaderParameters)
+	if err != nil {
+		return nil, fmt.Errorf("new header: %w", err)
+	}
+
+	for page := 1; page <= index.ItemPages(); page++ {
+		todos = todos.CurrentPage(page)
+		header = header.Title(todos)
+		header = header.Target(todos)
+		header = header.LinkBack(index.IndexPageFromItemPage(page))
+
+		if err = buffer.WriteBlocks(header, todos); err != nil {
 			return nil, fmt.Errorf("write index blocks: %w", err)
 		}
 	}

@@ -19,6 +19,7 @@ type Parameters struct {
 	DailyNotesParameters   sections.DailyNotesParameters
 	DailyReflectParameters sections.DailyReflectParameters
 	NotesParameters        sections.NotesParameters
+	TodosParameters        sections.TodosParameters
 }
 
 func (r Parameters) DailyNotesEnabled() bool {

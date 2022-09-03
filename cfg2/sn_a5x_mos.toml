@@ -5,7 +5,8 @@ Sections = [
 #    "dailies",
 #    "daily_notes",
 #    "daily_reflect",
-    "notes"
+    "notes",
+    "todo"
 ]
 
 # Layout-related stuff
@@ -102,3 +103,9 @@ LineHeight = 8
 [NotesParameters.NotesParameters.Lined]
 Number = 33
 Height = 5
+
+[TodosParameters]
+[TodosParameters.IndexParameters]
+ItemsPerPage = 25
+Pages = 4
+LineHeight = 8
