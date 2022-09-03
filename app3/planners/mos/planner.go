@@ -220,11 +220,11 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 		return nil, fmt.Errorf("new notes: %w", err)
 	}
 
+	index = index.ItemReferencePrefix("note-")
+
 	for page := 1; page <= index.IndexPages(); page++ {
 		index = index.CurrentPage(page)
-		index = index.ItemReferencePrefix("note-")
-		header = header.Title(index)
-		header = header.Target(index)
+		header = header.Title(index).Target(index)
 
 		if err = buffer.WriteBlocks(header, index); err != nil {
 			return nil, fmt.Errorf("write index blocks: %w", err)

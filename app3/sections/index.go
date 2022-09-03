@@ -102,7 +102,7 @@ func (r Index) IndexPageFromItemPage(page int) Index {
 }
 
 func (r Index) Reference() string {
-	return r.Title()
+	return r.referencePrefix + r.Title()
 }
 
 func (r Index) ItemReferencePrefix(referencePrefix string) Index {
