@@ -290,7 +290,7 @@ func (r *Planner) tabs(target ...int) components.Tabs {
 	}
 
 	if r.parameters.TodosEnabled() {
-		focus := contains(target, targetNotes)
+		focus := contains(target, targetTodos)
 
 		tabs = append(tabs, components.Tab{Text: "Todos", Reference: "todo-Index", Target: focus})
 	}
