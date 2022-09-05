@@ -60,18 +60,23 @@ func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSH
 	}, nil
 }
 
+func NewMOSHeaderWeekly(year calendar.Year, week calendar.Week, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeaderDaily, error) {
+	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
+
+	return MOSHeaderDaily{
+		tabLine:    tabLine,
+		parameters: parameters,
+		year:       year,
+	}, nil
+}
+
 func NewMOSHeaderIncomplete(year calendar.Year, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeaderDaily, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
 	return MOSHeaderDaily{
-		targetReference: "",
-		linkReference:   "",
-		today:           calendar.Day{},
-		tabLine:         tabLine,
-		parameters:      parameters,
-		year:            year,
-		quarter:         calendar.Quarter{},
-		month:           calendar.Month{},
+		tabLine:    tabLine,
+		parameters: parameters,
+		year:       year,
 	}, nil
 }
 

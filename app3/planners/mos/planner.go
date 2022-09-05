@@ -53,12 +53,42 @@ func (r *Planner) Generate() (types.NamedBuffers, error) {
 
 func (r *Planner) sections() map[string]types2.SectionFunc {
 	return map[string]types2.SectionFunc{
+		common.WeekliesSection:     r.weekliesSection,
 		common.DailiesSection:      r.dailiesSection,
 		common.DailyNotesSection:   r.dailyNotesSection,
 		common.DailyReflectSection: r.dailyReflectSection,
 		common.NotesSection:        r.notesSection,
 		common.ToDoSection:         r.todosSection,
 	}
+}
+
+func (r *Planner) weekliesSection() (*bytes.Buffer, error) {
+	buffer := pages.NewBuffer()
+
+	var (
+		header sections.MOSHeaderDaily
+		err    error
+	)
+
+	for _, week := range r.year.Weeks() {
+		if header, err = sections.NewMOSHeaderWeekly(r.year, week, r.tabs(), r.parameters.MOSHeaderParameters); err != nil {
+			return nil, fmt.Errorf("new header: %w", err)
+		}
+
+		weekly, err := sections.NewWeekly(week, r.parameters.WeeklyParameters)
+		if err != nil {
+			return nil, fmt.Errorf("new weekly: %w", err)
+		}
+
+		header = header.Target(weekly)
+		header = header.Title(weekly)
+
+		if err = buffer.WriteBlocks(header, weekly); err != nil {
+			return nil, fmt.Errorf("write weekly blocks: %w", err)
+		}
+	}
+
+	return buffer.Buffer, nil
 }
 
 func (r *Planner) dailiesSection() (*bytes.Buffer, error) {

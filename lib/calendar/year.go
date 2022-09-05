@@ -19,7 +19,7 @@ func NewYear(year int, wd time.Weekday) Year {
 	}
 }
 
-func (y Year) InWeeks() Weeks {
+func (y Year) Weeks() Weeks {
 	weeks := make(Weeks, 0, 53)
 
 	week := y.Quarters[0].Months[0].Weeks[0].backfill()

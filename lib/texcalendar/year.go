@@ -74,7 +74,7 @@ func (r Year) Days() Days {
 func (r Year) InWeeks() []Week {
 	weeks := make([]Week, 0, 53)
 
-	for _, week := range r.year.InWeeks() {
+	for _, week := range r.year.Weeks() {
 		weeks = append(weeks, NewWeek(week, WithParameters(r.parameters)))
 	}
 
