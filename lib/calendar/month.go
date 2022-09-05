@@ -4,6 +4,8 @@ import (
 	"time"
 )
 
+type Months []Month
+
 type Month struct{ Weeks Weeks }
 
 func NewMonth(year int, mo time.Month, wd time.Weekday) Month {

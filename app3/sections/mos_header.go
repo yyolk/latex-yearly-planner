@@ -24,8 +24,8 @@ type MOSHeaderDaily struct {
 	tabLine         components.TabLine
 	parameters      MOSHeaderParameters
 	year            calendar.Year
-	quarter         calendar.Quarter
-	month           calendar.Month
+	quarters        calendar.Quarters
+	months          calendar.Months
 	repeat          int
 	titleText       string
 }
@@ -53,8 +53,8 @@ func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSH
 	return MOSHeaderDaily{
 		today:      today,
 		year:       *year,
-		quarter:    *quarter,
-		month:      *month,
+		quarters:   calendar.Quarters{*quarter},
+		months:     calendar.Months{*month},
 		tabLine:    tabLine,
 		parameters: parameters,
 	}, nil
@@ -98,9 +98,9 @@ func (r MOSHeaderDaily) Build() ([]string, error) {
 
 		pages = append(pages, fmt.Sprintf(
 			dailyHeaderTemplate,
-			r.months().Build(),
+			r.makeMonths().Build(),
 			r.parameters.MonthAndQuarterSpace,
-			r.quarters().Build(),
+			r.makeQuarters().Build(),
 			target,
 			r.title()+postfix,
 			r.tabLine.Build(),
@@ -120,12 +120,16 @@ const dailyHeaderTemplate = `\marginnote{\rotatebox[origin=tr]{90}{%s\hspace{%s}
 
 `
 
-func (r MOSHeaderDaily) months() components.TabLine {
+func (r MOSHeaderDaily) makeMonths() components.TabLine {
 	tabs := components.Tabs{}
 	months := r.year.Months()
 
 	for i := len(months) - 1; i >= 0; i-- {
-		target := months[i].Month() == r.month.Month()
+		target := false
+
+		for _, month := range r.months {
+			target = target || months[i].Month() == month.Month()
+		}
 
 		tabs = append(tabs, components.Tab{Text: months[i].Month().String()[:3], Target: target})
 	}
@@ -133,11 +137,15 @@ func (r MOSHeaderDaily) months() components.TabLine {
 	return components.NewTabLine(tabs, r.parameters.MonthsTabLineParameters)
 }
 
-func (r MOSHeaderDaily) quarters() components.TabLine {
+func (r MOSHeaderDaily) makeQuarters() components.TabLine {
 	tabs := components.Tabs{}
 
 	for i := len(r.year.Quarters) - 1; i >= 0; i-- {
-		target := r.year.Quarters[i].Number() == r.quarter.Number()
+		target := false
+
+		for _, quarter := range r.quarters {
+			target = target || r.year.Quarters[i].Number() == quarter.Number()
+		}
 
 		tabs = append(tabs, components.Tab{Text: r.year.Quarters[i].Name(), Target: target})
 	}
