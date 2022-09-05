@@ -48,24 +48,24 @@ func NewWeek(wo WeekOption) Week {
 	return wo()
 }
 
-func (h Week) Next() Week {
-	return Week{days: [daysInWeek]Day{h.days[6].Add(1)}}.fillFromFirstDay()
+func (r Week) Next() Week {
+	return Week{days: [daysInWeek]Day{r.days[6].Add(1)}}.fillFromFirstDay()
 }
 
-func (h Week) fillFromFirstDay() Week {
-	return h.fillFromDay(0)
+func (r Week) fillFromFirstDay() Week {
+	return r.fillFromDay(0)
 }
 
-func (h Week) fillFromDay(n int) Week {
+func (r Week) fillFromDay(n int) Week {
 	for i := n + 1; i < daysInWeek; i++ {
-		h.days[i] = h.days[i-1].Add(1)
+		r.days[i] = r.days[i-1].Add(1)
 	}
 
-	return h
+	return r
 }
 
-func (h Week) HeadMonth() time.Month {
-	for _, day := range h.days {
+func (r Week) HeadMonth() time.Month {
+	for _, day := range r.days {
 		if day.IsZero() {
 			continue
 		}
@@ -76,24 +76,24 @@ func (h Week) HeadMonth() time.Month {
 	return -1
 }
 
-func (h Week) TailMonth() time.Month {
-	return h.days[6].Month()
+func (r Week) TailMonth() time.Month {
+	return r.days[6].Month()
 }
 
-func (h Week) ZerofyMonth(mo time.Month) Week {
-	for i, day := range h.days {
+func (r Week) ZerofyMonth(mo time.Month) Week {
+	for i, day := range r.days {
 		if day.Month() == mo {
-			h.days[i] = Day{} //nolint:exhaustivestruct
+			r.days[i] = Day{} //nolint:exhaustivestruct
 		}
 	}
 
-	return h
+	return r
 }
 
-func (h Week) WeekNumber() int {
-	_, weekNumber := h.days[0].ISOWeek()
+func (r Week) WeekNumber() int {
+	_, weekNumber := r.days[0].ISOWeek()
 
-	for _, day := range h.days {
+	for _, day := range r.days {
 		if _, currDayWeekNumber := day.ISOWeek(); !day.IsZero() && currDayWeekNumber != weekNumber {
 			return currDayWeekNumber
 		}
@@ -102,62 +102,113 @@ func (h Week) WeekNumber() int {
 	return weekNumber
 }
 
-func (h Week) backfill() Week {
-	for i := range h.days {
-		if h.days[i].IsZero() {
+func (r Week) backfill() Week {
+	for i := range r.days {
+		if r.days[i].IsZero() {
 			continue
 		}
 
 		for j := i - 1; j >= 0; j-- {
-			h.days[j] = h.days[j+1].Add(-1)
+			r.days[j] = r.days[j+1].Add(-1)
 		}
 
 		break
 	}
 
 	for i := 6; i >= 0; i-- {
-		if h.days[i].IsZero() {
+		if r.days[i].IsZero() {
 			continue
 		}
 
 		for j := i + 1; j < 7; j++ {
-			h.days[j] = h.days[j-1].Add(1)
+			r.days[j] = r.days[j-1].Add(1)
 		}
 
 		break
 	}
 
-	return h
+	return r
 }
 
-func (h Week) TailYear() int {
-	return h.days[6].Year()
+func (r Week) TailYear() int {
+	return r.days[6].Year()
 }
 
-func (h Week) HeadYear() int {
-	return h.days[0].Year()
+func (r Week) HeadYear() int {
+	return r.days[0].Year()
 }
 
-func (h Week) SetFirst() Week {
-	h.first = true
+func (r Week) SetFirst() Week {
+	r.first = true
 
-	return h
+	return r
 }
 
-func (h Week) First() bool {
-	return h.first
+func (r Week) First() bool {
+	return r.first
 }
 
-func (h Week) SetLast() Week {
-	h.last = true
+func (r Week) SetLast() Week {
+	r.last = true
 
-	return h
+	return r
 }
 
-func (h Week) Last() bool {
-	return h.last
+func (r Week) Last() bool {
+	return r.last
 }
 
-func (h Week) Days() Days {
-	return h.days[:]
+func (r Week) Days() Days {
+	return r.days[:]
+}
+
+func (r Week) Quarters(year int, weekday time.Weekday) Quarters {
+	quarters := make(Quarters, 0, 2)
+
+	if r.First() {
+		return append(quarters, NewQuarter(year, FirstQuarter, weekday))
+	}
+
+	if r.Last() {
+		return append(quarters, NewQuarter(year, FourthQuarter, weekday))
+	}
+
+	return append(
+		quarters,
+		NewQuarter(year, getQuarterFromMonth(r.HeadMonth()), weekday),
+		NewQuarter(year, getQuarterFromMonth(r.TailMonth()), weekday),
+	)
+}
+
+func getQuarterFromMonth(month time.Month) int {
+	switch month {
+	case time.January, time.February, time.March:
+		return FirstQuarter
+	case time.April, time.May, time.June:
+		return SecondQuarter
+	case time.July, time.August, time.September:
+		return ThirdQuarter
+	case time.October, time.November, time.December:
+		return FourthQuarter
+	}
+
+	return -1
+}
+
+func (r Week) Months(year int, weekday time.Weekday) Months {
+	months := make(Months, 0, 2)
+
+	if r.First() {
+		return append(months, NewMonth(year, time.January, weekday))
+	}
+
+	if r.Last() {
+		return append(months, NewMonth(year, time.December, weekday))
+	}
+
+	return append(
+		months,
+		NewMonth(year, r.HeadMonth(), weekday),
+		NewMonth(year, r.TailMonth(), weekday),
+	)
 }

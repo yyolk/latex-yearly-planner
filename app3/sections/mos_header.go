@@ -3,6 +3,7 @@ package sections
 import (
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app3/components"
 	"github.com/kudrykv/latex-yearly-planner/app3/types"
@@ -67,6 +68,8 @@ func NewMOSHeaderWeekly(year calendar.Year, week calendar.Week, tabs components.
 		tabLine:    tabLine,
 		parameters: parameters,
 		year:       year,
+		quarters:   week.Quarters(year.Year(), time.Monday),
+		months:     week.Months(year.Year(), time.Monday),
 	}, nil
 }
 
