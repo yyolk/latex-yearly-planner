@@ -44,6 +44,21 @@ SpaceBetweenColumns = 5
 VerticalSpacing = 2
 SpaceBetweenColumns = 3.5
 
+[WeeklyParameters]
+OneColumnWidth = 40
+TwoColumnWidth = 85
+Separator = 5
+
+[WeeklyParameters.OneColumnParameters.Dotted]
+Distance = 5
+Columns = 9
+Rows = 12
+
+[WeeklyParameters.TwoColumnParameters.Dotted]
+Distance = 5
+Columns = 18
+Rows = 12
+
 # daily setup
 [DailyParameters]
 ScheduleColumnWidth = 52
