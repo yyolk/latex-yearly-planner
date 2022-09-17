@@ -45,18 +45,30 @@ VerticalSpacing = 2
 SpaceBetweenColumns = 3.5
 
 [WeeklyParameters]
-OneColumnWidth = 40
-TwoColumnWidth = 85
+LeftColumnWidth = 40
+CenterColumnWidth = 45
+RightColumnWidth = 40
+TwoColumnWidth = 90
 Separator = 5
 
-[WeeklyParameters.OneColumnParameters.Dotted]
+[WeeklyParameters.LeftColumnParameters.Dotted]
+Distance = 5
+Columns = 9
+Rows = 12
+
+[WeeklyParameters.CenterColumnParameters.Dotted]
+Distance = 5
+Columns = 10
+Rows = 12
+
+[WeeklyParameters.RightColumnParameters.Dotted]
 Distance = 5
 Columns = 9
 Rows = 12
 
 [WeeklyParameters.TwoColumnParameters.Dotted]
 Distance = 5
-Columns = 18
+Columns = 19
 Rows = 12
 
 # daily setup

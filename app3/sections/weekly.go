@@ -9,22 +9,38 @@ import (
 )
 
 type WeeklyParameters struct {
-	OneColumnWidth      types.Millimeters
-	TwoColumnWidth      types.Millimeters
-	Separator           types.Millimeters
-	OneColumnParameters components.NotesParameters
-	TwoColumnParameters components.NotesParameters
+	LeftColumnWidth        types.Millimeters
+	CenterColumnWidth      types.Millimeters
+	RightColumnWidth       types.Millimeters
+	TwoColumnWidth         types.Millimeters
+	Separator              types.Millimeters
+	LeftColumnParameters   components.NotesParameters
+	CenterColumnParameters components.NotesParameters
+	RightColumnParameters  components.NotesParameters
+	TwoColumnParameters    components.NotesParameters
 }
 
 type Weekly struct {
-	parameters  WeeklyParameters
-	week        calendar.Week
-	oneColNotes components.Notes
-	twoColNotes components.Notes
+	parameters     WeeklyParameters
+	week           calendar.Week
+	leftColNotes   components.Notes
+	centerColNotes components.Notes
+	rightColNotes  components.Notes
+	twoColNotes    components.Notes
 }
 
 func NewWeekly(week calendar.Week, parameters WeeklyParameters) (Weekly, error) {
-	oneColNotes, err := components.NewNotes(parameters.OneColumnParameters)
+	leftColNotes, err := components.NewNotes(parameters.LeftColumnParameters)
+	if err != nil {
+		return Weekly{}, fmt.Errorf("new notes: %w", err)
+	}
+
+	centerColNotes, err := components.NewNotes(parameters.CenterColumnParameters)
+	if err != nil {
+		return Weekly{}, fmt.Errorf("new notes: %w", err)
+	}
+
+	rightColNotes, err := components.NewNotes(parameters.RightColumnParameters)
 	if err != nil {
 		return Weekly{}, fmt.Errorf("new notes: %w", err)
 	}
@@ -35,10 +51,12 @@ func NewWeekly(week calendar.Week, parameters WeeklyParameters) (Weekly, error) 
 	}
 
 	return Weekly{
-		parameters:  parameters,
-		week:        week,
-		oneColNotes: oneColNotes,
-		twoColNotes: twoColNotes,
+		parameters:     parameters,
+		week:           week,
+		leftColNotes:   leftColNotes,
+		centerColNotes: centerColNotes,
+		rightColNotes:  rightColNotes,
+		twoColNotes:    twoColNotes,
 	}, nil
 }
 
@@ -63,33 +81,33 @@ func (w Weekly) Build() ([]string, error) {
 	return []string{fmt.Sprintf(
 		weeklyTemplate,
 
-		w.parameters.OneColumnWidth,
+		w.parameters.LeftColumnWidth,
 		days[0].Format(format),
-		w.oneColNotes.Build(),
+		w.leftColNotes.Build(),
 		w.parameters.Separator,
-		w.parameters.OneColumnWidth,
+		w.parameters.CenterColumnWidth,
 		days[1].Format(format),
-		w.oneColNotes.Build(),
+		w.centerColNotes.Build(),
 		w.parameters.Separator,
-		w.parameters.OneColumnWidth,
+		w.parameters.RightColumnWidth,
 		days[2].Format(format),
-		w.oneColNotes.Build(),
+		w.rightColNotes.Build(),
 
-		w.parameters.OneColumnWidth,
+		w.parameters.LeftColumnWidth,
 		days[3].Format(format),
-		w.oneColNotes.Build(),
+		w.leftColNotes.Build(),
 		w.parameters.Separator,
-		w.parameters.OneColumnWidth,
+		w.parameters.CenterColumnWidth,
 		days[4].Format(format),
-		w.oneColNotes.Build(),
+		w.centerColNotes.Build(),
 		w.parameters.Separator,
-		w.parameters.OneColumnWidth,
+		w.parameters.RightColumnWidth,
 		days[5].Format(format),
-		w.oneColNotes.Build(),
+		w.rightColNotes.Build(),
 
-		w.parameters.OneColumnWidth,
+		w.parameters.LeftColumnWidth,
 		days[6].Format(format),
-		w.oneColNotes.Build(),
+		w.leftColNotes.Build(),
 		w.parameters.Separator,
 		w.parameters.TwoColumnWidth,
 		w.twoColNotes.Build(),
