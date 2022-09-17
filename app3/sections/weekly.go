@@ -57,28 +57,38 @@ func (w Weekly) Title() string {
 }
 
 func (w Weekly) Build() ([]string, error) {
+	format := "Monday, 2"
+	days := w.week.Days()
+
 	return []string{fmt.Sprintf(
 		weeklyTemplate,
 
 		w.parameters.OneColumnWidth,
+		days[0].Format(format),
 		w.oneColNotes.Build(),
 		w.parameters.Separator,
 		w.parameters.OneColumnWidth,
+		days[1].Format(format),
 		w.oneColNotes.Build(),
 		w.parameters.Separator,
 		w.parameters.OneColumnWidth,
+		days[2].Format(format),
 		w.oneColNotes.Build(),
 
 		w.parameters.OneColumnWidth,
+		days[3].Format(format),
 		w.oneColNotes.Build(),
 		w.parameters.Separator,
 		w.parameters.OneColumnWidth,
+		days[4].Format(format),
 		w.oneColNotes.Build(),
 		w.parameters.Separator,
 		w.parameters.OneColumnWidth,
+		days[5].Format(format),
 		w.oneColNotes.Build(),
 
 		w.parameters.OneColumnWidth,
+		days[6].Format(format),
 		w.oneColNotes.Build(),
 		w.parameters.Separator,
 		w.parameters.TwoColumnWidth,
@@ -86,21 +96,21 @@ func (w Weekly) Build() ([]string, error) {
 	)}, nil
 }
 
-const weeklyTemplate = `\parbox{%s}{\myUnderline{hello world}\par{}%s}%%
+const weeklyTemplate = `\parbox{%s}{\myUnderline{%s}\par{}%s}%%
 \hspace{%s}%%
-\parbox{%s}{\myUnderline{hello world}\par{}%s}%%
+\parbox{%s}{\myUnderline{%s}\par{}%s}%%
 \hspace{%s}%%
-\parbox{%s}{\myUnderline{hello world}\par{}%s}%%
+\parbox{%s}{\myUnderline{%s}\par{}%s}%%
 \vfill{}
 
-\parbox{%s}{\myUnderline{hello world}\par{}%s}%%
+\parbox{%s}{\myUnderline{%s}\par{}%s}%%
 \hspace{%s}%%
-\parbox{%s}{\myUnderline{hello world}\par{}%s}%%
+\parbox{%s}{\myUnderline{%s}\par{}%s}%%
 \hspace{%s}%%
-\parbox{%s}{\myUnderline{hello world}\par{}%s}%%
+\parbox{%s}{\myUnderline{%s}\par{}%s}%%
 \vfill{}
 
-\parbox{%s}{\myUnderline{hello world}\par{}%s}%%
+\parbox{%s}{\myUnderline{%s}\par{}%s}%%
 \hspace{%s}%%
 \parbox{%s}{\myUnderline{Notes}\par{}%s}
 `
