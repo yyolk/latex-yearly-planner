@@ -77,36 +77,39 @@ func (w Weekly) Title() string {
 func (w Weekly) Build() ([]string, error) {
 	format := "Monday, 2"
 	days := w.week.Days()
+	link := func(i int) string {
+		return fmt.Sprintf(`\hyperlink{%s}{%s}`, days[i].Format("2006-01-02"), days[i].Format(format))
+	}
 
 	return []string{fmt.Sprintf(
 		weeklyTemplate,
 
 		w.parameters.LeftColumnWidth,
-		days[0].Format(format),
+		link(0),
 		w.leftColNotes.Build(),
 		w.parameters.Separator,
 		w.parameters.CenterColumnWidth,
-		days[1].Format(format),
+		link(1),
 		w.centerColNotes.Build(),
 		w.parameters.Separator,
 		w.parameters.RightColumnWidth,
-		days[2].Format(format),
+		link(2),
 		w.rightColNotes.Build(),
 
 		w.parameters.LeftColumnWidth,
-		days[3].Format(format),
+		link(3),
 		w.leftColNotes.Build(),
 		w.parameters.Separator,
 		w.parameters.CenterColumnWidth,
-		days[4].Format(format),
+		link(4),
 		w.centerColNotes.Build(),
 		w.parameters.Separator,
 		w.parameters.RightColumnWidth,
-		days[5].Format(format),
+		link(5),
 		w.rightColNotes.Build(),
 
 		w.parameters.LeftColumnWidth,
-		days[6].Format(format),
+		link(6),
 		w.leftColNotes.Build(),
 		w.parameters.Separator,
 		w.parameters.TwoColumnWidth,

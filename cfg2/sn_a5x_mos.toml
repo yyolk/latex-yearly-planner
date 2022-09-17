@@ -3,7 +3,7 @@ Weekday = 1
 
 Sections = [
     "weeklies",
-#    "dailies",
+    "dailies",
 #    "daily_notes",
 #    "daily_reflect",
 #    "notes",
