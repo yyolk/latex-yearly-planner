@@ -53,6 +53,7 @@ func (r *Planner) Generate() (types.NamedBuffers, error) {
 
 func (r *Planner) sections() map[string]types2.SectionFunc {
 	return map[string]types2.SectionFunc{
+		common.MonthliesSection:    r.monthliesSection,
 		common.WeekliesSection:     r.weekliesSection,
 		common.DailiesSection:      r.dailiesSection,
 		common.DailyNotesSection:   r.dailyNotesSection,
@@ -60,6 +61,27 @@ func (r *Planner) sections() map[string]types2.SectionFunc {
 		common.NotesSection:        r.notesSection,
 		common.ToDoSection:         r.todosSection,
 	}
+}
+
+func (r *Planner) monthliesSection() (*bytes.Buffer, error) {
+	buffer := pages.NewBuffer()
+
+	var (
+		monthly sections.Monthly
+		err     error
+	)
+
+	for _, month := range r.year.Months() {
+		if monthly, err = sections.NewMonthly(month, r.parameters.MonthlyParameters); err != nil {
+			return nil, fmt.Errorf("new monthly: %w", err)
+		}
+
+		if err = buffer.WriteBlocks(monthly); err != nil {
+			return nil, fmt.Errorf("write monthly blocks: %w", err)
+		}
+	}
+
+	return buffer.Buffer, nil
 }
 
 func (r *Planner) weekliesSection() (*bytes.Buffer, error) {
