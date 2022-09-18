@@ -67,16 +67,21 @@ func (r *Planner) monthliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	var (
+		header  sections.MOSHeaderDaily
 		monthly sections.Monthly
 		err     error
 	)
 
 	for _, month := range r.year.Months() {
+		if header, err = sections.NewMOSHeaderMonthly(r.year, month, r.tabs(), r.parameters.MOSHeaderParameters); err != nil {
+			return nil, fmt.Errorf("new header: %w", err)
+		}
+
 		if monthly, err = sections.NewMonthly(month, r.parameters.MonthlyParameters); err != nil {
 			return nil, fmt.Errorf("new monthly: %w", err)
 		}
 
-		if err = buffer.WriteBlocks(monthly); err != nil {
+		if err = buffer.WriteBlocks(header, monthly); err != nil {
 			return nil, fmt.Errorf("write monthly blocks: %w", err)
 		}
 	}

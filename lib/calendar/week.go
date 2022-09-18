@@ -175,12 +175,12 @@ func (r Week) Quarters(year int, weekday time.Weekday) Quarters {
 
 	return append(
 		quarters,
-		NewQuarter(year, getQuarterFromMonth(r.HeadMonth()), weekday),
-		NewQuarter(year, getQuarterFromMonth(r.TailMonth()), weekday),
+		NewQuarter(year, GetQuarterFromMonth(r.HeadMonth()), weekday),
+		NewQuarter(year, GetQuarterFromMonth(r.TailMonth()), weekday),
 	)
 }
 
-func getQuarterFromMonth(month time.Month) int {
+func GetQuarterFromMonth(month time.Month) int {
 	switch month {
 	case time.January, time.February, time.March:
 		return FirstQuarter
