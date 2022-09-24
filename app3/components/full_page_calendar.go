@@ -1,6 +1,7 @@
 package components
 
 import (
+	"strconv"
 	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
@@ -25,6 +26,7 @@ func NewFullPageCalendar(month calendar.Month, parameters FullPageCalendarParame
 func (r FullPageCalendar) Build() string {
 	return `\begin{tabularx}{\linewidth}{` + r.tableRule() + `}
 ` + r.weekdays() + ` \\ \hline
+` + r.matrix() + ` \\ \hline
 \end{tabularx}`
 }
 
@@ -44,10 +46,48 @@ func (r FullPageCalendar) weekdays() string {
 	return strings.Join(weekdays, " & ")
 }
 
-func (r FullPageCalendar) tableRule() string {
-	if r.parameters.WeekNumberToTheRight {
-		return `*{7}{|@{}Y@{}}|c|`
+func (r FullPageCalendar) matrix() string {
+	pieces := make([]string, 0, len(r.month.Weeks))
+
+	for _, week := range r.month.Weeks {
+		weekRow := r.weekRow(week)
+
+		pieces = append(pieces, strings.Join(weekRow, " & "))
 	}
 
-	return "|c|*{7}{@{}Y@{}|}"
+	return strings.Join(pieces, " \\\\ \\hline\n")
+}
+
+func (r FullPageCalendar) weekRow(week calendar.Week) []string {
+	row := make([]string, 0, 8)
+
+	for _, day := range week.Days() {
+		if day.IsZero() {
+			row = append(row, "")
+
+			continue
+		}
+
+		row = append(row, strconv.Itoa(day.Day()))
+	}
+
+	row = r.addWeekNumber(row, week.WeekNumber())
+
+	return row
+}
+
+func (r FullPageCalendar) addWeekNumber(row []string, number int) []string {
+	if r.parameters.WeekNumberToTheRight {
+		return append(row, strconv.Itoa(number))
+	}
+
+	return append([]string{strconv.Itoa(number)}, row...)
+}
+
+func (r FullPageCalendar) tableRule() string {
+	if r.parameters.WeekNumberToTheRight {
+		return `*{7}{|@{}X@{}}|c|`
+	}
+
+	return "|c|*{7}{@{}X@{}|}"
 }
