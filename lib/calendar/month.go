@@ -10,6 +10,10 @@ type Month struct{ Weeks Weeks }
 
 func NewMonth(year int, mo time.Month, wd time.Weekday) Month {
 	week := NewWeek(FromMonth(year, mo, wd))
+	if mo == time.January {
+		week = week.SetFirst()
+	}
+
 	currMo := week.TailMonth()
 	month := Month{Weeks: append(make(Weeks, 0, usualWeeksInMonth), week)}
 
