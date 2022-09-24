@@ -68,7 +68,7 @@ func (r FullPageCalendar) weekRow(week calendar.Week) []string {
 			continue
 		}
 
-		value := fmt.Sprintf(`%d\vspace{1.5cm}`, day.Day())
+		value := fmt.Sprintf(`\hfill%d \parbox{0pt}{\vskip5mm}`, day.Day())
 
 		row = append(row, value)
 	}
@@ -79,7 +79,7 @@ func (r FullPageCalendar) weekRow(week calendar.Week) []string {
 }
 
 func (r FullPageCalendar) addWeekNumber(row []string, number int) []string {
-	value := fmt.Sprintf(`\rotatebox[origin=tr]{90}{\makebox[1.5cm][c]{Week %d}}`, number)
+	value := fmt.Sprintf(`\rotatebox[origin=tr]{90}{\makebox[1.85cm][c]{Week %d}}`, number)
 
 	if r.parameters.WeekNumberToTheRight {
 		return append(row, value)
