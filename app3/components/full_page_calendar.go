@@ -1,7 +1,7 @@
 package components
 
 import (
-	"strconv"
+	"fmt"
 	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
@@ -34,7 +34,7 @@ func (r FullPageCalendar) weekdays() string {
 	var weekdays []string
 
 	for _, weekday := range r.month.Weekdays() {
-		weekdays = append(weekdays, weekday.String())
+		weekdays = append(weekdays, `\hfil{}`+weekday.String())
 	}
 
 	if r.parameters.WeekNumberToTheRight {
@@ -68,7 +68,9 @@ func (r FullPageCalendar) weekRow(week calendar.Week) []string {
 			continue
 		}
 
-		row = append(row, strconv.Itoa(day.Day()))
+		value := fmt.Sprintf(`%d\vspace{1.5cm}`, day.Day())
+
+		row = append(row, value)
 	}
 
 	row = r.addWeekNumber(row, week.WeekNumber())
@@ -77,11 +79,13 @@ func (r FullPageCalendar) weekRow(week calendar.Week) []string {
 }
 
 func (r FullPageCalendar) addWeekNumber(row []string, number int) []string {
+	value := fmt.Sprintf(`\rotatebox[origin=tr]{90}{\makebox[1.5cm][c]{Week %d}}`, number)
+
 	if r.parameters.WeekNumberToTheRight {
-		return append(row, strconv.Itoa(number))
+		return append(row, value)
 	}
 
-	return append([]string{strconv.Itoa(number)}, row...)
+	return append([]string{value}, row...)
 }
 
 func (r FullPageCalendar) tableRule() string {
