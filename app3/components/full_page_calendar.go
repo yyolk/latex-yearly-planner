@@ -73,13 +73,13 @@ func (r FullPageCalendar) weekRow(week calendar.Week) []string {
 		row = append(row, value)
 	}
 
-	row = r.addWeekNumber(row, week.WeekNumber())
+	row = r.addWeekNumber(row, week)
 
 	return row
 }
 
-func (r FullPageCalendar) addWeekNumber(row []string, number int) []string {
-	value := fmt.Sprintf(`\rotatebox[origin=tr]{90}{\makebox[1.85cm][c]{Week %d}}`, number)
+func (r FullPageCalendar) addWeekNumber(row []string, week calendar.Week) []string {
+	value := fmt.Sprintf(`\rotatebox[origin=tr]{90}{\makebox[1.85cm][c]{%s}}`, NewWeekLink(week).Format("Week %d"))
 
 	if r.parameters.WeekNumberToTheRight {
 		return append(row, value)
