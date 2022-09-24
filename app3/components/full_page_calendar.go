@@ -68,7 +68,7 @@ func (r FullPageCalendar) weekRow(week calendar.Week) []string {
 			continue
 		}
 
-		value := fmt.Sprintf(`\hfill%d \parbox{0pt}{\vskip5mm}`, day.Day())
+		value := fmt.Sprintf(`\hfill%s \parbox{0pt}{\vskip5mm}`, NewDayLink(day))
 
 		row = append(row, value)
 	}

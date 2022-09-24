@@ -28,7 +28,7 @@ Width = 10
 Reverse = true
 
 [Document.Debug]
-ShowLinks = false
+ShowLinks = true
 ShowFrames = false
 
 ### planner setup
