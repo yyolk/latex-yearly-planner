@@ -45,6 +45,10 @@ SpaceBetweenColumns = 5
 VerticalSpacing = 2
 SpaceBetweenColumns = 3.5
 
+[MonthlyParameters]
+[MonthlyParameters.FullPageCalendarParameters]
+WeekNumberToTheRight = true
+
 [WeeklyParameters]
 LeftColumnWidth = 40
 CenterColumnWidth = 45
