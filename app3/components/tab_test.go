@@ -8,6 +8,8 @@ import (
 )
 
 func TestTab_String(t *testing.T) {
+	t.Parallel()
+
 	tests := map[string]struct {
 		tab  components.Tab
 		want string
@@ -32,7 +34,22 @@ func TestTab_String(t *testing.T) {
 
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
+			t.Parallel()
+
 			assert.Equal(t, test.want, test.tab.String())
 		})
 	}
+}
+
+func TestTabs_String(t *testing.T) {
+	t.Parallel()
+
+	tabs := components.Tabs{
+		components.Tab{Text: "hello"},
+		components.Tab{Text: "world"},
+	}
+
+	want := `\hyperlink{hello}{hello} & \hyperlink{world}{world}`
+
+	assert.Equal(t, want, tabs.String())
 }
