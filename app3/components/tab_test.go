@@ -24,6 +24,10 @@ func TestTab_String(t *testing.T) {
 			tab:  components.Tab{Text: "hello", Target: true},
 			want: `\cellcolor{black}{\textcolor{white}{hello}}`,
 		},
+		"marked as target has no, uh, target": {
+			tab:  components.Tab{Text: "hello", Target: true, Reference: "world"},
+			want: `\cellcolor{black}{\textcolor{white}{hello}}`,
+		},
 	}
 
 	for name, test := range tests {
