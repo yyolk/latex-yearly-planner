@@ -52,4 +52,6 @@ func TestTabs_String(t *testing.T) {
 	want := `\hyperlink{hello}{hello} & \hyperlink{world}{world}`
 
 	assert.Equal(t, want, tabs.String())
+
+	assert.Equal(t, "", components.Tabs{}.String())
 }
