@@ -2,8 +2,9 @@ Year = 2022
 Weekday = 1
 
 Sections = [
-    "monthlies",
-        "weeklies",
+    "quarterlies",
+#    "monthlies",
+#    "weeklies",
 #    "dailies",
 #    "daily_notes",
 #    "daily_reflect",
