@@ -9,17 +9,25 @@ import (
 
 type QuarterlyParameters struct {
 	LittleCalendarParameters components.LittleCalendarParameters
+	NotesParameters          components.NotesParameters
 }
 
 type Quarterly struct {
 	parameters QuarterlyParameters
 	quarter    calendar.Quarter
+	notes      components.Notes
 }
 
 func NewQuarterly(quarter calendar.Quarter, parameters QuarterlyParameters) (Quarterly, error) {
+	notes, err := components.NewNotes(parameters.NotesParameters)
+	if err != nil {
+		return Quarterly{}, fmt.Errorf("new notes: %w", err)
+	}
+
 	return Quarterly{
 		quarter:    quarter,
 		parameters: parameters,
+		notes:      notes,
 	}, nil
 }
 
@@ -28,24 +36,34 @@ func (r Quarterly) Title() string {
 }
 
 func (r Quarterly) Build() ([]string, error) {
+	return []string{r.calendarColumn() + `\hspace{5mm}` + r.notesColumn()}, nil
+}
+
+func (r Quarterly) calendarColumn() string {
 	mon1 := components.NewLittleCalendarFromMonth(r.quarter.Months[0], r.parameters.LittleCalendarParameters)
 	mon2 := components.NewLittleCalendarFromMonth(r.quarter.Months[1], r.parameters.LittleCalendarParameters)
 	mon3 := components.NewLittleCalendarFromMonth(r.quarter.Months[2], r.parameters.LittleCalendarParameters)
 
-	return []string{fmt.Sprintf(
-		quarterlyTemplate,
+	return fmt.Sprintf(
+		quarterlyCalendarTemplate,
 		mon1.Build(),
 		mon2.Build(),
 		mon3.Build(),
-	)}, nil
+	)
 }
 
-const quarterlyTemplate = `\begin{minipage}[t][\remainingHeight]{5cm}
+const quarterlyCalendarTemplate = `\begin{minipage}[t][18cm]{5cm}
 %s
 \vfill
 %s
 \vfill
 %s
-\end{minipage}\hspace{5mm}\begin{minipage}[t][\remainingHeight]{5cm}
-hello world
+\end{minipage}`
+
+func (r Quarterly) notesColumn() string {
+	return fmt.Sprintf(quarterlyNotesTemplate, r.notes.Build())
+}
+
+const quarterlyNotesTemplate = `\begin{minipage}[t][18cm]{7cm}
+%s
 \end{minipage}`

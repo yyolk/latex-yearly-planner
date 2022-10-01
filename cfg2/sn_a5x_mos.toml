@@ -46,6 +46,12 @@ SpaceBetweenColumns = 5
 VerticalSpacing = 2
 SpaceBetweenColumns = 3.5
 
+[QuarterlyParameters]
+[QuarterlyParameters.NotesParameters.Dotted]
+Distance = 5
+Columns = 17
+Rows = 33
+
 [MonthlyParameters]
 [MonthlyParameters.FullPageCalendarParameters]
 WeekNumberToTheRight = true
