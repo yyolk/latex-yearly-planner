@@ -68,12 +68,17 @@ func (r *Planner) quarterliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	for _, quarter := range r.year.GetQuarters() {
+		header, err := sections.NewMOSHeaderQuarterly(r.year, quarter, r.tabs(), r.parameters.MOSHeaderParameters)
+		if err != nil {
+			return nil, fmt.Errorf("new header: %w", err)
+		}
+
 		quarterly, err := sections.NewQuarterly(quarter, r.parameters.QuarterlyParameters)
 		if err != nil {
 			return nil, fmt.Errorf("new quarterly: %w", err)
 		}
 
-		if err = buffer.WriteBlocks(quarterly); err != nil {
+		if err = buffer.WriteBlocks(header, quarterly); err != nil {
 			return nil, fmt.Errorf("write quarterly blocks: %w", err)
 		}
 	}
