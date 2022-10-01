@@ -46,4 +46,6 @@ const quarterlyTemplate = `\begin{minipage}[t][\remainingHeight]{5cm}
 %s
 \vfill
 %s
+\end{minipage}\hspace{5mm}\begin{minipage}[t][\remainingHeight]{5cm}
+hello world
 \end{minipage}`

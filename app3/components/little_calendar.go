@@ -44,15 +44,13 @@ func NewLittleCalendarFromMonth(month calendar.Month, parameters LittleCalendarP
 
 func (r LittleCalendar) Build() string {
 	heading := strings.Join(r.centerItems(r.weekNumberInHeader(r.weeks())), " & ")
-	return fmt.Sprintf(`
-\vskip5mm{%%
-\setlength{\tabcolsep}{0pt}%%
+	return fmt.Sprintf(`\setlength{\tabcolsep}{0pt}%%
 \renewcommand{\arraystretch}{1.5}%%
 \begin{tabularx}{\linewidth}[t]{%s}
 	\multicolumn{8}{c}{%s} \\
 	%s \\ \hline
 	%s
-\end{tabularx}}
+\end{tabularx}
 `,
 		r.tableRule(),
 		r.month.Month().String(),
