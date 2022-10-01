@@ -12,6 +12,7 @@ import (
 type LittleCalendarParameters struct {
 	WeekNumberToTheRight bool
 	WeekHighlight        bool
+	DayHighlight         bool
 }
 
 type LittleCalendar struct {
@@ -112,7 +113,7 @@ func (r LittleCalendar) weekRow(week calendar.Week) []string {
 			continue
 		}
 
-		if r.today.Day() == day.Day() {
+		if r.parameters.DayHighlight && r.today.Day() == day.Day() {
 			row = append(row, fmt.Sprintf(`\cellcolor{black}{\textcolor{white}{%d}}`, day.Day()))
 
 			continue

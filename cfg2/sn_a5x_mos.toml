@@ -104,6 +104,7 @@ Height = 5
 [DailyParameters.LittleCalendarParameters]
 WeekNumberToTheRight = true
 WeekHighlight = true
+DayHighlight = true
 
 # daily notes setup
 [DailyNotesParameters]
