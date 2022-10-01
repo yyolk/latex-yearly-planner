@@ -47,6 +47,7 @@ VerticalSpacing = 2
 SpaceBetweenColumns = 3.5
 
 [QuarterlyParameters]
+CalendarsToTheRight = true
 [QuarterlyParameters.NotesParameters.Dotted]
 Distance = 5
 Columns = 17

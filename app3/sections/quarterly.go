@@ -8,6 +8,7 @@ import (
 )
 
 type QuarterlyParameters struct {
+	CalendarsToTheRight      bool
 	LittleCalendarParameters components.LittleCalendarParameters
 	NotesParameters          components.NotesParameters
 }
@@ -36,7 +37,14 @@ func (r Quarterly) Title() string {
 }
 
 func (r Quarterly) Build() ([]string, error) {
-	return []string{r.calendarColumn() + `\hspace{5mm}` + r.notesColumn()}, nil
+	leftColumn := r.calendarColumn()
+	rightColumn := r.notesColumn()
+
+	if r.parameters.CalendarsToTheRight {
+		leftColumn, rightColumn = rightColumn, leftColumn
+	}
+
+	return []string{leftColumn + `\hspace{5mm}` + rightColumn}, nil
 }
 
 func (r Quarterly) calendarColumn() string {
@@ -64,6 +72,6 @@ func (r Quarterly) notesColumn() string {
 	return fmt.Sprintf(quarterlyNotesTemplate, r.notes.Build())
 }
 
-const quarterlyNotesTemplate = `\begin{minipage}[t][18cm]{7cm}
+const quarterlyNotesTemplate = `\begin{minipage}[t][18cm]{8cm}
 %s
 \end{minipage}`
