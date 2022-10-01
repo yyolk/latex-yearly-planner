@@ -1,8 +1,14 @@
 package sections
 
-import "github.com/kudrykv/latex-yearly-planner/lib/calendar"
+import (
+	"fmt"
+
+	"github.com/kudrykv/latex-yearly-planner/app3/components"
+	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
+)
 
 type QuarterlyParameters struct {
+	LittleCalendarParameters components.LittleCalendarParameters
 }
 
 type Quarterly struct {
@@ -22,5 +28,22 @@ func (r Quarterly) Title() string {
 }
 
 func (r Quarterly) Build() ([]string, error) {
-	return []string{r.quarter.Name()}, nil
+	mon1 := components.NewLittleCalendarFromMonth(r.quarter.Months[0], r.parameters.LittleCalendarParameters)
+	mon2 := components.NewLittleCalendarFromMonth(r.quarter.Months[1], r.parameters.LittleCalendarParameters)
+	mon3 := components.NewLittleCalendarFromMonth(r.quarter.Months[2], r.parameters.LittleCalendarParameters)
+
+	return []string{fmt.Sprintf(
+		quarterlyTemplate,
+		mon1.Build(),
+		mon2.Build(),
+		mon3.Build(),
+	)}, nil
 }
+
+const quarterlyTemplate = `\begin{minipage}[t][\remainingHeight]{5cm}
+%s
+\vfill
+%s
+\vfill
+%s
+\end{minipage}`

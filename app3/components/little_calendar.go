@@ -35,6 +35,13 @@ func NewLittleCalendar(today calendar.Day, parameters LittleCalendarParameters) 
 	}, nil
 }
 
+func NewLittleCalendarFromMonth(month calendar.Month, parameters LittleCalendarParameters) LittleCalendar {
+	return LittleCalendar{
+		month:      month,
+		parameters: parameters,
+	}
+}
+
 func (r LittleCalendar) Build() string {
 	heading := strings.Join(r.centerItems(r.weekNumberInHeader(r.weeks())), " & ")
 	return fmt.Sprintf(`
