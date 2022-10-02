@@ -15,6 +15,7 @@ type Parameters struct {
 	Year                   int
 	Weekday                time.Weekday
 	MOSHeaderParameters    sections.MOSHeaderParameters
+	AnnualParameters       sections.AnnualParameters
 	QuarterlyParameters    sections.QuarterlyParameters
 	MonthlyParameters      sections.MonthlyParameters
 	WeeklyParameters       sections.WeeklyParameters

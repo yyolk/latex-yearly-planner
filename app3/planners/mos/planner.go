@@ -53,6 +53,7 @@ func (r *Planner) Generate() (types.NamedBuffers, error) {
 
 func (r *Planner) sections() map[string]types2.SectionFunc {
 	return map[string]types2.SectionFunc{
+		common.AnnualSection:       r.annualSection,
 		common.QuarterliesSection:  r.quarterliesSection,
 		common.MonthliesSection:    r.monthliesSection,
 		common.WeekliesSection:     r.weekliesSection,
@@ -62,6 +63,26 @@ func (r *Planner) sections() map[string]types2.SectionFunc {
 		common.NotesSection:        r.notesSection,
 		common.ToDoSection:         r.todosSection,
 	}
+}
+
+func (r *Planner) annualSection() (*bytes.Buffer, error) {
+	buffer := pages.NewBuffer()
+
+	header, err := sections.NewMOSHeaderIncomplete(r.year, r.tabs(), r.parameters.MOSHeaderParameters)
+	if err != nil {
+		return nil, fmt.Errorf("new header: %w", err)
+	}
+
+	annual, err := sections.NewAnnual(r.year, r.parameters.AnnualParameters)
+	if err != nil {
+		return nil, fmt.Errorf("new annual: %w", err)
+	}
+
+	if err = buffer.WriteBlocks(header, annual); err != nil {
+		return nil, fmt.Errorf("write annual blocks: %w", err)
+	}
+
+	return buffer.Buffer, nil
 }
 
 func (r *Planner) quarterliesSection() (*bytes.Buffer, error) {
