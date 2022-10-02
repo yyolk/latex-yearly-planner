@@ -6,7 +6,6 @@ import (
 
 	"github.com/kudrykv/latex-yearly-planner/app2/pages"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
-	types2 "github.com/kudrykv/latex-yearly-planner/app2/types"
 	"github.com/kudrykv/latex-yearly-planner/app3/components"
 	"github.com/kudrykv/latex-yearly-planner/app3/sections"
 	"github.com/kudrykv/latex-yearly-planner/app3/types"
@@ -51,8 +50,10 @@ func (r *Planner) Generate() (types.NamedBuffers, error) {
 	return result, nil
 }
 
-func (r *Planner) sections() map[string]types2.SectionFunc {
-	return map[string]types2.SectionFunc{
+type SectionFunc func() (*bytes.Buffer, error)
+
+func (r *Planner) sections() map[string]SectionFunc {
+	return map[string]SectionFunc{
 		common.AnnualSection:       r.annualSection,
 		common.QuarterliesSection:  r.quarterliesSection,
 		common.MonthliesSection:    r.monthliesSection,
