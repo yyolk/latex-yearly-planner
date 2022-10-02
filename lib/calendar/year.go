@@ -29,6 +29,8 @@ func (y Year) Weeks() Weeks {
 			break
 		}
 
+		week.year = &y
+
 		weeks = append(weeks, week)
 	}
 

@@ -216,3 +216,7 @@ func (r Week) Months(year int, weekday time.Weekday) Months {
 		NewMonth(year, r.TailMonth(), weekday),
 	)
 }
+
+func (r Week) Year() Year {
+	return *r.year
+}

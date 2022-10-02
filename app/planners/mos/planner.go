@@ -175,7 +175,7 @@ func (r *Planner) weekliesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, week := range r.year.Weeks() {
-		if header, err = sections.NewMOSHeaderWeekly(r.year, week, r.tabs(), r.parameters.MOSHeaderParameters); err != nil {
+		if header, err = sections.NewMOSHeaderWeekly(week, r.tabs(), r.parameters.MOSHeaderParameters); err != nil {
 			return nil, fmt.Errorf("new header: %w", err)
 		}
 

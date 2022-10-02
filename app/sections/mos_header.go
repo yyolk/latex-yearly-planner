@@ -61,15 +61,15 @@ func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSH
 	}, nil
 }
 
-func NewMOSHeaderWeekly(year calendar.Year, week calendar.Week, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeaderDaily, error) {
+func NewMOSHeaderWeekly(week calendar.Week, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeaderDaily, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
 	return MOSHeaderDaily{
 		tabLine:    tabLine,
 		parameters: parameters,
-		year:       year,
-		quarters:   week.Quarters(year.Year(), time.Monday),
-		months:     week.Months(year.Year(), time.Monday),
+		year:       week.Year(),
+		quarters:   week.Quarters(week.Year().Year(), time.Monday),
+		months:     week.Months(week.Year().Year(), time.Monday),
 	}, nil
 }
 
