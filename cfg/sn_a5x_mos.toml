@@ -2,9 +2,9 @@ Year = 2022
 Weekday = 1
 
 Sections = [
-    "title",
-    "annual",
-#    "quarterlies",
+#    "title",
+#    "annual",
+    "quarterlies",
 #    "monthlies",
 #    "weeklies",
 #    "dailies",

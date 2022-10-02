@@ -86,14 +86,14 @@ func NewMOSHeaderMonthly(year calendar.Year, month calendar.Month, tabs componen
 }
 
 func NewMOSHeaderQuarterly(
-	year calendar.Year, quarter calendar.Quarter, tabs components.Tabs, parameters MOSHeaderParameters,
+	quarter calendar.Quarter, tabs components.Tabs, parameters MOSHeaderParameters,
 ) (MOSHeaderDaily, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
 	return MOSHeaderDaily{
 		tabLine:    tabLine,
 		parameters: parameters,
-		year:       year,
+		year:       quarter.Year(),
 		quarters:   calendar.Quarters{quarter},
 	}, nil
 }

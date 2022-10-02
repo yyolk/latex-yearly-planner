@@ -118,7 +118,7 @@ func (r *Planner) quarterliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	for _, quarter := range r.year.GetQuarters() {
-		header, err := sections.NewMOSHeaderQuarterly(r.year, quarter, r.tabs(), r.parameters.MOSHeaderParameters)
+		header, err := sections.NewMOSHeaderQuarterly(quarter, r.tabs(), r.parameters.MOSHeaderParameters)
 		if err != nil {
 			return nil, fmt.Errorf("new header: %w", err)
 		}

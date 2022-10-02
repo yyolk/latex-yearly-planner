@@ -57,3 +57,7 @@ func (r Quarter) Name() string {
 func (r Quarter) Number() int {
 	return r.number
 }
+
+func (r Quarter) Year() Year {
+	return *r.year
+}
