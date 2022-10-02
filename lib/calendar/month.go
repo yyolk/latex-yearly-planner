@@ -6,7 +6,21 @@ import (
 
 type Months []Month
 
-type Month struct{ Weeks Weeks }
+type Month struct {
+	year    *Year
+	quarter *Quarter
+
+	Weeks Weeks
+}
+
+func newMonth(year *Year, quarter *Quarter, month time.Month, weekday time.Weekday) Month {
+	calendarMonth := NewMonth(year.Year(), month, weekday)
+
+	calendarMonth.year = year
+	calendarMonth.quarter = quarter
+
+	return calendarMonth
+}
 
 func NewMonth(year int, mo time.Month, wd time.Weekday) Month {
 	week := NewWeek(FromMonth(year, mo, wd))

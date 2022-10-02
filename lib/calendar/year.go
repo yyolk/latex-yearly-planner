@@ -8,15 +8,13 @@ type Year struct {
 }
 
 func NewYear(year int, wd time.Weekday) Year {
-	return Year{
-		year: year,
-		Quarters: [4]Quarter{
-			NewQuarter(year, FirstQuarter, wd),
-			NewQuarter(year, SecondQuarter, wd),
-			NewQuarter(year, ThirdQuarter, wd),
-			NewQuarter(year, FourthQuarter, wd),
-		},
+	calendarYear := Year{year: year}
+
+	for quarter := FirstQuarter; quarter <= FourthQuarter; quarter++ {
+		calendarYear.Quarters[quarter] = newQuarter(&calendarYear, quarter, wd)
 	}
+
+	return calendarYear
 }
 
 func (y Year) Weeks() Weeks {

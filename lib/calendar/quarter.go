@@ -10,6 +10,26 @@ type Quarters []Quarter
 type Quarter struct {
 	Months [3]Month
 	number int
+	year   *Year
+}
+
+func newQuarter(year *Year, quarter int, weekday time.Weekday) Quarter {
+	if quarter < FirstQuarter || quarter > FourthQuarter {
+		return Quarter{} //nolint:exhaustivestruct
+	}
+
+	monthNumber := time.Month((quarter+1)*3 - 2) //nolint:gomnd
+
+	calendarQuarter := Quarter{
+		year:   year,
+		number: quarter + 1,
+	}
+
+	for month := monthNumber; month <= monthNumber+2; month++ {
+		calendarQuarter.Months[month-monthNumber] = newMonth(year, &calendarQuarter, month, weekday)
+	}
+
+	return calendarQuarter
 }
 
 func NewQuarter(year int, qrtr int, wd time.Weekday) Quarter {
