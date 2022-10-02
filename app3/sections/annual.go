@@ -2,12 +2,17 @@ package sections
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app3/components"
+	"github.com/kudrykv/latex-yearly-planner/app3/types"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
 type AnnualParameters struct {
+	ColumnWidth          types.Millimeters
+	ColumnSeparatorWidth types.Millimeters
+
 	LittleCalendarParameters components.LittleCalendarParameters
 }
 
@@ -31,7 +36,7 @@ func (r Annual) Build() ([]string, error) {
 	}
 
 	return []string{
-		fmt.Sprintf(annualTemplate,
+		fmt.Sprintf(r.template(),
 			calendars[0].Build(), calendars[1].Build(), calendars[2].Build(),
 			calendars[3].Build(), calendars[4].Build(), calendars[5].Build(),
 			calendars[6].Build(), calendars[7].Build(), calendars[8].Build(),
@@ -40,18 +45,10 @@ func (r Annual) Build() ([]string, error) {
 	}, nil
 }
 
-const annualTemplate = `\begin{minipage}[t]{4cm}%s\end{minipage}\hspace{5mm}%%
-\begin{minipage}[t]{4cm}%s\end{minipage}\hspace{5mm}%%
-\begin{minipage}[t]{4cm}%s\end{minipage}
-\vfill
-\begin{minipage}[t]{4cm}%s\end{minipage}\hspace{5mm}%%
-\begin{minipage}[t]{4cm}%s\end{minipage}\hspace{5mm}%%
-\begin{minipage}[t]{4cm}%s\end{minipage}
-\vfill
-\begin{minipage}[t]{4cm}%s\end{minipage}\hspace{5mm}%%
-\begin{minipage}[t]{4cm}%s\end{minipage}\hspace{5mm}%%
-\begin{minipage}[t]{4cm}%s\end{minipage}
-\vfill
-\begin{minipage}[t]{4cm}%s\end{minipage}\hspace{5mm}%%
-\begin{minipage}[t]{4cm}%s\end{minipage}\hspace{5mm}%%
-\begin{minipage}[t]{4cm}%s\end{minipage}`
+func (r Annual) template() string {
+	row := fmt.Sprintf(`\begin{minipage}[t]{%s}%%s\end{minipage}\hspace{%s}%%%%
+\begin{minipage}[t]{%s}%%s\end{minipage}\hspace{%s}%%%%
+\begin{minipage}[t]{%s}%%s\end{minipage}`, r.parameters.ColumnWidth, r.parameters.ColumnSeparatorWidth, r.parameters.ColumnWidth, r.parameters.ColumnSeparatorWidth, r.parameters.ColumnWidth)
+
+	return strings.Join([]string{row, row, row, row}, "\n\\vfill\n")
+}

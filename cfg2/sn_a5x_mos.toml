@@ -47,6 +47,10 @@ SpaceBetweenColumns = 5
 VerticalSpacing = 2
 SpaceBetweenColumns = 3.5
 
+[AnnualParameters]
+ColumnWidth = 40
+ColumnSeparatorWidth = 5
+
 [QuarterlyParameters]
 CalendarsToTheRight = true
 [QuarterlyParameters.NotesParameters.Dotted]
