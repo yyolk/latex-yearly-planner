@@ -15,7 +15,7 @@ func TestMoS3(t *testing.T) {
 		errOut := &strings.Builder{}
 
 		args := []string{
-			"./app", "template", "mos2",
+			"./app", "template", "mos",
 			"--layout-path", "cfg/sn_a5x_mos.toml",
 			"--parameters-path", "cfg/sn_a5x_mos.toml",
 		}

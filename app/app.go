@@ -21,8 +21,7 @@ const (
 )
 
 func New(reader io.Reader, writer, errWriter io.Writer) *App {
-	return (&App{}).
-		setupCli(reader, writer, errWriter)
+	return (&App{}).setupCli(reader, writer, errWriter)
 }
 
 func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
@@ -38,7 +37,7 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 				Name: "template",
 				Subcommands: cli.Commands{
 					&cli.Command{
-						Name: "mos2",
+						Name: "mos",
 
 						Flags: []cli.Flag{
 							&cli.StringFlag{Name: layoutPathFlag},
@@ -56,15 +55,15 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 								return fmt.Errorf("new planner: %w", err)
 							}
 
-							if err := planner.Generate(); err != nil {
+							if err = planner.Generate(); err != nil {
 								return fmt.Errorf("generate: %w", err)
 							}
 
-							if err := planner.WriteTeXTo("./out"); err != nil {
+							if err = planner.WriteTeXTo("./out"); err != nil {
 								return fmt.Errorf("write tex: %w", err)
 							}
 
-							if err := planner.Compile(appContext.Context, "./out"); err != nil {
+							if err = planner.Compile(appContext.Context, "./out"); err != nil {
 								return fmt.Errorf("compile: %w", err)
 							}
 
@@ -85,7 +84,7 @@ func readToml(path string, dst any) error {
 		return fmt.Errorf("read file: %w", err)
 	}
 
-	if err := toml.Unmarshal(fileBytes, dst); err != nil {
+	if err = toml.Unmarshal(fileBytes, dst); err != nil {
 		return fmt.Errorf("unmarshal: %w", err)
 	}
 
