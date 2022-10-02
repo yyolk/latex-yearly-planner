@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app3/components"
 	"github.com/kudrykv/latex-yearly-planner/app3/pages"
 	"github.com/kudrykv/latex-yearly-planner/app3/sections"
@@ -52,17 +51,30 @@ func (r *Planner) Generate() (types.NamedBuffers, error) {
 
 type SectionFunc func() (*bytes.Buffer, error)
 
+const (
+	TitleSection        = "title"
+	AnnualSection       = "annual"
+	QuarterliesSection  = "quarterlies"
+	MonthliesSection    = "monthlies"
+	WeekliesSection     = "weeklies"
+	DailiesSection      = "dailies"
+	DailyNotesSection   = "daily_notes"
+	DailyReflectSection = "daily_reflect"
+	ToDoSection         = "todo"
+	NotesSection        = "notes"
+)
+
 func (r *Planner) sections() map[string]SectionFunc {
 	return map[string]SectionFunc{
-		common.AnnualSection:       r.annualSection,
-		common.QuarterliesSection:  r.quarterliesSection,
-		common.MonthliesSection:    r.monthliesSection,
-		common.WeekliesSection:     r.weekliesSection,
-		common.DailiesSection:      r.dailiesSection,
-		common.DailyNotesSection:   r.dailyNotesSection,
-		common.DailyReflectSection: r.dailyReflectSection,
-		common.NotesSection:        r.notesSection,
-		common.ToDoSection:         r.todosSection,
+		AnnualSection:       r.annualSection,
+		QuarterliesSection:  r.quarterliesSection,
+		MonthliesSection:    r.monthliesSection,
+		WeekliesSection:     r.weekliesSection,
+		DailiesSection:      r.dailiesSection,
+		DailyNotesSection:   r.dailyNotesSection,
+		DailyReflectSection: r.dailyReflectSection,
+		NotesSection:        r.notesSection,
+		ToDoSection:         r.todosSection,
 	}
 }
 
