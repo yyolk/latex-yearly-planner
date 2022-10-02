@@ -13,8 +13,14 @@ import (
 	"github.com/kudrykv/latex-yearly-planner/app/types"
 )
 
+type PlannerBuilder interface {
+	Generate() (types.NamedBuffers, error)
+	RunTimes() int
+	Document() types.Document
+}
+
 type Planner struct {
-	builder *mos.Planner
+	builder PlannerBuilder
 
 	futureFiles types.NamedBuffers
 }
@@ -22,7 +28,7 @@ type Planner struct {
 var ErrInvalidParameters = errors.New("invalid parameters")
 
 func New(template string, layout any) (*Planner, error) {
-	var builder *mos.Planner
+	var builder PlannerBuilder
 
 	switch template {
 	case "mos":
