@@ -7,6 +7,10 @@ import (
 type Weeks []Week
 
 type Week struct {
+	year    *Year
+	quarter *Quarter
+	month   *Month
+
 	days  [daysInWeek]Day
 	first bool
 	last  bool

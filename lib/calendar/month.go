@@ -19,6 +19,19 @@ func newMonth(year *Year, quarter *Quarter, month time.Month, weekday time.Weekd
 	calendarMonth.year = year
 	calendarMonth.quarter = quarter
 
+	for i := range calendarMonth.Weeks {
+		calendarMonth.Weeks[i].year = year
+		calendarMonth.Weeks[i].quarter = quarter
+		calendarMonth.Weeks[i].month = &calendarMonth
+
+		for j := range calendarMonth.Weeks[i].days {
+			calendarMonth.Weeks[i].days[j].year = year
+			calendarMonth.Weeks[i].days[j].quarter = quarter
+			calendarMonth.Weeks[i].days[j].month = &calendarMonth
+			calendarMonth.Weeks[i].days[j].week = &calendarMonth.Weeks[i]
+		}
+	}
+
 	return calendarMonth
 }
 
