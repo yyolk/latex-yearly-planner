@@ -36,6 +36,10 @@ func (r Quarterly) Title() string {
 	return r.quarter.Name()
 }
 
+func (r Quarterly) Reference() string {
+	return r.quarter.Name()
+}
+
 func (r Quarterly) Build() ([]string, error) {
 	leftColumn := r.calendarColumn()
 	rightColumn := r.notesColumn()

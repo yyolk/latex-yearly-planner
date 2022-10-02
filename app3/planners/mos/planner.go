@@ -78,7 +78,7 @@ func (r *Planner) quarterliesSection() (*bytes.Buffer, error) {
 			return nil, fmt.Errorf("new quarterly: %w", err)
 		}
 
-		header = header.Title(quarterly)
+		header = header.Title(quarterly).Target(quarterly)
 
 		if err = buffer.WriteBlocks(header, quarterly); err != nil {
 			return nil, fmt.Errorf("write quarterly blocks: %w", err)
