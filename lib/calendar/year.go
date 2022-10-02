@@ -25,11 +25,11 @@ func (y Year) Weeks() Weeks {
 
 	for {
 		week = week.Next()
+		week.year = &y
+
 		if week.TailYear() != y.year {
 			break
 		}
-
-		week.year = &y
 
 		weeks = append(weeks, week)
 	}
