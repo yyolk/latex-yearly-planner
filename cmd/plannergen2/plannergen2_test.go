@@ -16,8 +16,8 @@ func TestMoS3(t *testing.T) {
 
 		args := []string{
 			"./app", "template", "mos2",
-			"--layout-path", "cfg2/sn_a5x_mos.toml",
-			"--parameters-path", "cfg2/sn_a5x_mos.toml",
+			"--layout-path", "cfg/sn_a5x_mos.toml",
+			"--parameters-path", "cfg/sn_a5x_mos.toml",
 		}
 
 		err := app3.New(in, out, errOut).Run(args)
