@@ -218,8 +218,7 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 			return nil, fmt.Errorf("new daily: %w", err)
 		}
 
-		header = header.Target(daily)
-		header = header.Title(daily)
+		header = header.Target(daily).Title(daily)
 
 		if r.parameters.DailyNotesEnabled() {
 			if notes, err = sections.NewDailyNotes(day, r.parameters.DailyNotesParameters); err != nil {
