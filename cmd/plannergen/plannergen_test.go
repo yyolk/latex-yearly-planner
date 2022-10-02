@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"strings"
 	"testing"
 
@@ -20,7 +21,7 @@ func TestMoS3(t *testing.T) {
 			"--parameters-path", "cfg/sn_a5x_mos.toml",
 		}
 
-		err := app.New(in, out, errOut).Run(args)
+		err := app.New(in, out, errOut).Run(context.Background(), args)
 
 		So(err, ShouldBeNil)
 	})

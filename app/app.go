@@ -1,6 +1,7 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -91,6 +92,6 @@ func readToml(path string, dst any) error {
 	return nil
 }
 
-func (r *App) Run(args []string) error {
-	return r.app.Run(args)
+func (r *App) Run(ctx context.Context, args []string) error {
+	return r.app.RunContext(ctx, args)
 }
