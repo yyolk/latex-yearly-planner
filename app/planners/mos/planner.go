@@ -66,6 +66,7 @@ const (
 
 func (r *Planner) sections() map[string]SectionFunc {
 	return map[string]SectionFunc{
+		TitleSection:        r.titleSection,
 		AnnualSection:       r.annualSection,
 		QuarterliesSection:  r.quarterliesSection,
 		MonthliesSection:    r.monthliesSection,
@@ -76,6 +77,21 @@ func (r *Planner) sections() map[string]SectionFunc {
 		NotesSection:        r.notesSection,
 		ToDoSection:         r.todosSection,
 	}
+}
+
+func (r *Planner) titleSection() (*bytes.Buffer, error) {
+	buffer := pages.NewBuffer()
+
+	title, err := sections.NewTitle(r.year, r.parameters.TitleParameters)
+	if err != nil {
+		return nil, fmt.Errorf("new title: %w", err)
+	}
+
+	if err = buffer.WriteBlocks(title); err != nil {
+		return nil, fmt.Errorf("write title blocks: %w", err)
+	}
+
+	return buffer.Buffer, nil
 }
 
 func (r *Planner) annualSection() (*bytes.Buffer, error) {
