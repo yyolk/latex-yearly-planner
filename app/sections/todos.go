@@ -3,7 +3,7 @@ package sections
 import (
 	"fmt"
 
-	"github.com/kudrykv/latex-yearly-planner/app3/components"
+	"github.com/kudrykv/latex-yearly-planner/app/components"
 )
 
 type TodosParameters struct {

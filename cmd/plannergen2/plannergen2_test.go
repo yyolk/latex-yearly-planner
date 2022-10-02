@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/kudrykv/latex-yearly-planner/app3"
+	"github.com/kudrykv/latex-yearly-planner/app"
 	. "github.com/smartystreets/goconvey/convey"
 )
 
@@ -20,7 +20,7 @@ func TestMoS3(t *testing.T) {
 			"--parameters-path", "cfg/sn_a5x_mos.toml",
 		}
 
-		err := app3.New(in, out, errOut).Run(args)
+		err := app.New(in, out, errOut).Run(args)
 
 		So(err, ShouldBeNil)
 	})

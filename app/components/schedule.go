@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/kudrykv/latex-yearly-planner/app3/types"
+	"github.com/kudrykv/latex-yearly-planner/app/types"
 )
 
 type ScheduleParameters struct {

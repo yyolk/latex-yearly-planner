@@ -3,8 +3,8 @@ package sections
 import (
 	"fmt"
 
-	"github.com/kudrykv/latex-yearly-planner/app3/components"
-	"github.com/kudrykv/latex-yearly-planner/app3/types"
+	"github.com/kudrykv/latex-yearly-planner/app/components"
+	"github.com/kudrykv/latex-yearly-planner/app/types"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 

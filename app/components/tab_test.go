@@ -3,7 +3,7 @@ package components_test
 import (
 	"testing"
 
-	"github.com/kudrykv/latex-yearly-planner/app3/components"
+	"github.com/kudrykv/latex-yearly-planner/app/components"
 	"github.com/stretchr/testify/assert"
 )
 

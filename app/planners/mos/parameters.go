@@ -3,8 +3,8 @@ package mos
 import (
 	"time"
 
-	"github.com/kudrykv/latex-yearly-planner/app3/sections"
-	"github.com/kudrykv/latex-yearly-planner/app3/types"
+	"github.com/kudrykv/latex-yearly-planner/app/sections"
+	"github.com/kudrykv/latex-yearly-planner/app/types"
 )
 
 type Parameters struct {

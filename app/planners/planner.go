@@ -9,8 +9,8 @@ import (
 	"path"
 	"strings"
 
-	"github.com/kudrykv/latex-yearly-planner/app3/planners/mos"
-	"github.com/kudrykv/latex-yearly-planner/app3/types"
+	"github.com/kudrykv/latex-yearly-planner/app/planners/mos"
+	"github.com/kudrykv/latex-yearly-planner/app/types"
 )
 
 type Planner struct {

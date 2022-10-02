@@ -3,7 +3,7 @@ package components
 import (
 	"fmt"
 
-	"github.com/kudrykv/latex-yearly-planner/app3/types"
+	"github.com/kudrykv/latex-yearly-planner/app/types"
 )
 
 type TabLineParameters struct {

@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kudrykv/latex-yearly-planner/app3/components"
+	"github.com/kudrykv/latex-yearly-planner/app/components"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 	"github.com/stretchr/testify/assert"
 )

@@ -1,4 +1,4 @@
-package app3
+package app
 
 import (
 	"fmt"
@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"github.com/BurntSushi/toml"
-	"github.com/kudrykv/latex-yearly-planner/app3/planners"
-	"github.com/kudrykv/latex-yearly-planner/app3/planners/mos"
+	"github.com/kudrykv/latex-yearly-planner/app/planners"
+	"github.com/kudrykv/latex-yearly-planner/app/planners/mos"
 	"github.com/urfave/cli/v2"
 )
 
