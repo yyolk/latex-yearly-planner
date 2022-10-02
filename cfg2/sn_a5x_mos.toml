@@ -48,7 +48,7 @@ VerticalSpacing = 2
 SpaceBetweenColumns = 3.5
 
 [AnnualParameters]
-ColumnWidth = 40
+ColumnWidth = 42
 ColumnSeparatorWidth = 5
 
 [QuarterlyParameters]
