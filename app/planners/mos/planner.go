@@ -117,14 +117,18 @@ func (r *Planner) annualSection() (*bytes.Buffer, error) {
 func (r *Planner) quarterliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
+	var (
+		header    sections.MOSHeaderDaily
+		quarterly sections.Quarterly
+		err       error
+	)
+
 	for _, quarter := range r.year.GetQuarters() {
-		header, err := sections.NewMOSHeaderQuarterly(quarter, r.tabs(), r.parameters.MOSHeaderParameters)
-		if err != nil {
+		if header, err = sections.NewMOSHeaderQuarterly(quarter, r.tabs(), r.parameters.MOSHeaderParameters); err != nil {
 			return nil, fmt.Errorf("new header: %w", err)
 		}
 
-		quarterly, err := sections.NewQuarterly(quarter, r.parameters.QuarterlyParameters)
-		if err != nil {
+		if quarterly, err = sections.NewQuarterly(quarter, r.parameters.QuarterlyParameters); err != nil {
 			return nil, fmt.Errorf("new quarterly: %w", err)
 		}
 
@@ -171,6 +175,7 @@ func (r *Planner) weekliesSection() (*bytes.Buffer, error) {
 
 	var (
 		header sections.MOSHeaderDaily
+		weekly sections.Weekly
 		err    error
 	)
 
@@ -179,8 +184,7 @@ func (r *Planner) weekliesSection() (*bytes.Buffer, error) {
 			return nil, fmt.Errorf("new header: %w", err)
 		}
 
-		weekly, err := sections.NewWeekly(week, r.parameters.WeeklyParameters)
-		if err != nil {
+		if weekly, err = sections.NewWeekly(week, r.parameters.WeeklyParameters); err != nil {
 			return nil, fmt.Errorf("new weekly: %w", err)
 		}
 
