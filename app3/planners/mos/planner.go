@@ -4,9 +4,9 @@ import (
 	"bytes"
 	"fmt"
 
-	"github.com/kudrykv/latex-yearly-planner/app2/pages"
 	"github.com/kudrykv/latex-yearly-planner/app2/planners/common"
 	"github.com/kudrykv/latex-yearly-planner/app3/components"
+	"github.com/kudrykv/latex-yearly-planner/app3/pages"
 	"github.com/kudrykv/latex-yearly-planner/app3/sections"
 	"github.com/kudrykv/latex-yearly-planner/app3/types"
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
