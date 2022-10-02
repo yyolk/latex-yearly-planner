@@ -4,8 +4,8 @@ Weekday = 1
 Sections = [
 #    "title",
 #    "annual",
-    "quarterlies",
-#    "monthlies",
+#    "quarterlies",
+    "monthlies",
 #    "weeklies",
 #    "dailies",
 #    "daily_notes",

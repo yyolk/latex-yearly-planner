@@ -85,3 +85,11 @@ func (m Month) Weekdays() []time.Weekday {
 
 	return weekdays
 }
+
+func (m Month) Year() Year {
+	return *m.year
+}
+
+func (m Month) Quarter() Quarter {
+	return *m.quarter
+}

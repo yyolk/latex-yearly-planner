@@ -148,7 +148,7 @@ func (r *Planner) monthliesSection() (*bytes.Buffer, error) {
 	)
 
 	for _, month := range r.year.Months() {
-		if header, err = sections.NewMOSHeaderMonthly(r.year, month, r.tabs(), r.parameters.MOSHeaderParameters); err != nil {
+		if header, err = sections.NewMOSHeaderMonthly(month, r.tabs(), r.parameters.MOSHeaderParameters); err != nil {
 			return nil, fmt.Errorf("new header: %w", err)
 		}
 
