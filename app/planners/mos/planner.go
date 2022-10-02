@@ -184,8 +184,7 @@ func (r *Planner) weekliesSection() (*bytes.Buffer, error) {
 			return nil, fmt.Errorf("new weekly: %w", err)
 		}
 
-		header = header.Target(weekly)
-		header = header.Title(weekly)
+		header = header.Target(weekly).Title(weekly)
 
 		if err = buffer.WriteBlocks(header, weekly); err != nil {
 			return nil, fmt.Errorf("write weekly blocks: %w", err)
