@@ -17,7 +17,6 @@ type App struct {
 }
 
 const (
-	layoutPathFlag     = "layout-path"
 	parametersPathFlag = "parameters-path"
 )
 
@@ -41,7 +40,6 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 						Name: "mos",
 
 						Flags: []cli.Flag{
-							&cli.StringFlag{Name: layoutPathFlag},
 							&cli.StringFlag{Name: parametersPathFlag},
 						},
 

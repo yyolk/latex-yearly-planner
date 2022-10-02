@@ -17,7 +17,6 @@ func TestMoS3(t *testing.T) {
 
 		args := []string{
 			"./app", "template", "mos",
-			"--layout-path", "cfg/sn_a5x_mos.toml",
 			"--parameters-path", "cfg/sn_a5x_mos.toml",
 		}
 
