@@ -97,7 +97,7 @@ func (r *Planner) titleSection() (*bytes.Buffer, error) {
 func (r *Planner) annualSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	header, err := sections.NewMOSHeaderIncomplete(r.year, r.tabs(), r.parameters.MOSHeaderParameters)
+	header, err := sections.NewMOSHeaderAnnual(r.year, r.tabs(), r.parameters.MOSHeaderParameters)
 	if err != nil {
 		return nil, fmt.Errorf("new header: %w", err)
 	}
@@ -118,7 +118,7 @@ func (r *Planner) quarterliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	var (
-		header    sections.MOSHeaderDaily
+		header    sections.MOSHeader
 		quarterly sections.Quarterly
 		err       error
 	)
@@ -146,7 +146,7 @@ func (r *Planner) monthliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	var (
-		header  sections.MOSHeaderDaily
+		header  sections.MOSHeader
 		monthly sections.Monthly
 		err     error
 	)
@@ -174,7 +174,7 @@ func (r *Planner) weekliesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	var (
-		header sections.MOSHeaderDaily
+		header sections.MOSHeader
 		weekly sections.Weekly
 		err    error
 	)
@@ -205,7 +205,7 @@ func (r *Planner) dailiesSection() (*bytes.Buffer, error) {
 		daily   sections.Daily
 		notes   sections.DailyNotes
 		reflect sections.DailyReflect
-		header  sections.MOSHeaderDaily
+		header  sections.MOSHeader
 		err     error
 	)
 
@@ -248,7 +248,7 @@ func (r *Planner) dailyNotesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	var (
-		header sections.MOSHeaderDaily
+		header sections.MOSHeader
 		daily  sections.Daily
 		notes  sections.DailyNotes
 		err    error
@@ -284,7 +284,7 @@ func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
 	var (
-		header  sections.MOSHeaderDaily
+		header  sections.MOSHeader
 		reflect sections.DailyReflect
 		daily   sections.Daily
 		err     error
@@ -318,7 +318,7 @@ func (r *Planner) dailyReflectSection() (*bytes.Buffer, error) {
 func (r *Planner) notesSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	header, err := sections.NewMOSHeaderIncomplete(r.year, r.tabs(targetNotes), r.parameters.MOSHeaderParameters)
+	header, err := sections.NewMOSHeaderAnnual(r.year, r.tabs(targetNotes), r.parameters.MOSHeaderParameters)
 	if err != nil {
 		return nil, fmt.Errorf("new header: %w", err)
 	}
@@ -344,7 +344,7 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 		}
 	}
 
-	header, err = sections.NewMOSHeaderIncomplete(r.year, r.tabs(), r.parameters.MOSHeaderParameters)
+	header, err = sections.NewMOSHeaderAnnual(r.year, r.tabs(), r.parameters.MOSHeaderParameters)
 	if err != nil {
 		return nil, fmt.Errorf("new header: %w", err)
 	}
@@ -366,7 +366,7 @@ func (r *Planner) notesSection() (*bytes.Buffer, error) {
 func (r *Planner) todosSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	header, err := sections.NewMOSHeaderIncomplete(r.year, r.tabs(targetTodos), r.parameters.MOSHeaderParameters)
+	header, err := sections.NewMOSHeaderAnnual(r.year, r.tabs(targetTodos), r.parameters.MOSHeaderParameters)
 	if err != nil {
 		return nil, fmt.Errorf("new header: %w", err)
 	}
@@ -392,7 +392,7 @@ func (r *Planner) todosSection() (*bytes.Buffer, error) {
 		}
 	}
 
-	header, err = sections.NewMOSHeaderIncomplete(r.year, r.tabs(), r.parameters.MOSHeaderParameters)
+	header, err = sections.NewMOSHeaderAnnual(r.year, r.tabs(), r.parameters.MOSHeaderParameters)
 	if err != nil {
 		return nil, fmt.Errorf("new header: %w", err)
 	}

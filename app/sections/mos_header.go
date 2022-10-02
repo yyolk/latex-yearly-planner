@@ -18,7 +18,7 @@ type MOSHeaderParameters struct {
 	MonthsTabLineParameters   components.TabLineParameters
 }
 
-type MOSHeaderDaily struct {
+type MOSHeader struct {
 	targetReference string
 	linkReference   string
 	today           calendar.Day
@@ -33,25 +33,25 @@ type MOSHeaderDaily struct {
 
 var ErrIncompleteDay = errors.New("incomplete day")
 
-func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeaderDaily, error) {
+func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeader, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
 	year := today.CalendarYear()
 	if year == nil {
-		return MOSHeaderDaily{}, fmt.Errorf("get year: %w", ErrIncompleteDay)
+		return MOSHeader{}, fmt.Errorf("get year: %w", ErrIncompleteDay)
 	}
 
 	quarter := today.CalendarQuarter()
 	if quarter == nil {
-		return MOSHeaderDaily{}, fmt.Errorf("get quarter: %w", ErrIncompleteDay)
+		return MOSHeader{}, fmt.Errorf("get quarter: %w", ErrIncompleteDay)
 	}
 
 	month := today.CalendarMonth()
 	if month == nil {
-		return MOSHeaderDaily{}, fmt.Errorf("get month: %w", ErrIncompleteDay)
+		return MOSHeader{}, fmt.Errorf("get month: %w", ErrIncompleteDay)
 	}
 
-	return MOSHeaderDaily{
+	return MOSHeader{
 		today:      today,
 		year:       *year,
 		quarters:   calendar.Quarters{*quarter},
@@ -61,10 +61,10 @@ func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSH
 	}, nil
 }
 
-func NewMOSHeaderWeekly(week calendar.Week, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeaderDaily, error) {
+func NewMOSHeaderWeekly(week calendar.Week, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeader, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
-	return MOSHeaderDaily{
+	return MOSHeader{
 		tabLine:    tabLine,
 		parameters: parameters,
 		year:       week.Year(),
@@ -73,10 +73,10 @@ func NewMOSHeaderWeekly(week calendar.Week, tabs components.Tabs, parameters MOS
 	}, nil
 }
 
-func NewMOSHeaderMonthly(month calendar.Month, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeaderDaily, error) {
+func NewMOSHeaderMonthly(month calendar.Month, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeader, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
-	return MOSHeaderDaily{
+	return MOSHeader{
 		tabLine:    tabLine,
 		parameters: parameters,
 		year:       month.Year(),
@@ -87,10 +87,10 @@ func NewMOSHeaderMonthly(month calendar.Month, tabs components.Tabs, parameters 
 
 func NewMOSHeaderQuarterly(
 	quarter calendar.Quarter, tabs components.Tabs, parameters MOSHeaderParameters,
-) (MOSHeaderDaily, error) {
+) (MOSHeader, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
-	return MOSHeaderDaily{
+	return MOSHeader{
 		tabLine:    tabLine,
 		parameters: parameters,
 		year:       quarter.Year(),
@@ -98,17 +98,17 @@ func NewMOSHeaderQuarterly(
 	}, nil
 }
 
-func NewMOSHeaderIncomplete(year calendar.Year, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeaderDaily, error) {
+func NewMOSHeaderAnnual(year calendar.Year, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeader, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
-	return MOSHeaderDaily{
+	return MOSHeader{
 		tabLine:    tabLine,
 		parameters: parameters,
 		year:       year,
 	}, nil
 }
 
-func (r MOSHeaderDaily) Build() ([]string, error) {
+func (r MOSHeader) Build() ([]string, error) {
 	repeat := r.repeat
 	if repeat <= 1 {
 		repeat = 1
@@ -148,7 +148,7 @@ const dailyHeaderTemplate = `\marginnote{\rotatebox[origin=tr]{90}{%s\hspace{%s}
 
 `
 
-func (r MOSHeaderDaily) makeMonths() components.TabLine {
+func (r MOSHeader) makeMonths() components.TabLine {
 	tabs := components.Tabs{}
 	months := r.year.Months()
 
@@ -165,7 +165,7 @@ func (r MOSHeaderDaily) makeMonths() components.TabLine {
 	return components.NewTabLine(tabs, r.parameters.MonthsTabLineParameters)
 }
 
-func (r MOSHeaderDaily) makeQuarters() components.TabLine {
+func (r MOSHeader) makeQuarters() components.TabLine {
 	tabs := components.Tabs{}
 
 	for i := len(r.year.Quarters) - 1; i >= 0; i-- {
@@ -181,7 +181,7 @@ func (r MOSHeaderDaily) makeQuarters() components.TabLine {
 	return components.NewTabLine(tabs, r.parameters.QuartersTabLineParameters)
 }
 
-func (r MOSHeaderDaily) target() string {
+func (r MOSHeader) target() string {
 	if len(r.targetReference) == 0 {
 		return ""
 	}
@@ -189,7 +189,7 @@ func (r MOSHeaderDaily) target() string {
 	return fmt.Sprintf(`\hypertarget{%s}{}`, r.targetReference)
 }
 
-func (r MOSHeaderDaily) title() string {
+func (r MOSHeader) title() string {
 	if len(r.linkReference) == 0 {
 		return r.titleText
 	}
@@ -197,25 +197,25 @@ func (r MOSHeaderDaily) title() string {
 	return fmt.Sprintf(`\hyperlink{%s}{%s}`, r.linkReference, r.titleText)
 }
 
-func (r MOSHeaderDaily) Target(referencer interface{ Reference() string }) MOSHeaderDaily {
+func (r MOSHeader) Target(referencer interface{ Reference() string }) MOSHeader {
 	r.targetReference = referencer.Reference()
 
 	return r
 }
 
-func (r MOSHeaderDaily) LinkBack(referencer interface{ Reference() string }) MOSHeaderDaily {
+func (r MOSHeader) LinkBack(referencer interface{ Reference() string }) MOSHeader {
 	r.linkReference = referencer.Reference()
 
 	return r
 }
 
-func (r MOSHeaderDaily) Repeat(repeater interface{ Repeat() int }) MOSHeaderDaily {
+func (r MOSHeader) Repeat(repeater interface{ Repeat() int }) MOSHeader {
 	r.repeat = repeater.Repeat()
 
 	return r
 }
 
-func (r MOSHeaderDaily) Title(titler interface{ Title() string }) MOSHeaderDaily {
+func (r MOSHeader) Title(titler interface{ Title() string }) MOSHeader {
 	r.titleText = titler.Title()
 
 	return r
