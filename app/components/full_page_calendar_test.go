@@ -14,6 +14,8 @@ func TestFullPageCalendar_Build(t *testing.T) {
 	t.Parallel()
 
 	t.Run("week number to the left", func(t *testing.T) {
+		t.Parallel()
+
 		month := calendar.NewMonth(2022, time.June, time.Monday)
 		parameters := components.FullPageCalendarParameters{}
 
@@ -24,6 +26,8 @@ func TestFullPageCalendar_Build(t *testing.T) {
 	})
 
 	t.Run("week number to the right", func(t *testing.T) {
+		t.Parallel()
+
 		month := calendar.NewMonth(2022, time.June, time.Monday)
 		parameters := components.FullPageCalendarParameters{WeekNumberToTheRight: true}
 

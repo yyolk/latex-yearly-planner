@@ -96,10 +96,10 @@ func (r LittleCalendar) matrix() string {
 			highlight = `\rowcolor{lightgray}`
 		}
 
-		pieces = append(pieces, highlight+strings.Join(weekRow, " & "))
+		pieces = append(pieces, highlight+strings.TrimSpace(strings.Join(weekRow, " & ")))
 	}
 
-	return strings.Join(pieces, " \\\\ \n")
+	return strings.Join(pieces, " \\\\\n")
 }
 
 func (r LittleCalendar) weekRow(week calendar2.Week) []string {
