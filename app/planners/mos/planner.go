@@ -160,7 +160,7 @@ func (r *Planner) monthliesSection() (*bytes.Buffer, error) {
 			return nil, fmt.Errorf("new monthly: %w", err)
 		}
 
-		header = header.Title(monthly)
+		header = header.Title(monthly).Target(monthly)
 
 		if err = buffer.WriteBlocks(header, monthly); err != nil {
 			return nil, fmt.Errorf("write monthly blocks: %w", err)

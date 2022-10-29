@@ -30,6 +30,10 @@ func (r Monthly) Title() string {
 	return r.month.Month().String()
 }
 
+func (r Monthly) Reference() string {
+	return r.month.Month().String()
+}
+
 func (r Monthly) Build() ([]string, error) {
 	return []string{r.fullPageCalendar.Build()}, nil
 }

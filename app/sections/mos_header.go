@@ -159,7 +159,7 @@ func (r MOSHeader) makeMonths() components.TabLine {
 			target = target || months[i].Month() == month.Month()
 		}
 
-		tabs = append(tabs, components.Tab{Text: months[i].Month().String()[:3], Target: target})
+		tabs = append(tabs, components.Tab{Text: months[i].Month().String()[:3], Reference: months[i].Month().String(), Target: target})
 	}
 
 	return components.NewTabLine(tabs, r.parameters.MonthsTabLineParameters)
