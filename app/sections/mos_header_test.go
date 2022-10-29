@@ -13,6 +13,12 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+type stub struct{}
+
+func (r stub) Title() string { return "title" }
+
+func (r stub) Reference() string { return "reference" }
+
 func TestMOSHeader_Build(t *testing.T) {
 	t.Parallel()
 
@@ -22,11 +28,35 @@ func TestMOSHeader_Build(t *testing.T) {
 	daily, err := sections.NewMOSHeaderDaily(day, sampleTabs(), sampleMOSParameters())
 	require.NoError(t, err)
 
-	build, err := daily.Build()
-	require.NoError(t, err)
+	t.Run("sample header", func(t *testing.T) {
+		t.Parallel()
 
-	require.Len(t, build, 1)
-	require.Equal(t, fixture("mos_header_from_dailies"), build[0])
+		build, err := daily.Build()
+		require.NoError(t, err)
+
+		require.Len(t, build, 1)
+		require.Equal(t, fixture("mos_header_from_dailies"), build[0])
+	})
+
+	t.Run("the header with the title", func(t *testing.T) {
+		t.Parallel()
+
+		build, err := daily.Title(stub{}).Build()
+		require.NoError(t, err)
+
+		require.Len(t, build, 1)
+		require.Equal(t, fixture("mos_header_from_dailies_with_title"), build[0])
+	})
+
+	t.Run("the header with the target", func(t *testing.T) {
+		t.Parallel()
+
+		build, err := daily.Target(stub{}).Build()
+		require.NoError(t, err)
+
+		require.Len(t, build, 1)
+		require.Equal(t, fixture("mos_header_from_dailies_with_target"), build[0])
+	})
 }
 
 func sampleTabs() components.Tabs {
