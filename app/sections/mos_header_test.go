@@ -199,6 +199,25 @@ func TestMOSHeader_Quarterly_Build(t *testing.T) {
 	})
 }
 
+func TestMOSHeader_Annual_Build(t *testing.T) {
+	t.Parallel()
+
+	yearCalendar := calendar.NewYear(2020, time.Monday)
+
+	yearly, err := sections.NewMOSHeaderAnnual(yearCalendar, sampleTabs(), sampleMOSParameters())
+	require.NoError(t, err)
+
+	t.Run("sample header", func(t *testing.T) {
+		t.Parallel()
+
+		build, err := yearly.Build()
+		require.NoError(t, err)
+
+		require.Len(t, build, 1)
+		require.Equal(t, fixture("mos_header_from_annual"), build[0])
+	})
+}
+
 func sampleTabs() components.Tabs {
 	return components.Tabs{{Text: "tab1"}, {Text: "tab2"}, {Text: "tab3"}}
 }
