@@ -19,7 +19,7 @@ func (r stub) Title() string { return "title" }
 
 func (r stub) Reference() string { return "reference" }
 
-func TestMOSHeader_Build(t *testing.T) {
+func TestMOSHeader_Daily_Build(t *testing.T) {
 	t.Parallel()
 
 	yearCalendar := calendar.NewYear(2020, time.Monday)
@@ -45,7 +45,7 @@ func TestMOSHeader_Build(t *testing.T) {
 		require.NoError(t, err)
 
 		require.Len(t, build, 1)
-		require.Equal(t, fixture("mos_header_from_dailies_with_title"), build[0])
+		require.Contains(t, build[0], `title%`)
 	})
 
 	t.Run("the header with the target", func(t *testing.T) {
@@ -55,7 +55,27 @@ func TestMOSHeader_Build(t *testing.T) {
 		require.NoError(t, err)
 
 		require.Len(t, build, 1)
-		require.Equal(t, fixture("mos_header_from_dailies_with_target"), build[0])
+		require.Contains(t, build[0], `\hypertarget{reference}{}%`)
+	})
+
+	t.Run("the header with the title and the target", func(t *testing.T) {
+		t.Parallel()
+
+		build, err := daily.Title(stub{}).Target(stub{}).Build()
+		require.NoError(t, err)
+
+		require.Len(t, build, 1)
+		require.Contains(t, build[0], `\hypertarget{reference}{}title%`)
+	})
+
+	t.Run("the header with the title and the linkback", func(t *testing.T) {
+		t.Parallel()
+
+		build, err := daily.Title(stub{}).LinkBack(stub{}).Build()
+		require.NoError(t, err)
+
+		require.Len(t, build, 1)
+		require.Contains(t, build[0], `\hyperlink{reference}{title}%`)
 	})
 }
 
