@@ -19,6 +19,8 @@ func (r stub) Title() string { return "title" }
 
 func (r stub) Reference() string { return "reference" }
 
+func (r stub) Repeat() int { return 3 }
+
 func TestMOSHeader_Daily_Build(t *testing.T) {
 	t.Parallel()
 
@@ -76,6 +78,18 @@ func TestMOSHeader_Daily_Build(t *testing.T) {
 
 		require.Len(t, build, 1)
 		require.Contains(t, build[0], `\hyperlink{reference}{title}%`)
+	})
+
+	t.Run("the header with repeat", func(t *testing.T) {
+		t.Parallel()
+
+		build, err := daily.Title(stub{}).Repeat(stub{}).Build()
+		require.NoError(t, err)
+
+		require.Len(t, build, 3)
+		require.Contains(t, build[0], `title%`)
+		require.Contains(t, build[1], `title 2%`)
+		require.Contains(t, build[2], `title 3%`)
 	})
 }
 
