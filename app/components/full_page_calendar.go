@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	calendar2 "github.com/kudrykv/latex-yearly-planner/app/calendar"
+	"github.com/kudrykv/latex-yearly-planner/app/calendar"
 )
 
 type FullPageCalendarParameters struct {
@@ -12,11 +12,11 @@ type FullPageCalendarParameters struct {
 }
 
 type FullPageCalendar struct {
-	month      calendar2.Month
+	month      calendar.Month
 	parameters FullPageCalendarParameters
 }
 
-func NewFullPageCalendar(month calendar2.Month, parameters FullPageCalendarParameters) FullPageCalendar {
+func NewFullPageCalendar(month calendar.Month, parameters FullPageCalendarParameters) FullPageCalendar {
 	return FullPageCalendar{
 		month:      month,
 		parameters: parameters,
@@ -58,7 +58,7 @@ func (r FullPageCalendar) matrix() string {
 	return strings.Join(pieces, " \\\\ \\hline\n")
 }
 
-func (r FullPageCalendar) weekRow(week calendar2.Week) []string {
+func (r FullPageCalendar) weekRow(week calendar.Week) []string {
 	row := make([]string, 0, 8)
 
 	for _, day := range week.Days() {
@@ -78,7 +78,7 @@ func (r FullPageCalendar) weekRow(week calendar2.Week) []string {
 	return row
 }
 
-func (r FullPageCalendar) addWeekNumber(row []string, week calendar2.Week) []string {
+func (r FullPageCalendar) addWeekNumber(row []string, week calendar.Week) []string {
 	value := fmt.Sprintf(`\rotatebox[origin=tr]{90}{\makebox[1.85cm][c]{%s}}`, NewWeekLink(week).Format("Week %d"))
 
 	if r.parameters.WeekNumberToTheRight {
