@@ -97,7 +97,7 @@ func (r *Planner) titleSection() (*bytes.Buffer, error) {
 func (r *Planner) annualSection() (*bytes.Buffer, error) {
 	buffer := pages.NewBuffer()
 
-	header, err := sections.NewMOSHeaderAnnual(r.year, r.tabs(), r.parameters.MOSHeaderParameters)
+	header, err := sections.NewMOSHeaderAnnual(r.year, r.tabs(targetCalendar), r.parameters.MOSHeaderParameters)
 	if err != nil {
 		return nil, fmt.Errorf("new header: %w", err)
 	}
@@ -106,6 +106,8 @@ func (r *Planner) annualSection() (*bytes.Buffer, error) {
 	if err != nil {
 		return nil, fmt.Errorf("new annual: %w", err)
 	}
+
+	header = header.Title(annual).Target(annual)
 
 	if err = buffer.WriteBlocks(header, annual); err != nil {
 		return nil, fmt.Errorf("write annual blocks: %w", err)
@@ -412,12 +414,15 @@ func (r *Planner) todosSection() (*bytes.Buffer, error) {
 }
 
 const (
-	targetNotes = iota + 1
+	targetCalendar = iota + 1
+	targetNotes
 	targetTodos
 )
 
 func (r *Planner) tabs(target ...int) components.Tabs {
-	tabs := components.Tabs{{Text: "Calendar"}}
+	var tabs = components.Tabs{}
+
+	tabs = append(tabs, components.Tab{Text: "Calendar", Target: contains(target, targetCalendar)})
 
 	if r.parameters.NotesEnabled() {
 		focus := contains(target, targetNotes)

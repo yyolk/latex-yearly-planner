@@ -52,3 +52,11 @@ func (r Annual) template() string {
 
 	return strings.Join([]string{row, row, row, row}, "\n\\vfill\n")
 }
+
+func (r Annual) Title() string {
+	return fmt.Sprintf("%d", r.year.Year())
+}
+
+func (r Annual) Reference() string {
+	return "Calendar"
+}
