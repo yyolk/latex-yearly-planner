@@ -119,7 +119,7 @@ func (r LittleCalendar) weekRow(week calendar.Week) []string {
 			continue
 		}
 
-		row = append(row, strconv.Itoa(day.Day()))
+		row = append(row, NewDayLink(day).String())
 	}
 
 	row = r.addWeekNumber(row, week.WeekNumber())
