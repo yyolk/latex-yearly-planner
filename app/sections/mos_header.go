@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
+	calendar2 "github.com/kudrykv/latex-yearly-planner/app/calendar"
 	"github.com/kudrykv/latex-yearly-planner/app/components"
 	"github.com/kudrykv/latex-yearly-planner/app/types"
-	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
 type MOSHeaderParameters struct {
@@ -21,19 +21,19 @@ type MOSHeaderParameters struct {
 type MOSHeader struct {
 	targetReference string
 	linkReference   string
-	today           calendar.Day
+	today           calendar2.Day
 	tabLine         components.TabLine
 	parameters      MOSHeaderParameters
-	year            calendar.Year
-	quarters        calendar.Quarters
-	months          calendar.Months
+	year            calendar2.Year
+	quarters        calendar2.Quarters
+	months          calendar2.Months
 	repeat          int
 	titleText       string
 }
 
 var ErrIncompleteDay = errors.New("incomplete day")
 
-func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeader, error) {
+func NewMOSHeaderDaily(today calendar2.Day, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeader, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
 	year := today.CalendarYear()
@@ -54,14 +54,14 @@ func NewMOSHeaderDaily(today calendar.Day, tabs components.Tabs, parameters MOSH
 	return MOSHeader{
 		today:      today,
 		year:       *year,
-		quarters:   calendar.Quarters{*quarter},
-		months:     calendar.Months{*month},
+		quarters:   calendar2.Quarters{*quarter},
+		months:     calendar2.Months{*month},
 		tabLine:    tabLine,
 		parameters: parameters,
 	}, nil
 }
 
-func NewMOSHeaderWeekly(week calendar.Week, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeader, error) {
+func NewMOSHeaderWeekly(week calendar2.Week, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeader, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
 	return MOSHeader{
@@ -73,20 +73,20 @@ func NewMOSHeaderWeekly(week calendar.Week, tabs components.Tabs, parameters MOS
 	}, nil
 }
 
-func NewMOSHeaderMonthly(month calendar.Month, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeader, error) {
+func NewMOSHeaderMonthly(month calendar2.Month, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeader, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
 	return MOSHeader{
 		tabLine:    tabLine,
 		parameters: parameters,
 		year:       month.Year(),
-		quarters:   calendar.Quarters{month.Quarter()},
-		months:     calendar.Months{month},
+		quarters:   calendar2.Quarters{month.Quarter()},
+		months:     calendar2.Months{month},
 	}, nil
 }
 
 func NewMOSHeaderQuarterly(
-	quarter calendar.Quarter, tabs components.Tabs, parameters MOSHeaderParameters,
+	quarter calendar2.Quarter, tabs components.Tabs, parameters MOSHeaderParameters,
 ) (MOSHeader, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
@@ -94,11 +94,11 @@ func NewMOSHeaderQuarterly(
 		tabLine:    tabLine,
 		parameters: parameters,
 		year:       quarter.Year(),
-		quarters:   calendar.Quarters{quarter},
+		quarters:   calendar2.Quarters{quarter},
 	}, nil
 }
 
-func NewMOSHeaderAnnual(year calendar.Year, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeader, error) {
+func NewMOSHeaderAnnual(year calendar2.Year, tabs components.Tabs, parameters MOSHeaderParameters) (MOSHeader, error) {
 	tabLine := components.NewTabLine(tabs, parameters.HeadingTabLineParameters)
 
 	return MOSHeader{

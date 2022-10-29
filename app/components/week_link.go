@@ -3,7 +3,7 @@ package components
 import (
 	"fmt"
 
-	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
+	"github.com/kudrykv/latex-yearly-planner/app/calendar"
 )
 
 type WeekLink struct {

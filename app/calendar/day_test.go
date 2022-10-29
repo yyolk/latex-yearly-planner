@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
+	"github.com/kudrykv/latex-yearly-planner/app/calendar"
 	. "github.com/smartystreets/goconvey/convey"
 )
 

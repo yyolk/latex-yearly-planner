@@ -1,8 +1,8 @@
 package sections
 
 import (
+	"github.com/kudrykv/latex-yearly-planner/app/calendar"
 	"github.com/kudrykv/latex-yearly-planner/app/components"
-	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
 type MonthlyParameters struct {

@@ -3,7 +3,7 @@ package sections
 import (
 	"fmt"
 
-	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
+	"github.com/kudrykv/latex-yearly-planner/app/calendar"
 )
 
 type TitleParameters struct {

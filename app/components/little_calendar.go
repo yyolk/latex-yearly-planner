@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
+	calendar2 "github.com/kudrykv/latex-yearly-planner/app/calendar"
 )
 
 type LittleCalendarParameters struct {
@@ -15,14 +15,14 @@ type LittleCalendarParameters struct {
 }
 
 type LittleCalendar struct {
-	today      calendar.Day
-	month      calendar.Month
+	today      calendar2.Day
+	month      calendar2.Month
 	parameters LittleCalendarParameters
 }
 
 var ErrNoMonth = errors.New("no month")
 
-func NewLittleCalendar(today calendar.Day, parameters LittleCalendarParameters) (LittleCalendar, error) {
+func NewLittleCalendar(today calendar2.Day, parameters LittleCalendarParameters) (LittleCalendar, error) {
 	month := today.CalendarMonth()
 	if month == nil {
 		return LittleCalendar{}, fmt.Errorf("day doesn't return its month: %w", ErrNoMonth)
@@ -35,7 +35,7 @@ func NewLittleCalendar(today calendar.Day, parameters LittleCalendarParameters) 
 	}, nil
 }
 
-func NewLittleCalendarFromMonth(month calendar.Month, parameters LittleCalendarParameters) LittleCalendar {
+func NewLittleCalendarFromMonth(month calendar2.Month, parameters LittleCalendarParameters) LittleCalendar {
 	return LittleCalendar{
 		month:      month,
 		parameters: parameters,
@@ -102,7 +102,7 @@ func (r LittleCalendar) matrix() string {
 	return strings.Join(pieces, " \\\\ \n")
 }
 
-func (r LittleCalendar) weekRow(week calendar.Week) []string {
+func (r LittleCalendar) weekRow(week calendar2.Week) []string {
 	row := make([]string, 0, 8)
 
 	for _, day := range week.Days() {

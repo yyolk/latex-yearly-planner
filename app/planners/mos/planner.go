@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"fmt"
 
+	"github.com/kudrykv/latex-yearly-planner/app/calendar"
 	"github.com/kudrykv/latex-yearly-planner/app/components"
 	"github.com/kudrykv/latex-yearly-planner/app/pages"
 	"github.com/kudrykv/latex-yearly-planner/app/sections"
 	"github.com/kudrykv/latex-yearly-planner/app/types"
-	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
 )
 
 type Planner struct {
