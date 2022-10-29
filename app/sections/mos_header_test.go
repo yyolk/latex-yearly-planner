@@ -1,15 +1,13 @@
 package sections_test
 
 import (
-	"fmt"
-	"os"
-	"path"
 	"testing"
 	"time"
 
 	"github.com/kudrykv/latex-yearly-planner/app/calendar"
 	"github.com/kudrykv/latex-yearly-planner/app/components"
 	"github.com/kudrykv/latex-yearly-planner/app/sections"
+	. "github.com/kudrykv/latex-yearly-planner/app/test"
 	"github.com/stretchr/testify/require"
 )
 
@@ -37,7 +35,7 @@ func TestMOSHeader_Daily_Build(t *testing.T) {
 		require.NoError(t, err)
 
 		require.Len(t, build, 1)
-		require.Equal(t, fixture("mos_header_from_dailies"), build[0])
+		require.Equal(t, Fixture("mos_header_from_dailies"), build[0])
 	})
 
 	t.Run("the header with the title", func(t *testing.T) {
@@ -110,7 +108,7 @@ func TestMOSHeader_Weekly_Build(t *testing.T) {
 		require.NoError(t, err)
 
 		require.Len(t, build, 1)
-		require.Equal(t, fixture("mos_header_from_weeklies"), build[0])
+		require.Equal(t, Fixture("mos_header_from_weeklies"), build[0])
 	})
 
 	t.Run("highlighted Q1, both February and March", func(t *testing.T) {
@@ -165,7 +163,7 @@ func TestMOSHeader_Monthly_Build(t *testing.T) {
 		require.NoError(t, err)
 
 		require.Len(t, build, 1)
-		require.Equal(t, fixture("mos_header_from_monthlies"), build[0])
+		require.Equal(t, Fixture("mos_header_from_monthlies"), build[0])
 	})
 
 	t.Run("highlights month and quarter", func(t *testing.T) {
@@ -196,7 +194,7 @@ func TestMOSHeader_Quarterly_Build(t *testing.T) {
 		require.NoError(t, err)
 
 		require.Len(t, build, 1)
-		require.Equal(t, fixture("mos_header_from_quarterlies"), build[0])
+		require.Equal(t, Fixture("mos_header_from_quarterlies"), build[0])
 	})
 
 	t.Run("highlights quarter, no month highlights", func(t *testing.T) {
@@ -228,7 +226,7 @@ func TestMOSHeader_Annual_Build(t *testing.T) {
 		require.NoError(t, err)
 
 		require.Len(t, build, 1)
-		require.Equal(t, fixture("mos_header_from_annual"), build[0])
+		require.Equal(t, Fixture("mos_header_from_annual"), build[0])
 	})
 }
 
@@ -253,15 +251,4 @@ func sampleMOSParameters() sections.MOSHeaderParameters {
 			SpaceBetweenColumns: 8,
 		},
 	}
-}
-
-func fixture(filename string) string {
-	pathToFile := path.Join("fixtures", fmt.Sprintf("%s.tex", filename))
-
-	fileBytes, err := os.ReadFile(pathToFile)
-	if err != nil {
-		panic(fmt.Errorf("read fixture %s: %w", pathToFile, err))
-	}
-
-	return string(fileBytes)
 }
