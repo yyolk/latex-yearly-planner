@@ -23,9 +23,9 @@ func TestMOSHeader_Daily_Build(t *testing.T) {
 	t.Parallel()
 
 	yearCalendar := calendar.NewYear(2020, time.Monday)
-	day := yearCalendar.Days()[32]
+	february1st := yearCalendar.Days()[32]
 
-	daily, err := sections.NewMOSHeaderDaily(day, sampleTabs(), sampleMOSParameters())
+	daily, err := sections.NewMOSHeaderDaily(february1st, sampleTabs(), sampleMOSParameters())
 	require.NoError(t, err)
 
 	t.Run("sample header", func(t *testing.T) {
@@ -76,6 +76,62 @@ func TestMOSHeader_Daily_Build(t *testing.T) {
 
 		require.Len(t, build, 1)
 		require.Contains(t, build[0], `\hyperlink{reference}{title}%`)
+	})
+}
+
+func TestMOSHeader_Weekly_Build(t *testing.T) {
+	t.Parallel()
+
+	yearCalendar := calendar.NewYear(2022, time.Monday)
+
+	t.Run("highlighted Q1 and January", func(t *testing.T) {
+		t.Parallel()
+
+		week2 := yearCalendar.Weeks()[2]
+
+		weekly, err := sections.NewMOSHeaderWeekly(week2, sampleTabs(), sampleMOSParameters())
+		require.NoError(t, err)
+
+		build, err := weekly.Build()
+		require.NoError(t, err)
+
+		require.Len(t, build, 1)
+		require.Equal(t, fixture("mos_header_from_weeklies"), build[0])
+	})
+
+	t.Run("highlighted Q1, both February and March", func(t *testing.T) {
+		t.Parallel()
+
+		week9 := yearCalendar.Weeks()[9]
+
+		weekly, err := sections.NewMOSHeaderWeekly(week9, sampleTabs(), sampleMOSParameters())
+		require.NoError(t, err)
+
+		build, err := weekly.Build()
+		require.NoError(t, err)
+
+		require.Len(t, build, 1)
+		require.Contains(t, build[0], `\cellcolor{black}{\textcolor{white}{Q1}`)
+		require.Contains(t, build[0], `\cellcolor{black}{\textcolor{white}{Feb}`)
+		require.Contains(t, build[0], `\cellcolor{black}{\textcolor{white}{Mar}`)
+	})
+
+	t.Run("highlighted Q1 and Q2, March and April", func(t *testing.T) {
+		t.Parallel()
+
+		week13 := yearCalendar.Weeks()[13]
+
+		weekly, err := sections.NewMOSHeaderWeekly(week13, sampleTabs(), sampleMOSParameters())
+		require.NoError(t, err)
+
+		build, err := weekly.Build()
+		require.NoError(t, err)
+
+		require.Len(t, build, 1)
+		require.Contains(t, build[0], `\cellcolor{black}{\textcolor{white}{Q1}`)
+		require.Contains(t, build[0], `\cellcolor{black}{\textcolor{white}{Q2}`)
+		require.Contains(t, build[0], `\cellcolor{black}{\textcolor{white}{Mar}`)
+		require.Contains(t, build[0], `\cellcolor{black}{\textcolor{white}{Apr}`)
 	})
 }
 
