@@ -3,7 +3,6 @@ package components
 import (
 	"errors"
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/lib/calendar"
@@ -122,17 +121,17 @@ func (r LittleCalendar) weekRow(week calendar.Week) []string {
 		row = append(row, NewDayLink(day).String())
 	}
 
-	row = r.addWeekNumber(row, week.WeekNumber())
+	row = r.addWeekNumber(row, NewWeekLink(week).Format("%d").String())
 
 	return row
 }
 
-func (r LittleCalendar) addWeekNumber(row []string, number int) []string {
+func (r LittleCalendar) addWeekNumber(row []string, number string) []string {
 	if r.parameters.WeekNumberToTheRight {
-		return append(row, strconv.Itoa(number))
+		return append(row, number)
 	}
 
-	return append([]string{strconv.Itoa(number)}, row...)
+	return append([]string{number}, row...)
 }
 
 func (r LittleCalendar) tableRule() string {
