@@ -135,6 +135,37 @@ func TestMOSHeader_Weekly_Build(t *testing.T) {
 	})
 }
 
+func TestMOSHeader_Monthly_Build(t *testing.T) {
+	t.Parallel()
+
+	yearCalendar := calendar.NewYear(2020, time.Monday)
+	february := yearCalendar.Months()[1]
+
+	monthly, err := sections.NewMOSHeaderMonthly(february, sampleTabs(), sampleMOSParameters())
+	require.NoError(t, err)
+
+	t.Run("sample header", func(t *testing.T) {
+		t.Parallel()
+
+		build, err := monthly.Build()
+		require.NoError(t, err)
+
+		require.Len(t, build, 1)
+		require.Equal(t, fixture("mos_header_from_monthlies"), build[0])
+	})
+
+	t.Run("highlights month and quarter", func(t *testing.T) {
+		t.Parallel()
+
+		build, err := monthly.Build()
+		require.NoError(t, err)
+
+		require.Len(t, build, 1)
+		require.Contains(t, build[0], `\cellcolor{black}{\textcolor{white}{Feb}`)
+		require.Contains(t, build[0], `\cellcolor{black}{\textcolor{white}{Q1}`)
+	})
+}
+
 func sampleTabs() components.Tabs {
 	return components.Tabs{{Text: "tab1"}, {Text: "tab2"}, {Text: "tab3"}}
 }
