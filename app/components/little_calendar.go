@@ -54,7 +54,7 @@ func (r LittleCalendar) Build() string {
 \end{tabularx}
 `,
 		r.tableRule(),
-		r.month.Month().String(),
+		NewMonthLink(r.month.Month()),
 		heading,
 		r.matrix(),
 	)
