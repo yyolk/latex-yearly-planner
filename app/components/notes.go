@@ -25,11 +25,11 @@ type Dotted struct {
 }
 
 var (
-	ErrBothLinedAndDottedSet   = errors.New("both lined and dotted parameters are set")
-	ErrBothLinedAndDottedUnset = errors.New("both lined and dotted parameters are unset")
-	ErrNonPositiveLineHeight   = errors.New("line height is not positive")
-	ErrNonPositiveRows         = errors.New("rows is not positive")
-	ErrNonPositiveColumns      = errors.New("columns is not positive")
+	ErrBothLinedAndDottedSet     = errors.New("both lined and dotted parameters are set")
+	ErrBothLinedAndDottedMissing = errors.New("both lined and dotted parameters are unset")
+	ErrNonPositiveLineHeight     = errors.New("line height is not positive")
+	ErrNonPositiveRows           = errors.New("rows is not positive")
+	ErrNonPositiveColumns        = errors.New("columns is not positive")
 )
 
 func (r NotesParameters) Test() error {
@@ -38,7 +38,7 @@ func (r NotesParameters) Test() error {
 	}
 
 	if r.Lined.Number <= 0 && r.Dotted.Distance <= 0 {
-		return ErrBothLinedAndDottedUnset
+		return ErrBothLinedAndDottedMissing
 	}
 
 	if r.Lined.Number > 0 {
