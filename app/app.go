@@ -17,7 +17,8 @@ type App struct {
 }
 
 const (
-	parametersPathFlag = "parameters-path"
+	flagParametersPath = "parameters-path"
+	flagTemplate       = "template"
 )
 
 func New(reader io.Reader, writer, errWriter io.Writer) *App {
@@ -40,12 +41,12 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 						Name: "mos",
 
 						Flags: []cli.Flag{
-							&cli.StringFlag{Name: parametersPathFlag},
+							&cli.StringFlag{Name: flagParametersPath},
 						},
 
 						Action: func(appContext *cli.Context) error {
 							var parameters mos.Parameters
-							if err := readToml(appContext.String(parametersPathFlag), &parameters); err != nil {
+							if err := readToml(appContext.String(flagParametersPath), &parameters); err != nil {
 								return fmt.Errorf("read parameters: %w", err)
 							}
 
@@ -69,6 +70,25 @@ func (r *App) setupCli(reader io.Reader, writer, errWriter io.Writer) *App {
 							return nil
 						},
 					},
+				},
+			},
+
+			&cli.Command{
+				Name: "empty-config",
+				Flags: []cli.Flag{
+					&cli.StringFlag{Name: flagTemplate},
+				},
+
+				Action: func(appContext *cli.Context) error {
+					var template any
+					switch appContext.String(flagTemplate) {
+					case "mos":
+						template = mos.Parameters{Sections: mos.Sections()}
+					default:
+						return fmt.Errorf("unknown template: %s", appContext.String(flagTemplate))
+					}
+
+					return toml.NewEncoder(appContext.App.Writer).Encode(template)
 				},
 			},
 		},

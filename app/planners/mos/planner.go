@@ -64,6 +64,16 @@ const (
 	NotesSection        = "notes"
 )
 
+func Sections() []string {
+	var list []string
+
+	for section := range (&Planner{}).sections() {
+		list = append(list, section)
+	}
+
+	return list
+}
+
 func (r *Planner) sections() map[string]SectionFunc {
 	return map[string]SectionFunc{
 		TitleSection:        r.titleSection,
