@@ -22,6 +22,5 @@ func TestTabLine_Build(t *testing.T) {
 
 	tabLine := components.NewTabLine(tabs, parameters)
 
-	build := tabLine.Build()
-	assert.Equal(t, Fixture("tab_line"), build)
+	assert.Equal(t, Fixture("tab_line"), tabLine.Build())
 }
