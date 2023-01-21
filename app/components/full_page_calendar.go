@@ -27,7 +27,13 @@ func (r FullPageCalendar) Build() string {
 	return `\begin{tabularx}{\linewidth}{` + r.tableRule() + `}
 ` + r.weekdays() + ` \\ \hline
 ` + r.matrix() + ` \\ \hline
-\end{tabularx}`
+\end{tabularx}
+\vskip 5mm
+
+\myUnderline{Notes}
+  \vbox to \dimexpr\textheight-\pagetotal\relax {%
+    \leaders\hbox to \linewidth{\textcolor{\myColorGray}{\rule{0pt}{5mm}\hrulefill}}\vfil
+  }`
 }
 
 func (r FullPageCalendar) weekdays() string {
