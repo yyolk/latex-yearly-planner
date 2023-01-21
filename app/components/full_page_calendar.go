@@ -5,10 +5,14 @@ import (
 	"strings"
 
 	"github.com/kudrykv/latex-yearly-planner/app/calendar"
+	"github.com/kudrykv/latex-yearly-planner/app/types"
 )
 
 type FullPageCalendarParameters struct {
 	WeekNumberToTheRight bool
+	LineHeight           types.Millimeters
+
+	Dotted Dotted
 }
 
 type FullPageCalendar struct {
@@ -31,9 +35,24 @@ func (r FullPageCalendar) Build() string {
 \vskip 5mm
 
 \myUnderline{Notes}
-  \vbox to \dimexpr\textheight-\pagetotal\relax {%
-    \leaders\hbox to \linewidth{\textcolor{\myColorGray}{\rule{0pt}{5mm}\hrulefill}}\vfil
-  }`
+  ` + r.notes()
+}
+
+func (r FullPageCalendar) notes() string {
+	if r.parameters.LineHeight > 0 {
+		return fmt.Sprintf(`\vbox to \dimexpr\textheight-\pagetotal\relax {%%
+    \leaders\hbox to \linewidth{\textcolor{\myColorGray}{\rule{0pt}{%s}\hrulefill}}\vfil
+}`, r.parameters.LineHeight)
+	}
+
+	return fmt.Sprintf(
+		`\vbox to 0pt{\vskip%s\leavevmode\multido{\dC=0mm+%s}{%s}{\multido{\dR=0mm+%s}{%s}{\put(\dR,\dC){\scriptsize.}}}}`,
+		r.parameters.Dotted.Distance,
+		r.parameters.Dotted.Distance,
+		r.parameters.Dotted.Rows,
+		r.parameters.Dotted.Distance,
+		r.parameters.Dotted.Columns,
+	)
 }
 
 func (r FullPageCalendar) weekdays() string {
