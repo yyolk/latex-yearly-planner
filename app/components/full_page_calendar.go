@@ -46,7 +46,7 @@ func (r FullPageCalendar) notes() string {
 	}
 
 	return fmt.Sprintf(
-		`\vbox to 0pt{\vskip%s\leavevmode\multido{\dC=0mm+%s}{%s}{\multido{\dR=0mm+%s}{%s}{\put(\dR,\dC){\scriptsize.}}}}`,
+		`\vbox to 0pt{\vskip%s\leavevmode\multido{\dC=0mm+%s}{%d}{\multido{\dR=0mm+%s}{%d}{\put(\dR,\dC){\scriptsize.}}}}`,
 		r.parameters.Dotted.Distance,
 		r.parameters.Dotted.Distance,
 		r.parameters.Dotted.Rows,

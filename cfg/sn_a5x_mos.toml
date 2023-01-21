@@ -1,4 +1,4 @@
-Year = 2022
+Year = 2023
 Weekday = 1
 
 Sections = [
@@ -62,6 +62,10 @@ Rows = 33
 [MonthlyParameters]
 [MonthlyParameters.FullPageCalendarParameters]
 WeekNumberToTheRight = true
+[MonthlyParameters.FullPageCalendarParameters.Dotted]
+Distance = 5
+Columns = 28
+Rows = 22
 
 [WeeklyParameters]
 LeftColumnWidth = 40
