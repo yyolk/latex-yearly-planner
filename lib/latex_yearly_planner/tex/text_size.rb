@@ -9,8 +9,62 @@ module LatexYearlyPlanner
         @text = text
       end
 
+      def xhuge
+        self.size = 'Huge'
+
+        self
+      end
+
       def huge
         self.size = 'huge'
+
+        self
+      end
+
+      def xxlarge
+        self.size = 'LARGE'
+
+        self
+      end
+
+      def xlarge
+        self.size = 'Large'
+
+        self
+      end
+
+      def large
+        self.size = 'large'
+
+        self
+      end
+
+      def normal
+        self.size = 'normalsize'
+
+        self
+      end
+
+      def small
+        self.size = 'small'
+
+        self
+      end
+
+      def footnote
+        self.size = 'footnotesize'
+
+        self
+      end
+
+      def script
+        self.size = 'scriptsize'
+
+        self
+      end
+
+      def tiny
+        self.size = 'tiny'
 
         self
       end
