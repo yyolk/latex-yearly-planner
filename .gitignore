@@ -22,3 +22,6 @@ sorbet/
 *.py
 python/
 .ruff_cache
+
+# ignore legacy config reference files
+config/legacy*
