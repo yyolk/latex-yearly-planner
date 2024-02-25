@@ -15,7 +15,9 @@ module LatexYearlyPlanner
               #{config.struct.to_h.deep_stringify_keys.to_yaml}
               \\end{verbatim}\\end{tiny}\\end{multicols}
 
-              https://github.com/kudrykv/latex-yearly-planner $\\heartsuit$ #{current_year}
+              Hacked \\texttt{latex-yearly-planner} $\\skull$ {@}yyolk
+
+              https://github.com/yyolk/latex-yearly-planner $\\heartsuit$ #{current_year}
             LATEX
           end
 
