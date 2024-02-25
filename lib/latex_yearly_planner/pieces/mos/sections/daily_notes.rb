@@ -6,7 +6,11 @@ module LatexYearlyPlanner
       module Sections
         class DailyNotes < Section
           def iterations
-            all_days.map { |day| pages_number.times.map(&:succ).map { |page| [page, day] } }.flatten(1)
+            all_days.map do |day|
+              pages_number.times.map(&:succ).map do |page|
+                [page, day, pages_number]
+              end
+            end.flatten(1)
           end
 
           private
