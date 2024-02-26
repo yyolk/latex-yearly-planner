@@ -1,0 +1,426 @@
+document:
+  debug:
+    enabled: false
+    # enabled: true
+    parameters:
+      highlight_links: true
+      # highlight_frames: false
+      highlight_frames: true
+
+  document_class:
+    name: article
+    size: 9pt
+    # options: draft
+
+  remaining_height:
+    # lag: 4pt
+    # lag: 4pt
+    # lag: 9pt
+    # lag: 12pt
+    lag: 0pt
+    # lag: 0.1mm
+
+  layout:
+    dimensions:
+      # width: 139.2mm
+      # height: 191.85mm
+      # width: 278.4mm
+      # height: 383.7mm
+      # 196 x 230 x
+      # Device: 7.7” x 9.0 x .22 (196 x 230 x 5.8mm excluding feet) Basic Pen: 6.4” x .35” x .33” (162 x 8.8 x 8.4 mm)
+      # width: 196mm
+      # height: 230mm
+      # 7.71 × 9.06 in (portrait)
+      # width: 158mm
+      # height: 210mm
+      width: 156mm
+      height: 207mm
+
+
+    margin:
+      # top: 10mm
+      # top: 8mm
+      # top: 3mm
+      # top: 5mm
+      # top: 1mm
+      top: 3mm
+      # bottom: 5mm
+      # good
+      # bottom: 7mm
+      bottom: 3mm
+      left: 5mm
+      # right: 12mm
+      # right: 14mm
+      # right: 16mm
+      # right: 14mm
+      right: 11.7mm
+
+    margin_notes:
+      # width: 10mm
+      # width: 10mm
+      # width: 14mm-(1.9mm*2)
+      # width: 10mm
+      width: 11.3mm
+      separation: 1.9mm
+      placement: right
+
+parameters:
+  template_name: mos
+  compile:
+    runs: 2
+    # runs: 0
+  parameters:
+    header:
+      title_position: left
+      between_tables_spacing: 5mm
+      # skip: 1mm
+      # skip: 0.5mm
+      # skip: 0mm
+      skip: 0.8mm
+      top_table:
+        parameters:
+          vertical_stretch: 1.3
+          horizontal_spacing: 6pt
+      quarterly_table:
+        parameters:
+          # min_cell_height: 13mm
+          # min_cell_height: 
+          min_cell_height: 14mm
+          horizontal_spacing: 0mm
+          format: Y
+          horizontal_lines: true
+      monthly_table:
+        parameters:
+          # min_cell_height: 11.1mm
+          min_cell_height: 10mm
+          horizontal_spacing: 0mm
+          format: Y
+          horizontal_lines: true
+    start_date: 2024, January
+    end_date: 2024, December
+    weekday_start: Sunday
+    show_week_numbers: true
+    format_ampm: false
+    week_number_placement: right
+    notes:
+      type: dotted
+      parameters:
+        horizontal_spacing_between_dots: 5mm
+        vertical_spacing_between_dots: 5mm
+    little_calendar:
+      parameters:
+        vertical_stretch: 1.2
+        horizontal_spacing: 0mm
+        show_week_numbers: true
+        week_number_placement: left
+        ####
+        # width: 63mm
+        # width: 60mm
+        
+    large_calendar:
+      parameters:
+        name_cell_height: 6mm
+        cell_height: 2cm
+        show_week_numbers: true
+        week_number_placement: right
+        day_number_shift: 1.5mm
+        week_column_width: 6mm
+        # vertical_stretch: 4.3
+        # vertical_stretch: 4
+        vertical_stretch: 3
+
+sections:
+  title:
+    enabled: true
+    parameters:
+      name: 2024
+
+  annual:
+    enabled: true
+    parameters:
+      months_per_page: 12
+      # months_per_page: 6
+      columns: 3
+      # underfull_vertical_spacing: 1cm
+      # underfull_vertical_spacing: 1cm
+      underfull_vertical_spacing: 0mm
+      little_calendar:
+        parameters:
+          width: 4.5cm
+          # width: 5.2cm
+          # vertical_stretch: 1.08
+          # vertical_stretch: 1.01
+          # vertical_stetch: 2.1
+          vertical_stetch: 2.5
+
+  quarterly:
+    enabled: true
+    parameters:
+      calendars_column_position: right
+      calendars_width: 5.8cm
+      # calendars_width: 4.24cm
+      # spacer_width: 3mm
+      spacer_width: 0.5mm
+      notes:
+        parameters:
+          width: 8cm
+          # width: 8.2cm
+          # height: 18cm
+          # width: 12cm
+          # height: 20cm
+          height: 19cm
+          shift_vertical: 4mm
+      little_calendar:
+        parameters:
+          # width: 4.5cm
+          # width: 5.8cm
+          # width: 5cm
+          # width: 5.2cm
+          # vertical_stretch: 2.2
+          # vertical_stretch: 2.05
+          # vertical_stretch: 1.8
+          vertical_stretch: 1.91
+          
+
+
+  monthly:
+    enabled: true
+    parameters:
+
+  weekly:
+    enabled: true
+    parameters:
+      column_width: 3cm
+      notes:
+        parameters:
+          # width: 14cm
+          # width: 17cm
+          # width: 13cm
+          width: 13.5cm
+          height: 5.5cm
+          shift_vertical: 2mm
+          shift_horizontal: 1mm
+
+  daily:
+    enabled: true
+    parameters:
+      schedule_placement: right
+      # schedule_column_width: 5cm
+      # schedule_column_width: 0.25\textwidth
+      # schedule_column_width: '\columnwidth-5mm'
+      # schedule_column_width: 4.24cm
+      # schedule_column_width: 6cm
+      schedule_column_width: 4.6cm
+      spacer_width: 0.5cm
+      # spacer_width: 1cm
+      write_column_width: 8.6cm
+      # write_column_width: 0.60\textwidth
+      little_calendar:
+        enabled: true
+        parameters:
+          # width: 5cm
+          # width: '\columnwidth-5mm'
+          # width: 4cm
+          # WORKS
+          # width: 4.5cm
+          width: 4.6cm
+          # vertical_stretch: 1.7
+          # vertical_stretch: 1.4
+          vertical_stretch: 1.1
+      schedule_label:
+        enabled: true
+      schedule:
+        parameters:
+          show_label: true
+          # from: '7:30'
+          # from: '7:00'
+          from: '6:30'
+          # to: '21:30'
+          # to: '22:30'
+          # to: '24:00'
+          to: '24:00'
+          hour_format: '24'
+          # this line height fucked with me for a while breaking pages and shit
+          # line_height: 5mm
+          # 4.2mm works
+          # line_height: 4.2mm
+          # line_height: 4.4mm
+          line_height: 4.2mm
+          # width: 40mm
+          # width: '\columnwidth-5mm'
+          # width: 4cm
+      todo_label:
+        enabled: true
+      todo:
+        parameters:
+          count: 10
+          line_height: 5mm
+      notes_label:
+        enabled: true
+        parameters:
+          shift_vertical: 2mm
+      notes:
+        parameters:
+          shift_vertical: 5mm
+          shift_horizontal: 0.5mm
+          # width: 8.6cm
+          # width: 10.5cm
+          # width: \columnwidth
+          # width: 8cm
+          width: 8.2cm
+          # height: 11.5cm
+          # height: 11.5cm
+          # too much
+          # height: 14cm
+          # to the end of the page
+          # height: 13cm
+          height: 12.5cm
+      personal_notes_label:
+        enabled: false
+        parameters:
+          shift_vertical: 9mm
+      personal_notes:
+        enabled: false
+        type: dotted
+        parameters:
+          shift_vertical: 5mm
+          shift_horizontal: 1mm
+          width: 5.5cm
+          height: 4cm
+
+  daily_notes:
+    enabled: true
+    parameters:
+      pages: 4
+      notes:
+        parameters:
+          shift_vertical: 4mm
+          shift_horizontal: 1mm
+          # width: 14cm
+          # width: 13cm
+          width: 13.5cm
+          # width: 17cm
+          # height: 18cm
+          height: 19cm
+          # height: 20cm
+
+  daily_reflect:
+    enabled: true
+    parameters:
+      goals_label:
+        enabled: true
+        parameters:
+          width: 6.75cm
+
+      best_thing_label:
+        enabled: true
+        parameters:
+          width: 6.75cm
+          # is this even an option? taken from gratitude label
+          # shift_vertical: 2mm
+
+
+      goals_and_best_thing_notes:
+        type: dotted
+        parameters:
+          # width: 14cm
+          # width: 17cm
+          width: 13.5cm
+          height: 3cm
+          shift_vertical: 5mm
+          shift_horizontal: 0.5mm
+
+      gratitude_label:
+        enabled: true
+        parameters:
+          shift_vertical: 9mm
+
+      gratitude_notes:
+        type: dotted
+        parameters:
+          # width: 14cm
+          # width: 17cm
+          width: 13.5cm
+          height: 3cm
+          shift_vertical: 5mm
+          shift_horizontal: 0.5mm
+
+      daily_log_label:
+        enabled: true
+        parameters:
+          shift_vertical: 9mm
+
+      daily_log_notes:
+        type: dotted
+        parameters:
+          # width: 14cm
+          # width: 17cm
+          width: 13.5cm
+          # works, but short
+          # height: 8.5cm
+          #
+          # height: 10.5cm
+          height: 10cm
+          shift_vertical: 5mm
+          shift_horizontal: 0.5mm
+
+  index_notes:
+    enabled: true
+    parameters:
+      # index_pages: 4
+      # notes_per_page: 26
+      index_pages: 5
+      # notes_per_page: 28
+      notes_per_page: 27
+      index_table:
+        parameters:
+          line_height: 6.79mm
+          lines_color: gray!50
+
+      # pages_per_note: 1
+      pages_per_note: 5
+      # pages_per_note: 2
+      notes:
+        parameters:
+          shift_vertical: 4mm
+          shift_horizontal: 0.5mm
+          # width: 14cm
+          # width: 13cm
+          width: 13.5cm
+          # width: 17cm
+          # width: 16.5cm
+          # width: 17cm
+          # height: 18cm
+          height: 19cm
+
+  index_todos:
+    enabled: true
+    parameters:
+      # index_pages: 4
+      # todos_per_page: 27
+      # index_pages: 5
+      # todos_per_page: 28
+      todos_per_page: 27
+      index_pages: 10
+      # todos_per_page: 29
+      
+      index_table:
+        parameters:
+          # line_height: 6.8mm
+          line_height: 6.79mm
+          lines_color: gray!50
+
+      pages_per_todo: 1
+      column_width: 6.75cm
+      # column_width: 8.6cm
+      # column_width: 8cm
+      # column_width: 8.6cm
+      todos:
+        parameters:
+          line_height: 6.92mm
+          # count: 25
+          # count: 28
+          count: 28
+
+  about:
+    enabled: true

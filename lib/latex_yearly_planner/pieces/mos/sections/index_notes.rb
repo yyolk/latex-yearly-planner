@@ -25,9 +25,10 @@ module LatexYearlyPlanner
           end
 
           def notes_pages
+            total_pages = param(:pages_per_note)
             (param(:index_pages) * param(:notes_per_page)).times.map(&:succ).map do |note|
               param(:pages_per_note).times.map(&:succ).map do |page|
-                "#{header.generate_notes(note, page)}#{body.generate_notes(note, page)}"
+                "#{header.generate_notes(note, page, total_pages)}#{body.generate_notes(note, page)}"
               end
             end
           end

@@ -14,3 +14,14 @@ result
 
 # rspec failure tracking
 .rspec_status
+out*/
+sig/
+sorbet/
+
+# python sideshit
+*.py
+python/
+.ruff_cache
+
+# ignore legacy config reference files
+config/legacy*
