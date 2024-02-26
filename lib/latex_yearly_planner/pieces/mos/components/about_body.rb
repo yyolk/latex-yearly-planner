@@ -9,7 +9,7 @@ module LatexYearlyPlanner
             <<~LATEX
               This is the configuration that was used to build the planner.
 
-              SHA: #{sha}
+              SHA\\@: #{sha}
               Config:
               \\begin{multicols}{2}\\begin{tiny}\\begin{verbatim}
               #{config.struct.to_h.deep_stringify_keys.to_yaml}
